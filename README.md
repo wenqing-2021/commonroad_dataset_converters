@@ -11,8 +11,8 @@ For the converter you need at least Python 3.6 and the following packages:
 The usage of the Anaconda Python distribution is recommended. 
 You can install the required Python packages with the provided requirements.txt file (pip install -r requirements.txt).
 
-A conversion can be started by executing  
-`python main.py dataset input_dir output_dir --num_time_steps_scenario #NUMTIMESTEPSSCENARIO --num_planning_problems #NUMPLANNINGPROBLEMS --keep_ego --obstacle_initial_state_invalid`.
+A conversion can be started from the *dataset_converters* directory by executing  
+`python -m src.main dataset input_dir output_dir --num_time_steps_scenario #NUMTIMESTEPSSCENARIO --num_planning_problems #NUMPLANNINGPROBLEMS --keep_ego --obstacle_initial_state_invalid`.
 
 In the following the different parameters are explained:
 * **dataset**: The dataset which should be convertered. Currently, only the parameter *highD* for the [highD-dataset](https://www.highd-dataset.com/) is supported. 
