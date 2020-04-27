@@ -1,7 +1,7 @@
 import time
 import os
 import argparse
-from highD.highd_to_cr import create_highd_scenarios
+from src.highD.highd_to_cr import create_highd_scenarios
 
 
 def get_args() -> argparse.Namespace:
@@ -20,6 +20,8 @@ def get_args() -> argparse.Namespace:
                         help='Number of planning problems per CommonRoad scenario')
     parser.add_argument('--keep_ego', default=False, action='store_true',
                         help='Indicator if vehicles used for planning problem should be kept in scenario')
+    parser.add_argument('--obstacle_initial_state_invalid', default=False, action='store_true',
+                        help='Indicator if the initial state of an obstacle has to start at time step zero')
 
     return parser.parse_args()
 
@@ -35,7 +37,7 @@ def main():
         os.makedirs(args.output_dir)
     if args.dataset == "highD":
         create_highd_scenarios(args.input_dir, args.output_dir, args.num_time_steps_scenario,
-                               args.num_planning_problems, args.keep_ego)
+                               args.num_planning_problems, args.keep_ego, args.obstacle_initial_state_invalid)
     else:
         print("Unknown dataset in command line parameter!")
 
