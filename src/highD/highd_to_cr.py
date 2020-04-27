@@ -171,7 +171,7 @@ def create_highd_scenarios(input_dir: str, output_dir: str, num_time_steps_scena
     listing_metas = get_file_lists(path_metas)
     listing_recording = get_file_lists(path_recording)
 
-    highd_config = load_yaml(os.path.abspath(__file__) + "/config.yaml")
+    highd_config = load_yaml(os.path.dirname(os.path.abspath(__file__)) + "/config.yaml")
 
     for index, (recording_meta_fn, tracks_meta_fn, tracks_fn) in \
             enumerate(zip(listing_recording, listing_metas, listing_tracks)):
