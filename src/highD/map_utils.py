@@ -53,7 +53,7 @@ def get_speed_limit(recording_df: DataFrame) -> Union[float, None]:
 
 
 def get_meta_scenario(dt: float, benchmark_id: str, lane_markings: List[float], speed_limit: float,
-                      road_length: int, direction: Direction):
+                      road_length: int, direction: Direction, road_offset: int):
     """
     Generates meta CommonRoad scenario containing only lanelet network
 
@@ -63,6 +63,7 @@ def get_meta_scenario(dt: float, benchmark_id: str, lane_markings: List[float], 
     :param speed_limit: speed limits for road
     :param road_length: length of road
     :param direction: indicator for upper or lower interstate road
+    :param road_offset: length added on both sides of road
     :return: CommonRoad scenario
     """
     scenario = Scenario(dt, benchmark_id)
@@ -70,9 +71,9 @@ def get_meta_scenario(dt: float, benchmark_id: str, lane_markings: List[float], 
         # get two lines of current lane
         lane_y = lane_markings[i]
         next_lane_y = lane_markings[i + 1]
-        x_vec = np.linspace(-10.0, road_length + 10, num=road_length + 20)
-        lane_y_vec = np.ones(road_length + 20) * lane_y
-        next_lane_y_vec = np.ones(road_length + 20) * next_lane_y
+        x_vec = np.linspace(-road_offset, road_length + road_offset, num=road_length + 2 * road_offset)
+        lane_y_vec = np.ones(road_length + 2 * road_offset) * lane_y
+        next_lane_y_vec = np.ones(road_length + 2 * road_offset) * next_lane_y
 
         if direction is Direction.UPPER:
             x_vec = np.flip(x_vec)

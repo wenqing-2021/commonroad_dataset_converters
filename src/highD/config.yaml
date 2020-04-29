@@ -11,6 +11,7 @@ locations:
     5: LocationE
     6: LocationF
 
-road_length: 420 # 10 meters will be added on each side -> real_length = road_length + 20
+road_length: 420
+road_offset: 20 #length added on both sides: 20 meters added on each side -> real_length = road_length + 20 + 20
 
 

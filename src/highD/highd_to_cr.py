@@ -55,9 +55,11 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
     speed_limit = get_speed_limit(recording_meta_df)
     upper_lane_markings, lower_lane_markings = get_lane_markings(recording_meta_df)
     meta_scenario_upper = get_meta_scenario(dt, "meta_scenario_upper", upper_lane_markings, speed_limit,
-                                            highd_config.get("road_length"), Direction.UPPER)
+                                            highd_config.get("road_length"), Direction.UPPER,
+                                            highd_config.get("road_offset"))
     meta_scenario_lower = get_meta_scenario(dt, "meta_scearnio_lower", lower_lane_markings, speed_limit,
-                                            highd_config.get("road_length"), Direction.LOWER)
+                                            highd_config.get("road_length"), Direction.LOWER,
+                                            highd_config.get("road_offset"))
 
     # separate record and generate scenario for each separated part for each direction
     # (upper interstate direction / lower interstate direction)
