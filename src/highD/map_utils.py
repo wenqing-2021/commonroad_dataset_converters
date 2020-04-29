@@ -109,19 +109,19 @@ def get_meta_scenario(dt: float, benchmark_id: str, lane_markings: List[float], 
                 line_marking_right_vertices = LineMarking.DASHED
         else:
             if lanelet_id == len(lane_markings) - 1:
-                adjacent_left = lanelet_id + 1
+                adjacent_left = lanelet_id - 1
                 adjacent_left_same_direction = True
                 adjacent_right = None
                 adjacent_right_same_direction = False
-                line_marking_left_vertices = LineMarking.SOLID
-                line_marking_right_vertices = LineMarking.DASHED
+                line_marking_left_vertices = LineMarking.DASHED
+                line_marking_right_vertices = LineMarking.SOLID
             elif lanelet_id == 0:
-                adjacent_right = lanelet_id - 1
+                adjacent_right = lanelet_id + 1
                 adjacent_right_same_direction = True
                 adjacent_left = None
                 adjacent_left_same_direction = False
-                line_marking_left_vertices = LineMarking.DASHED
-                line_marking_right_vertices = LineMarking.S
+                line_marking_left_vertices = LineMarking.SOLID
+                line_marking_right_vertices = LineMarking.DASHED
             else:
                 adjacent_right = lanelet_id + 1
                 adjacent_right_same_direction = True
