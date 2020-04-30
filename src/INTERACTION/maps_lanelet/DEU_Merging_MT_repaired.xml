@@ -1,0 +1,440 @@
+<commonRoad timeStepSize="0.1" commonRoadVersion="2018b" author="Edmond Irani Liu" affiliation="Technical University of Munich, Germany" source="" tags="highway multi_lane no_oncoming_traffic parallel_lanes comfort" benchmarkID="none" date="2020-04-29">
+  <lanelet id="111">
+    <leftBound>
+      <point>
+        <x>-504662.4100</x>
+        <y>1018.2496</y>
+      </point>
+      <point>
+        <x>-504662.9900</x>
+        <y>1018.2882</y>
+      </point>
+      <point>
+        <x>-504664.1400</x>
+        <y>1017.8029</y>
+      </point>
+      <point>
+        <x>-504675.1000</x>
+        <y>1015.5525</y>
+      </point>
+      <point>
+        <x>-504685.5200</x>
+        <y>1014.5687</y>
+      </point>
+      <point>
+        <x>-504691.5400</x>
+        <y>1014.3121</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>-504662.0000</x>
+        <y>1021.2217</y>
+      </point>
+      <point>
+        <x>-504665.5100</x>
+        <y>1021.2707</y>
+      </point>
+      <point>
+        <x>-504668.9300</x>
+        <y>1021.1965</y>
+      </point>
+      <point>
+        <x>-504673.5200</x>
+        <y>1020.7251</y>
+      </point>
+      <point>
+        <x>-504678.1200</x>
+        <y>1020.2536</y>
+      </point>
+      <point>
+        <x>-504691.9200</x>
+        <y>1017.9753</y>
+      </point>
+    </rightBound>
+    <predecessor ref="103"/>
+    <successor ref="108"/>
+  </lanelet>
+  <lanelet id="100">
+    <leftBound>
+      <point>
+        <x>-504629.1700</x>
+        <y>1015.9537</y>
+      </point>
+      <point>
+        <x>-504629.4000</x>
+        <y>1015.9688</y>
+      </point>
+      <point>
+        <x>-504635.1400</x>
+        <y>1016.2488</y>
+      </point>
+      <point>
+        <x>-504635.3300</x>
+        <y>1016.2699</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>-504628.7700</x>
+        <y>1020.8584</y>
+      </point>
+      <point>
+        <x>-504628.9200</x>
+        <y>1020.8717</y>
+      </point>
+      <point>
+        <x>-504635.0600</x>
+        <y>1019.5110</y>
+      </point>
+      <point>
+        <x>-504635.1100</x>
+        <y>1019.5144</y>
+      </point>
+    </rightBound>
+    <successor ref="104"/>
+    <adjacentLeft ref="101" drivingDir="same"/>
+  </lanelet>
+  <lanelet id="102">
+    <leftBound>
+      <point>
+        <x>-504640.9200</x>
+        <y>1016.7141</y>
+      </point>
+      <point>
+        <x>-504647.4400</x>
+        <y>1017.1701</y>
+      </point>
+      <point>
+        <x>-504657.6100</x>
+        <y>1017.9707</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>-504640.6800</x>
+        <y>1019.9176</y>
+      </point>
+      <point>
+        <x>-504648.9200</x>
+        <y>1020.4514</y>
+      </point>
+      <point>
+        <x>-504657.1600</x>
+        <y>1020.9852</y>
+      </point>
+    </rightBound>
+    <predecessor ref="104"/>
+    <successor ref="103"/>
+    <adjacentLeft ref="105" drivingDir="same"/>
+  </lanelet>
+  <lanelet id="106">
+    <leftBound>
+      <point>
+        <x>-504704.6400</x>
+        <y>1014.7978</y>
+      </point>
+      <point>
+        <x>-504714.4800</x>
+        <y>1015.5631</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>-504704.1900</x>
+        <y>1017.5646</y>
+      </point>
+      <point>
+        <x>-504714.3100</x>
+        <y>1018.1797</y>
+      </point>
+    </rightBound>
+    <predecessor ref="108"/>
+    <successor ref="107"/>
+  </lanelet>
+  <lanelet id="101">
+    <leftBound>
+      <point>
+        <x>-504629.3300</x>
+        <y>1013.1478</y>
+      </point>
+      <point>
+        <x>-504633.4400</x>
+        <y>1013.4690</y>
+      </point>
+      <point>
+        <x>-504631.3900</x>
+        <y>1013.3084</y>
+      </point>
+      <point>
+        <x>-504635.5000</x>
+        <y>1013.6296</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>-504629.1700</x>
+        <y>1015.9537</y>
+      </point>
+      <point>
+        <x>-504629.4000</x>
+        <y>1015.9688</y>
+      </point>
+      <point>
+        <x>-504635.1400</x>
+        <y>1016.2488</y>
+      </point>
+      <point>
+        <x>-504635.3300</x>
+        <y>1016.2699</y>
+      </point>
+    </rightBound>
+    <successor ref="110"/>
+    <adjacentRight ref="100" drivingDir="same"/>
+  </lanelet>
+  <lanelet id="109">
+    <leftBound>
+      <point>
+        <x>-504658.0300</x>
+        <y>1015.2655</y>
+      </point>
+      <point>
+        <x>-504662.6300</x>
+        <y>1015.2221</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>-504657.6100</x>
+        <y>1017.9707</y>
+      </point>
+      <point>
+        <x>-504662.4100</x>
+        <y>1018.2496</y>
+      </point>
+    </rightBound>
+    <predecessor ref="105"/>
+    <successor ref="112"/>
+    <adjacentRight ref="103" drivingDir="same"/>
+  </lanelet>
+  <lanelet id="110">
+    <leftBound>
+      <point>
+        <x>-504635.5000</x>
+        <y>1013.6296</y>
+      </point>
+      <point>
+        <x>-504641.1100</x>
+        <y>1014.0429</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>-504635.3300</x>
+        <y>1016.2699</y>
+      </point>
+      <point>
+        <x>-504640.9200</x>
+        <y>1016.7141</y>
+      </point>
+    </rightBound>
+    <predecessor ref="101"/>
+    <successor ref="105"/>
+    <adjacentRight ref="104" drivingDir="same"/>
+  </lanelet>
+  <lanelet id="105">
+    <leftBound>
+      <point>
+        <x>-504641.1100</x>
+        <y>1014.0429</y>
+      </point>
+      <point>
+        <x>-504654.4500</x>
+        <y>1015.0684</y>
+      </point>
+      <point>
+        <x>-504658.0300</x>
+        <y>1015.2655</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>-504640.9200</x>
+        <y>1016.7141</y>
+      </point>
+      <point>
+        <x>-504647.4400</x>
+        <y>1017.1701</y>
+      </point>
+      <point>
+        <x>-504657.6100</x>
+        <y>1017.9707</y>
+      </point>
+    </rightBound>
+    <predecessor ref="110"/>
+    <successor ref="109"/>
+    <adjacentRight ref="102" drivingDir="same"/>
+  </lanelet>
+  <lanelet id="103">
+    <leftBound>
+      <point>
+        <x>-504657.6100</x>
+        <y>1017.9707</y>
+      </point>
+      <point>
+        <x>-504662.4100</x>
+        <y>1018.2496</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>-504657.1600</x>
+        <y>1020.9852</y>
+      </point>
+      <point>
+        <x>-504662.0000</x>
+        <y>1021.2217</y>
+      </point>
+    </rightBound>
+    <predecessor ref="102"/>
+    <successor ref="111"/>
+    <adjacentLeft ref="109" drivingDir="same"/>
+  </lanelet>
+  <lanelet id="107">
+    <leftBound>
+      <point>
+        <x>-504714.4800</x>
+        <y>1015.5631</y>
+      </point>
+      <point>
+        <x>-504723.3000</x>
+        <y>1016.2054</y>
+      </point>
+      <point>
+        <x>-504733.4500</x>
+        <y>1017.0658</y>
+      </point>
+      <point>
+        <x>-504755.3600</x>
+        <y>1018.8284</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>-504714.3100</x>
+        <y>1018.1797</y>
+      </point>
+      <point>
+        <x>-504722.4400</x>
+        <y>1018.8958</y>
+      </point>
+      <point>
+        <x>-504733.8300</x>
+        <y>1019.6798</y>
+      </point>
+      <point>
+        <x>-504755.2000</x>
+        <y>1021.4750</y>
+      </point>
+    </rightBound>
+    <predecessor ref="106"/>
+  </lanelet>
+  <lanelet id="112">
+    <leftBound>
+      <point>
+        <x>-504662.6300</x>
+        <y>1015.2221</y>
+      </point>
+      <point>
+        <x>-504667.1800</x>
+        <y>1015.2915</y>
+      </point>
+      <point>
+        <x>-504676.8800</x>
+        <y>1015.1081</y>
+      </point>
+      <point>
+        <x>-504691.5400</x>
+        <y>1014.3121</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>-504662.4100</x>
+        <y>1018.2496</y>
+      </point>
+      <point>
+        <x>-504669.7200</x>
+        <y>1018.7243</y>
+      </point>
+      <point>
+        <x>-504681.6900</x>
+        <y>1019.0982</y>
+      </point>
+      <point>
+        <x>-504691.9200</x>
+        <y>1017.9753</y>
+      </point>
+    </rightBound>
+    <predecessor ref="109"/>
+    <successor ref="108"/>
+  </lanelet>
+  <lanelet id="108">
+    <leftBound>
+      <point>
+        <x>-504691.5400</x>
+        <y>1014.3121</y>
+      </point>
+      <point>
+        <x>-504696.9900</x>
+        <y>1014.3550</y>
+      </point>
+      <point>
+        <x>-504704.6400</x>
+        <y>1014.7978</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>-504691.9200</x>
+        <y>1017.9753</y>
+      </point>
+      <point>
+        <x>-504696.4800</x>
+        <y>1017.5027</y>
+      </point>
+      <point>
+        <x>-504704.1900</x>
+        <y>1017.5646</y>
+      </point>
+    </rightBound>
+    <predecessor ref="112"/>
+    <predecessor ref="111"/>
+    <successor ref="106"/>
+  </lanelet>
+  <lanelet id="104">
+    <leftBound>
+      <point>
+        <x>-504635.3300</x>
+        <y>1016.2699</y>
+      </point>
+      <point>
+        <x>-504640.9200</x>
+        <y>1016.7141</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>-504635.1100</x>
+        <y>1019.5144</y>
+      </point>
+      <point>
+        <x>-504640.6800</x>
+        <y>1019.9176</y>
+      </point>
+    </rightBound>
+    <predecessor ref="100"/>
+    <successor ref="102"/>
+    <adjacentLeft ref="110" drivingDir="same"/>
+  </lanelet>
+</commonRoad>
