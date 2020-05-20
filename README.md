@@ -18,17 +18,15 @@ In the following the different parameters are explained:
 * **dataset**: The dataset which should be convertered. Currently, only the parameter *highD* for the [highD-dataset](https://www.highd-dataset.com/) is supported. 
 This is a mandatory parameter.
 * **input_dir**: The directory of the original dataset. This is a mandatory parameter.
-* **output_dir**: The directory where she generated CommonRoad scenarios should be stored. This is a mandatory parameter.
-* **num_time_steps_scenario**: The maximum number of time steps the CommonRoad scenario can be long. This is an optional parameter. The default length is *150* time steps.
+* **output_dir**: The directory where the generated CommonRoad scenarios should be stored. This is a mandatory parameter.
+* **num_time_steps_scenario**: The maximum length the CommonRoad scenario in time steps . This is an optional parameter. The default length is *150* time steps.
 * **num_planning_problems**: The number of planning problems per CommonRoad scenario. This is an optional parameter. The default is *1* planning problem.
-* **keep_ego**: Indicator if vehicles used for planning problem should be kept in scenario. 
-This is an optional parameter. This boolean parameter needs no additional value. 
-If the parameter is added the parameter evaluates to true otherwise to false. Therefore, the default is *false*.
-* **obstacle_initial_state_invalid**: Indicator if the initial state of an obstacle has to start at time step zero. This is an optional parameter. 
-If the parameter is added the parameter evaluates to true otherwise to false. 
-Therefore, the default is *false* which results in a valid CommonRoad scenarios in which all predictions start at time step zero.
+* **keep_ego**: Flag to keep vehicles used for planning problems in the scenario. 
+This is an optional flag. 
+* **obstacle_initial_state_invalid**: Flag to allow for the initial state of an obstacle to start at a nonzero time step. This is an optional flag. 
+If not set, the generated CommonRoad scenarios are valid in the sense that all predictions start at time step zero.
 
-You can list the different parameters by executing `python main.py -h`.
+A help message is printed by `python main.py -h`.
 
 If you want to exit/logout from command line, but still want to continue the process execute   
 `nohup command-with-options &`.
