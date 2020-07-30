@@ -251,6 +251,7 @@ def planning_problems_from_recording(
         max_length=-1,
         detect_static_vehicles=False,
         include_obstacles=True,
+        keep_ego=True,
 ):
     """
     Takes a recording and cuts it into many smaller scenarios.
@@ -296,6 +297,7 @@ def planning_problems_from_recording(
                 max_length=max_length,
                 detect_static_vehicles=detect_static_vehicles,
                 include_obstacles=include_obstacles,
+                keep_ego=keep_ego,
             )
             LOGGER.info("Conversion took {} s".format(time() - _begin))
             yield new_scenario, new_problem_set
@@ -315,6 +317,7 @@ def planning_problem_from_track(
         max_length=-1,
         detect_static_vehicles=False,
         include_obstacles=True,
+        keep_ego=False,
 ):
     """
     Extract a singleton planning problem from the bigger recording.
@@ -372,7 +375,7 @@ def planning_problem_from_track(
         object_id_base = new_scenario.generate_object_id() + 1
         for i, (t, t_m) in enumerate(zip(tracks, tracksMeta)):
             try:
-                assert i != track_id, "Vehicle is ego vehicle"
+                assert keep_ego or i != track_id, "Vehicle is ego vehicle"
                 # copy vehicle over (including subtracting the time line beginning)
                 o = offset_obstacle_from_track(t, t_m, object_id_base + i, init_time_step, final_time_step, detect_static_vehicles)
                 # TODO off lanelet vehicles are not handled by crcurv

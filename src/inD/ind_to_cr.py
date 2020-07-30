@@ -21,6 +21,7 @@ import re
 import sys
 import random
 import os
+from typing import List
 
 from commonroad.scenario.scenario import Scenario
 from commonroad.common.file_writer import CommonRoadFileWriter, OverwriteExistingFile, Tag
@@ -46,6 +47,7 @@ except ImportError:
 LOGGER = logging.getLogger(__name__)
 META_SCENARIO = "meta_scenario"
 PROBLEM = "problem"
+LANELET_DEFAULT = os.path.join(os.path.dirname(__file__), "inD_LaneletMaps/convert_tinkered_translated")
 META_SCENARIOS = {}
 
 author = "Julian Bock, Robert Krajewski, Lennart Vater, Lutz Eckstein, Niels Mündler"
@@ -54,37 +56,37 @@ source = "https://www.ind-dataset.com/"
 tags = {Tag.INTERSECTION, Tag.MULTI_LANE, Tag.SPEED_LIMIT, Tag.URBAN}
 
 
-def main(argv):
-    parser = ArgumentParser(description=__desc__)
-    parser.add_argument("-i", default="../../data", help="Path to input directory (converts all files)", dest="input")
-    parser.add_argument("-t", "--tracks", default=[0], type=int, help="Track numbers to be read (-1 = all)", dest="numbers", nargs='+')
-    parser.add_argument("-o", default="../../data_cr", help="Path to output directory (if not existing, will be created)", dest="output")
-    parser.add_argument("-v", "--verbose", help="Print verbose", dest="verbose", action="store_true")
-    parser.add_argument("-l", "--lanelets", default=os.path.join(os.path.dirname(__file__), "inD_LaneletMaps/convert_tinkered_translated"), help="Path to directory containing commonroad formatted lanelets", dest="lanelets")
-    parser.add_argument("-n", "--numproblems", default=1, type=int, help="Number of smaller planning problems to be generated (-1 = all)", dest="planning_problems")
-    parser.add_argument("--min-length", default=125, type=int, help="Minimum number of timeframes per resulting scenario (default 125 ~ 5 seconds at 25fps)", dest="min_length")
-    parser.add_argument("--max-length", default=250, type=int, help="Maximum number of timeframes per resulting scenario (default 250 ~ 10 seconds at 25 fps)", dest="max_length")
-    parser.add_argument("--multiprocessing", action="store_true", help="Enable multiprocessing")
-    parser.add_argument("--static-vehicles", action="store_true", help="Enable detection of static vehicles", dest="static_vehicles")
-    parser.add_argument("--no-obstacles", action="store_true", help="Disable all obstacles other than roads", dest="no_obstacles")
-    parser.add_argument("-p", "--pickle", action="store_true", help="Dump a pickle of meta scenarios and scenarios instead of xml-files")
-    parser.add_argument("-s", "--seed", help="Set the seed for randomization", default="0")
-    args = parser.parse_args(argv)
+def create_ind_scenarios(
+    input_path: str,
+    output_path: str,
+    tracks: List[int],
+    num_problems: int,
+    lanelets = LANELET_DEFAULT,
+    min_length = 125,
+    max_length = 250,
+    multiprocessing = False,
+    static_vehicles = True,
+    no_obstacles = False,
+    pickle = False,
+    seed = 0,
+    verbose = False,
+    keep_ego = False,
+):
 
-    if args.pickle and not PICKLE_SUPPORT:
+    if pickle and not PICKLE_SUPPORT:
         raise ImportError("Pickling without package commonroad_rl is not supported. Try installing commonroad_rl first.")
 
-    if args.verbose:
+    if verbose:
         LOGGER.setLevel(logging.INFO)
         logging.basicConfig(level=logging.INFO)
 
     # Check if the given paths exist
-    input_d = Path(args.input)
+    input_d = Path(input_path)
     if not input_d.exists():
         print("Error: path {} does not exist".format(input_d))
         exit(-1)
 
-    lanelet_d = Path(args.lanelets)
+    lanelet_d = Path(lanelets)
     if not lanelet_d.exists():
         print("Error: path {} does not exist".format(lanelet_d))
         exit(-1)
@@ -93,42 +95,43 @@ def main(argv):
         exit(-1)
 
     # Create output dir if necessary
-    output_d = Path(args.output)
+    output_d = Path(output_path)
     output_d.mkdir(parents=True, exist_ok=True)
-    if args.pickle:
+    if pickle:
         output_d.joinpath(META_SCENARIO).mkdir(exist_ok=True)
         output_d.joinpath(PROBLEM).mkdir(exist_ok=True)
 
     load_lanelet_networks(lanelet_d)
     # If pickling is enabled, dump these networks already
     # as meta scenarios
-    if args.pickle:
+    if pickle:
         store_meta_scenarios(output_d)
 
     # set the seed for random slices
-    random.seed(args.seed)
+    random.seed(seed)
 
     # Decide whether to load all tracks or only given ones
-    if -1 in args.numbers:
+    if -1 in tracks:
         numbers = list(range(33))
     else:
-        numbers = args.numbers
+        numbers = tracks
     total = len(numbers)
-    if args.multiprocessing:
+    if multiprocessing:
         with Pool() as p:
             p.starmap(convert_recording_to_scenario, [(
                 number,
                 input_d,
                 i,
                 total,
-                args.planning_problems,
+                num_problems,
                 output_d,
-                args.min_length,
-                args.max_length,
+                min_length,
+                max_length,
                 True,
-                args.pickle,
-                args.static_vehicles,
-                not args.no_obstacles,
+                pickle,
+                static_vehicles,
+                not no_obstacles,
+                keep_ego,
             ) for i, number in enumerate(numbers, start=1)])
     else:
         for i, number in enumerate(numbers, start=1):
@@ -138,18 +141,19 @@ def main(argv):
                 input_d,
                 i,
                 total,
-                args.planning_problems,
+                num_problems,
                 output_d,
-                args.min_length,
-                args.max_length,
+                min_length,
+                max_length,
                 False,
-                args.pickle,
-                args.static_vehicles,
-                not args.no_obstacles,
+                pickle,
+                static_vehicles,
+                not no_obstacles,
+                keep_ego,
             )
 
     # merge problem_meta_scenario dicts
-    if args.pickle:
+    if pickle:
         merge_problem_meta_scenario_dicts(total, output_d)
 
 
@@ -199,6 +203,7 @@ def convert_recording_to_scenario(
         pickle=True,
         detect_static_vehicles=False,
         include_obstacles=True,
+        keep_ego=False,
 ):
     """
     Convert a given recording to scenarios and write them to disk
@@ -239,6 +244,7 @@ def convert_recording_to_scenario(
             max_length=max_length,
             detect_static_vehicles=detect_static_vehicles,
             include_obstacles=include_obstacles,
+            keep_ego=keep_ego,
     ):
         LOGGER.info("Writing planning problem {} of {} to {} ({}/{})".format(
             j+1,
@@ -279,4 +285,35 @@ def convert_recording_to_scenario(
 
 
 if __name__ == '__main__':
-    main(sys.argv[1:])
+    parser = ArgumentParser(description=__desc__)
+    parser.add_argument("-i", default="../../data", help="Path to input directory (converts all files)", dest="input")
+    parser.add_argument("-t", "--tracks", default=[0], type=int, help="Track numbers to be read (-1 = all)", dest="numbers", nargs='+')
+    parser.add_argument("-o", default="../../data_cr", help="Path to output directory (if not existing, will be created)", dest="output")
+    parser.add_argument("-v", "--verbose", help="Print verbose", dest="verbose", action="store_true")
+    parser.add_argument("-l", "--lanelets", default=LANELET_DEFAULT, help="Path to directory containing commonroad formatted lanelets", dest="lanelets")
+    parser.add_argument("-n", "--numproblems", default=1, type=int, help="Number of smaller planning problems to be generated (-1 = all)", dest="planning_problems")
+    parser.add_argument("--min-length", default=125, type=int, help="Minimum number of timeframes per resulting scenario (default 125 ~ 5 seconds at 25fps)", dest="min_length")
+    parser.add_argument("--max-length", default=250, type=int, help="Maximum number of timeframes per resulting scenario (default 250 ~ 10 seconds at 25 fps)", dest="max_length")
+    parser.add_argument("--multiprocessing", action="store_true", help="Enable multiprocessing")
+    parser.add_argument("--static-vehicles", action="store_true", help="Enable detection of static vehicles", dest="static_vehicles")
+    parser.add_argument("--no-obstacles", action="store_true", help="Disable all obstacles other than roads", dest="no_obstacles")
+    parser.add_argument("--keep-ego", action="store_true", help="Keep the ego vehicle in the generated planning problem", dest="keep_ego")
+    parser.add_argument("-p", "--pickle", action="store_true", help="Dump a pickle of meta scenarios and scenarios instead of xml-files")
+    parser.add_argument("-s", "--seed", help="Set the seed for randomization", default="0")
+    args = parser.parse_args()
+    create_ind_scenarios(
+        args.input,
+        args.output,
+        args.numbers,
+        args.planning_problems,
+        args.lanelets,
+        args.min_length,
+        args.max_length,
+        args.multitprocessing,
+        args.static_vehicles,
+        args.no_obstacles,
+        args.pickle,
+        args.seed,
+        args.verbose,
+        args.keep_ego,
+    )
