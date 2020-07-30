@@ -22,13 +22,26 @@ import sys
 import random
 import os
 
+from commonroad.scenario.scenario import Scenario
 from commonroad.common.file_writer import CommonRoadFileWriter, OverwriteExistingFile, Tag
 
 from .utils.tracks_import import read_from_csv
 from .utils.csv_to_planning_problem import planning_problems_from_recording, load_lanelet_networks, meta_scenarios
 from .utils.common import get_end_time
 
-from ..utils_highd.preprocessing import generate_obstacle_lanelet_id, generate_reset_config
+# Pickling requires the commonroad_rl package to be installed
+try:
+    from commonroad_rl.utils_highd.preprocessing import generate_obstacle_lanelet_id, generate_reset_config
+    PICKLE_SUPPORT = True
+except ImportError:
+    def generate_obstacle_lanelet_id(scenario: Scenario) -> dict:
+        pass
+
+    def generate_reset_config(scenario: Scenario) -> dict:
+        pass
+
+    PICKLE_SUPPORT = False
+
 
 LOGGER = logging.getLogger(__name__)
 META_SCENARIO = "meta_scenario"
@@ -57,6 +70,9 @@ def main(argv):
     parser.add_argument("-p", "--pickle", action="store_true", help="Dump a pickle of meta scenarios and scenarios instead of xml-files")
     parser.add_argument("-s", "--seed", help="Set the seed for randomization", default="0")
     args = parser.parse_args(argv)
+
+    if args.pickle and not PICKLE_SUPPORT:
+        raise ImportError("Pickling without package commonroad_rl is not supported. Try installing commonroad_rl first.")
 
     if args.verbose:
         LOGGER.setLevel(logging.INFO)

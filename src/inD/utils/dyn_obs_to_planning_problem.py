@@ -13,6 +13,7 @@ import logging
 from commonroad.planning.goal import GoalRegion
 from commonroad.planning.planning_problem import PlanningProblem
 from commonroad.common.util import Interval, AngleInterval
+from commonroad.common.solution import VehicleModel, VehicleType
 from commonroad.geometry.shape import Shape
 from commonroad.scenario.obstacle import State, DynamicObstacle
 from commonroad.scenario.lanelet import Lanelet
@@ -22,14 +23,23 @@ from shapely.geometry import Point
 
 from .common import make_valid_orientation_interval_pruned
 
-from commonroad_route_planner.route_planner import RoutePlanner
-
 LOGGER = logging.getLogger(__name__)
+
+from commonroad_route_planner.route_planner import RoutePlanner
+try:
+    from commonroad_rl.gym_commonroad.utils.scenario import check_trajectory
+except ImportError:
+    # skip checking for non commonraod_rl oriented trajectories
+    LOGGER.info("commonroad_rl not installed, trajectory checking will not be conducted")
+    def check_trajectory(obstacle: DynamicObstacle, vehicle_model: VehicleModel, vehicle_type: VehicleType):
+        return True
 
 
 def planning_problem_from_dynamic_obstacle(
         ego_vehicle: DynamicObstacle,
         scenario: Scenario,
+        vehicle_model=VehicleModel.KS,
+        vehicle_type=VehicleType.FORD_ESCORT
 ):
     """
     Converts an ego vehicle to a planning problem
@@ -45,6 +55,9 @@ def planning_problem_from_dynamic_obstacle(
     # convert ego_vehicle to planning problem
     assert scenario.lanelet_network.find_lanelet_by_position([ego_vehicle.initial_state.position])[0], \
         "Starting position off lanelet network"
+
+    assert check_trajectory(ego_vehicle, vehicle_model, vehicle_type, scenario.dt), \
+        f"Trajectory is infeasible with {vehicle_type}:{vehicle_model}"
 
     goal_shape, goal_lanelets = goal_shape_from_ego_vehicle(ego_vehicle, scenario)
 
@@ -114,7 +127,7 @@ def goal_shape_from_ego_vehicle(ego_vehicle: DynamicObstacle, scenario: Scenario
     goal_vehicle_state = ego_vehicle.prediction.trajectory.final_state
     goal_vehicle_shape = ego_vehicle.prediction.occupancy_set[-1].shape
     goal_lanelet_candidate_ids = scenario.lanelet_network.find_lanelet_by_shape(goal_vehicle_shape)
-
+    
     # filter candidates:
     # filter goal lanelets by which of them are contained in any path from initial position to the goal
     route_planner = RoutePlanner(
