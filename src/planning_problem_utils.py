@@ -19,7 +19,6 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
     :param keep_ego: boolean indicating if vehicles selected for planning problem should be kept in scenario
     :return: CommonRoad planning problem
     """
-
     # random choose obstacle as ego vehicle
     random.seed(0)
     if len(scenario.dynamic_obstacles) == 1:
@@ -45,7 +44,7 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
                                  dynamic_obstacle_final_state.velocity + velocity_half_range)
 
     max_time_step = max([obs.prediction.trajectory.state_list[-1].time_step for obs in scenario.dynamic_obstacles])
-    final_time_step =  min(dynamic_obstacle_final_state.time_step + time_step_half_range, max_time_step)
+    final_time_step = min(dynamic_obstacle_final_state.time_step + time_step_half_range, max_time_step)
     time_step_interval = Interval(0, final_time_step)
 
     goal_position = Rectangle(dynamic_obstacle_shape.length, dynamic_obstacle_shape.width,

@@ -11,7 +11,7 @@ def get_args() -> argparse.Namespace:
     :return: command line arguments
     """
     parser = argparse.ArgumentParser(description="Generates CommonRoad scenarios different datasets")
-    parser.add_argument('dataset', type=str, help='Specification of dataset')
+    parser.add_argument('dataset', type=str, help='Specification of dataset, currently supported: highD')
     parser.add_argument('input_dir', type=str, help='Path to dataset files')
     parser.add_argument('output_dir', type=str, help='Directory to store generated CommonRoad files')
     parser.add_argument('--num_time_steps_scenario', type=int, default=150,
@@ -33,8 +33,8 @@ def main():
     args = get_args()
 
     # make output dir
-    if not os.path.exists(args.output_dir):
-        os.makedirs(args.output_dir)
+    os.makedirs(args.output_dir, exist_ok=True)
+
     if args.dataset == "highD":
         create_highd_scenarios(args.input_dir, args.output_dir, args.num_time_steps_scenario,
                                args.num_planning_problems, args.keep_ego, args.obstacle_initial_state_invalid)
