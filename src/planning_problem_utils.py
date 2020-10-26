@@ -6,6 +6,7 @@ from commonroad.geometry.shape import Rectangle
 from commonroad.planning.planning_problem import PlanningProblem
 from commonroad.planning.goal import GoalRegion
 from commonroad.scenario.scenario import Scenario
+from commonroad.scenario.obstacle import ObstacleType
 
 
 def generate_planning_problem(scenario: Scenario, orientation_half_range: float = 0.2, velocity_half_range: float = 10,
@@ -19,13 +20,16 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
     :param keep_ego: boolean indicating if vehicles selected for planning problem should be kept in scenario
     :return: CommonRoad planning problem
     """
+
     # random choose obstacle as ego vehicle
     random.seed(0)
-    if len(scenario.dynamic_obstacles) == 1:
-        obstacle_idx = 0
-    else:
-        obstacle_idx = random.randint(0, len(scenario.dynamic_obstacles) - 1)
-    dynamic_obstacle_selected = scenario.dynamic_obstacles[obstacle_idx]
+    dynamic_obstacle_selected = None
+
+    # only choose car type as ego vehicle
+    while dynamic_obstacle_selected is None:
+        dynamic_obstacle_selected = random.choice(scenario.dynamic_obstacles)
+        if dynamic_obstacle_selected.obstacle_type != ObstacleType.CAR:
+            dynamic_obstacle_selected = None
 
     dynamic_obstacle_shape = dynamic_obstacle_selected.obstacle_shape
     dynamic_obstacle_initial_state = dynamic_obstacle_selected.initial_state
@@ -57,5 +61,5 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
     dynamic_obstacle_initial_state.slip_angle = 0.0
 
     planning_problem = PlanningProblem(planning_problem_id, dynamic_obstacle_initial_state, goal_region)
-    
+
     return planning_problem

@@ -1,7 +1,9 @@
-import time
 import os
+import time
 import argparse
+
 from src.highD.highd_to_cr import create_highd_scenarios
+from src.inD.ind_to_cr import create_ind_scenarios
 
 
 def get_args() -> argparse.Namespace:
@@ -11,7 +13,7 @@ def get_args() -> argparse.Namespace:
     :return: command line arguments
     """
     parser = argparse.ArgumentParser(description="Generates CommonRoad scenarios different datasets")
-    parser.add_argument('dataset', type=str, help='Specification of dataset, currently supported: highD')
+    parser.add_argument('dataset', type=str, choices=["inD", "highD", "INTERACTION"], help='Specification of dataset')
     parser.add_argument('input_dir', type=str, help='Path to dataset files')
     parser.add_argument('output_dir', type=str, help='Directory to store generated CommonRoad files')
     parser.add_argument('--num_time_steps_scenario', type=int, default=150,
@@ -33,11 +35,22 @@ def main():
     args = get_args()
 
     # make output dir
-    os.makedirs(args.output_dir, exist_ok=True)
-
+    if not os.path.exists(args.output_dir):
+        os.makedirs(args.output_dir)
     if args.dataset == "highD":
         create_highd_scenarios(args.input_dir, args.output_dir, args.num_time_steps_scenario,
                                args.num_planning_problems, args.keep_ego, args.obstacle_initial_state_invalid)
+    elif args.dataset == "inD":
+        create_ind_scenarios(
+            args.input_dir,
+            args.output_dir,
+            num_time_steps_scenario=args.num_time_steps_scenario,
+            num_planning_problems=args.num_planning_problems,
+            keep_ego=args.keep_ego,
+            obstacle_initial_state_invalid=args.obstacle_initial_state_invalid
+        )
+    elif args.dataset == "INTERACTION":
+        raise NotImplementedError("The interface to the INTERACTION conversion script is not implemented yet")
     else:
         print("Unknown dataset in command line parameter!")
 

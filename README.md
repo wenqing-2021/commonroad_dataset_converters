@@ -1,7 +1,6 @@
 # Dataset Converters
 
-This repository contains converters from different datasets to CommonRoad scenarios using a common commandline interface.
-Currently, we only support the [highD dataset](https://www.highd-dataset.com/)). We will release converters for the [inD dataset](https://www.ind-dataset.com/) and the [INTERACTION dataset](http://interaction-dataset.com/) soon.
+This repository contains tools to convert popular datasets, which are publicly available for scientific purposes only, to the CommonRoad format. Before converting these datasets, please request them on their respective websites. Currently, the [highD](https://www.highd-dataset.com/) and [inD](https://www.ind-dataset.com/) dataset are supported. We will add support for the [INTERACTION](http://interaction-dataset.com/) dataset soon.
 
 
 ### Prerequisites
@@ -20,7 +19,7 @@ A conversion can be started from the *dataset_converters* directory by executing
 `python -m src.main dataset input_dir output_dir --num_time_steps_scenario #NUMTIMESTEPSSCENARIO --num_planning_problems #NUMPLANNINGPROBLEMS --keep_ego --obstacle_initial_state_invalid`.
 
 In the following the different parameters are explained:
-* **dataset**: The dataset which should be convertered. Currently, only the parameter *highD* for the [highD-dataset](https://www.highd-dataset.com/) is supported. 
+* **dataset**: The dataset which should be convertered. Currently, parameters *highD* or *inD* are supported. 
 This is a mandatory parameter.
 * **input_dir**: The directory of the original dataset. This is a mandatory parameter.
 * **output_dir**: The directory where the generated CommonRoad scenarios should be stored. This is a mandatory parameter.
