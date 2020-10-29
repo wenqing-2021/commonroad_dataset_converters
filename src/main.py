@@ -35,8 +35,8 @@ def main():
     args = get_args()
 
     # make output dir
-    if not os.path.exists(args.output_dir):
-        os.makedirs(args.output_dir)
+    os.makedirs(args.output_dir, exist_ok=True)
+
     if args.dataset == "highD":
         create_highd_scenarios(args.input_dir, args.output_dir, args.num_time_steps_scenario,
                                args.num_planning_problems, args.keep_ego, args.obstacle_initial_state_invalid)

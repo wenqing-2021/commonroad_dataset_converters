@@ -1,31 +1,19 @@
 import os
 import glob
-import pandas as pd
 import copy
 import math
-from typing import Dict, List
+import numpy as np
+import pandas as pd
+from typing import Dict
 
 from commonroad.planning.planning_problem import PlanningProblemSet
-from commonroad.common.file_writer import CommonRoadFileWriter
-from commonroad.common.file_writer import OverwriteExistingFile
+from commonroad.common.file_writer import CommonRoadFileWriter, OverwriteExistingFile
 from commonroad.scenario.scenario import Scenario, Tag
 
 from src.highD.map_utils import get_meta_scenario, get_speed_limit, get_lane_markings, get_dt, Direction
 from src.highD.obstacle_utils import generate_dynamic_obstacle
 from src.planning_problem_utils import generate_planning_problem
 from src.helper import load_yaml
-
-
-def get_file_lists(path: str) -> List[str]:
-    """
-    Returns all paths which correspond to pattern
-
-    :param path: path pattern
-    :return: list of paths
-    """
-    listing = glob.glob(path)
-    listing.sort()
-    return listing
 
 
 def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, tracks_fn: str,
@@ -78,7 +66,7 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
             highd_config.get("locations")[recording_meta_df.locationId.values[0]] + "Lower",
             int(recording_meta_df.id), idx_1 + 1)
         generate_single_scenario(highd_config, num_planning_problems, keep_ego,
-                                 output_dir, tracks_df, tracks_meta_df, meta_scenario_lower,  benchmark_id,
+                                 output_dir, tracks_df, tracks_meta_df, meta_scenario_lower, benchmark_id,
                                  Direction.LOWER, frame_start, frame_end, obstacle_initial_state_invalid)
 
 
@@ -102,6 +90,7 @@ def generate_single_scenario(highd_config: Dict, num_planning_problems: int, kee
     :param obstacle_initial_state_invalid: boolean indicating if the initial state of an obstacle has to start
     at time step zero
     """
+
     def enough_time_steps(veh_id):
         vehicle_meta = tracks_meta_df[tracks_meta_df.id == veh_id]
         if not obstacle_initial_state_invalid and int(vehicle_meta.initialFrame) > frame_start \
@@ -127,7 +116,7 @@ def generate_single_scenario(highd_config: Dict, num_planning_problems: int, kee
         scenario.add_objects(do)
 
     # return if scenario contains no dynamic obstacle
-    if len(scenario.dynamic_obstacles) == 0:
+    if len(scenario.dynamic_obstacles) == 0 or len(scenario.dynamic_obstacles) == 1 and not keep_ego:
         return
 
     # generate planning problems
@@ -135,6 +124,13 @@ def generate_single_scenario(highd_config: Dict, num_planning_problems: int, kee
     for idx_2 in range(num_planning_problems):
         planning_problem = generate_planning_problem(scenario, keep_ego=keep_ego)
         planning_problem_set.add_planning_problem(planning_problem)
+
+    # rotate scenario if it is upper scenario
+    if direction == Direction.UPPER:
+        translation = np.array([0.0, 0.0])
+        angle = np.pi
+        scenario.translate_rotate(translation, angle)
+        planning_problem_set.translate_rotate(translation, angle)
 
     # write new scenario
     tags = {Tag(tag) for tag in highd_config.get("tags")}
@@ -169,9 +165,9 @@ def create_highd_scenarios(input_dir: str, output_dir: str, num_time_steps_scena
     path_recording = os.path.join(input_dir, "data/*_recordingMeta.csv")
 
     # get all file names
-    listing_tracks = get_file_lists(path_tracks)
-    listing_metas = get_file_lists(path_metas)
-    listing_recording = get_file_lists(path_recording)
+    listing_tracks = sorted(glob.glob(path_tracks))
+    listing_metas = sorted(glob.glob(path_metas))
+    listing_recording = sorted(glob.glob(path_recording))
 
     highd_config = load_yaml(os.path.dirname(os.path.abspath(__file__)) + "/config.yaml")
 

@@ -20,7 +20,6 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
     :param keep_ego: boolean indicating if vehicles selected for planning problem should be kept in scenario
     :return: CommonRoad planning problem
     """
-
     # random choose obstacle as ego vehicle
     random.seed(0)
     dynamic_obstacle_selected = None

@@ -1,6 +1,10 @@
 # Dataset Converters
 
-This repository contains converters from different datasets to CommonRoad scenarios using a common commandline interface.  
+This repository contains converters from different datasets to CommonRoad scenarios using a common commandline interface.
+Currently, we only support the [highD dataset](https://www.highd-dataset.com/)). We will release converters for the [inD dataset](https://www.ind-dataset.com/) and the [INTERACTION dataset](http://interaction-dataset.com/) soon.
+
+
+### Prerequisites
 For the converter you need at least Python 3.6 and the following packages:
 * numpy>=1.18.2
 * commonroad-io>=2020.2
@@ -11,6 +15,7 @@ For the converter you need at least Python 3.6 and the following packages:
 The usage of the Anaconda Python distribution is recommended. 
 You can install the required Python packages with the provided requirements.txt file (pip install -r requirements.txt).
 
+### Usage
 A conversion can be started from the *dataset_converters* directory by executing  
 `python -m src.main dataset input_dir output_dir --num_time_steps_scenario #NUMTIMESTEPSSCENARIO --num_planning_problems #NUMPLANNINGPROBLEMS --keep_ego --obstacle_initial_state_invalid`.
 
@@ -26,7 +31,7 @@ This is an optional flag.
 * **obstacle_initial_state_invalid**: Flag to allow for the initial state of an obstacle to start at a nonzero time step. This is an optional flag. 
 If not set, the generated CommonRoad scenarios are valid in the sense that all predictions start at time step zero.
 
-A help message is printed by `python main.py -h`.
+A help message is printed by `python -m src.main.py -h`.
 
 If you want to exit/logout from command line, but still want to continue the process execute   
 `nohup command-with-options &`.
