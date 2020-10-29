@@ -35,3 +35,5 @@ A help message is printed by `python -m src.main.py -h`.
 
 If you want to exit/logout from command line, but still want to continue the process execute   
 `nohup command-with-options &`.
+
+Note that the specific converters in each subdirectory may host seperate additional scripts and options for conversion.
