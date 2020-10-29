@@ -1,6 +1,7 @@
-import time
 import os
+import time
 import argparse
+
 from src.highD.highd_to_cr import create_highd_scenarios
 from src.inD.ind_to_cr import create_ind_scenarios
 
@@ -39,21 +40,16 @@ def main():
     if args.dataset == "highD":
         create_highd_scenarios(args.input_dir, args.output_dir, args.num_time_steps_scenario,
                                args.num_planning_problems, args.keep_ego, args.obstacle_initial_state_invalid)
-    if args.dataset == "inD":
-        if not args.obstacle_initial_state_invalid:
-            raise NotImplementedError(
-                "The inD dataset conversion does not yet allow forcing all obstacles to start at timestep 0"
-            )
+    elif args.dataset == "inD":
         create_ind_scenarios(
             args.input_dir,
             args.output_dir,
-            [-1],
-            -1,
-            max_length=args.num_time_steps_scenario,
-            multiprocessing=True,
-            keep_ego=args.keep_ego
+            num_time_steps_scenario=args.num_time_steps_scenario,
+            num_planning_problems=args.num_planning_problems,
+            keep_ego=args.keep_ego,
+            obstacle_initial_state_invalid=args.obstacle_initial_state_invalid
         )
-    if args.dataset == "INTERACTION":
+    elif args.dataset == "INTERACTION":
         raise NotImplementedError("The interface to the INTERACTION conversion script is not implemented yet")
     else:
         print("Unknown dataset in command line parameter!")

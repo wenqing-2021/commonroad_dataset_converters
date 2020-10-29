@@ -1,319 +1,191 @@
-#! /usr/bin/env python
-
 __author__ = "Niels Mündler"
-__copyright__ = ""
+__copyright__ = "TUM Cyber-Physical System Group"
 __credits__ = [""]
-__version__ = "0.1"
-__maintainer__ = "Niels Mündler"
-__email__ = "n.muendler@tum.de"
-__status__ = "Alpha"
+__version__ = "1.0"
+__maintainer__ = "Xiao Wang"
+__email__ = "xiao.wang@tum.de"
+__status__ = "Released"
 
 __desc__ = """
 Converts inD files to Commonroad Format, creating smaller Planning Problems if required
 """
 
-from argparse import ArgumentParser
-from pathlib import Path
-import logging
-from multiprocessing import Pool
-import pickle as pkl
-import re
-import sys
-import random
 import os
-from typing import List
+import glob
+import copy
+import math
+import random
+import logging
+import pandas as pd
+from typing import Dict
 
 from commonroad.scenario.scenario import Scenario
-from commonroad.common.file_writer import CommonRoadFileWriter, OverwriteExistingFile, Tag
+from commonroad.planning.planning_problem import PlanningProblemSet
+from commonroad.common.file_writer import CommonRoadFileWriter, Tag, OverwriteExistingFile
 
-from .utils.tracks_import import read_from_csv
-from .utils.csv_to_planning_problem import planning_problems_from_recording, load_lanelet_networks, meta_scenarios
-from .utils.common import get_end_time
-
-# Pickling requires the commonroad_rl package to be installed
-try:
-    from commonroad_rl.utils_highd.preprocessing import generate_obstacle_lanelet_id, generate_reset_config
-    PICKLE_SUPPORT = True
-except ImportError:
-    def generate_obstacle_lanelet_id(scenario: Scenario) -> dict:
-        pass
-
-    def generate_reset_config(scenario: Scenario) -> dict:
-        pass
-
-    PICKLE_SUPPORT = False
-
+from src.helper import load_yaml
+from src.inD.map_utils import load_lanelet_networks, meta_scenario_from_recording
+from src.inD.obstacle_utils import generate_obstacle
+from src.planning_problem_utils import generate_planning_problem
 
 LOGGER = logging.getLogger(__name__)
-META_SCENARIO = "meta_scenario"
-PROBLEM = "problem"
-LANELET_DEFAULT = os.path.join(os.path.dirname(__file__), "inD_LaneletMaps/convert_tinkered_translated")
-META_SCENARIOS = {}
-
-author = "Julian Bock, Robert Krajewski, Lennart Vater, Lutz Eckstein, Niels Mündler"
-affiliation = "RWTH Aachen University & Technical University Munich, Germany"
-source = "https://www.ind-dataset.com/"
-tags = {Tag.INTERSECTION, Tag.MULTI_LANE, Tag.SPEED_LIMIT, Tag.URBAN}
 
 
-def create_ind_scenarios(
-    input_path: str,
-    output_path: str,
-    tracks: List[int],
-    num_problems: int,
-    lanelets = LANELET_DEFAULT,
-    min_length = 125,
-    max_length = 250,
-    multiprocessing = False,
-    static_vehicles = True,
-    no_obstacles = False,
-    pickle = False,
-    seed = 0,
-    verbose = False,
-    keep_ego = False,
-):
+def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_ego: bool, output_dir: str,
+                             tracks_df: pd.DataFrame, tracks_meta_df: pd.DataFrame, meta_scenario: Scenario,
+                             benchmark_id: str, frame_start: int, frame_end: int,
+                             obstacle_initial_state_invalid: bool):
+    """
+    Generate a single CommonRoad scenario based on inD record snippet
+    :param ind_config: dictionary with configuration parameters for highD scenario generation
+    :param num_planning_problems: number of planning problems per CommonRoad scenario
+    :param output_dir: path to store generated CommonRoad scenario files
+    :param keep_ego: boolean indicating if vehicles selected for planning problem should be kept in scenario
+    :param tracks_df: single track
+    :param tracks_meta_df: single meta information track
+    :param meta_scenario: CommonRoad scenario with lanelet network
+    :param benchmark_id: CommonRoad benchmark ID for scenario
+    :param direction: indicator for upper or lower road of interstate
+    :param frame_start: start of frame in time steps of record
+    :param frame_end: end of frame in time steps of record
+    :param obstacle_initial_state_invalid: boolean indicating if the initial state of an obstacle has to start
+    at time step zero
+    """
 
-    if pickle and not PICKLE_SUPPORT:
-        raise ImportError("Pickling without package commonroad_rl is not supported. Try installing commonroad_rl first.")
+    def enough_time_steps(veh_id):
+        vehicle_meta = tracks_meta_df[tracks_meta_df.trackId == veh_id]
+        if frame_end - int(vehicle_meta.initialFrame) < 2 \
+                or int(vehicle_meta.finalFrame) - frame_start < 2:
+            return False
+        return True
+
+    # copy meta_scenario with lanelet networks
+    scenario = copy.deepcopy(meta_scenario)
+    scenario.benchmark_id = benchmark_id
+
+    # read tracks appear between [frame_start, frame_end]
+    scenario_tracks_df = tracks_df[(tracks_df.frame >= frame_start) & (tracks_df.frame <= frame_end)]
+
+    # generate CR obstacles
+    for vehicle_id in [vehicle_id for vehicle_id in scenario_tracks_df.trackId.unique()
+                       if vehicle_id in tracks_meta_df.trackId.unique()]:
+        # if appearing time steps < min_time_steps, skip vehicle
+        if not enough_time_steps(vehicle_id):
+            continue
+        print("Generating scenario {}, vehicle id {}".format(benchmark_id, vehicle_id), end="\r")
+        obstacle = generate_obstacle(
+            scenario_tracks_df,
+            tracks_meta_df,
+            vehicle_id=vehicle_id,
+            obstacle_id=scenario.generate_object_id(),
+            frame_start=frame_start,
+            class_to_type=ind_config.get("class_to_obstacleType"),
+            detect_static_vehicles=False
+        )
+        scenario.add_objects(obstacle)
+
+    # return if scenario contains no dynamic obstacle
+    if len(scenario.dynamic_obstacles) == 0:
+        return
+
+    # generate planning problems
+    planning_problem_set = PlanningProblemSet()
+    for idx_2 in range(num_planning_problems):
+        planning_problem = generate_planning_problem(scenario, keep_ego=keep_ego)
+        planning_problem_set.add_planning_problem(planning_problem)
+
+    # write new scenario
+    tags = {Tag(tag) for tag in ind_config.get("tags")}
+    fw = CommonRoadFileWriter(scenario, planning_problem_set, ind_config.get("author"),
+                              ind_config.get("affiliation"), ind_config.get("source"), tags)
+    filename = os.path.join(output_dir, "{}.xml".format(scenario.benchmark_id))
+    if obstacle_initial_state_invalid is True:
+        check_validity = False
+    else:
+        check_validity = True
+    fw.write_to_file(filename, OverwriteExistingFile.ALWAYS, check_validity=check_validity)
+    print("Scenario file stored in {}".format(filename))
+
+
+def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, tracks_fn: str,
+                                  num_time_steps_scenario: int, num_planning_problems: int, keep_ego: bool,
+                                  output_dir: str, ind_config: Dict, obstacle_initial_state_invalid: bool):
+    """
+    Generate CommonRoad scenarios with given paths to highD for a high-D recording
+
+    :param recording_meta_fn: path to *_recordingMeta.csv
+    :param tracks_meta_fn: path to *_tracksMeta.csv
+    :param tracks_fn: path to *_tracks.csv
+    :param num_time_steps_scenario: maximal number of time steps per CommonRoad scenario
+    :param num_planning_problems: number of planning problems per CommonRoad scenario
+    :param keep_ego: boolean indicating if vehicles selected for planning problem should be kept in scenario
+    :param output_dir: path to store generated CommonRoad scenario files
+    :param ind_config: dictionary with configuration parameters for inD scenario generation
+    :param obstacle_initial_state_invalid: boolean indicating if the initial state of an obstacle has to start
+    at time step zero
+    """
+    # read data frames from the three files
+    recording_meta_df = pd.read_csv(recording_meta_fn, header=0)
+    tracks_meta_df = pd.read_csv(tracks_meta_fn, header=0)
+    tracks_df = pd.read_csv(tracks_fn, header=0)
+
+    # generate meta scenario with lanelet network
+    meta_scenario = meta_scenario_from_recording(
+        ind_config,
+        recording_meta_df.locationId.values[0],
+        recording_meta_df.recordingId.values[0],
+        recording_meta_df.frameRate.values[0],
+    )
+
+    # separate record and generate scenario for each separated part for each direction
+    # (upper interstate direction / lower interstate direction)
+    num_scenarios = math.ceil(max(tracks_meta_df.finalFrame) / num_time_steps_scenario)
+    for idx_1 in range(num_scenarios):
+        # benchmark id format: COUNTRY_SCENE_CONFIG_PRED
+        frame_start = idx_1 * num_time_steps_scenario + (idx_1 + 1)
+        frame_end = (idx_1 + 1) * num_time_steps_scenario + (idx_1 + 1)
+        benchmark_id = "DEU_{0}-{1}_{2}_T-1".format(
+            ind_config.get("location_benchmark_id")[recording_meta_df.locationId.values[0]],
+            int(recording_meta_df.recordingId), idx_1 + 1)
+        generate_single_scenario(ind_config, num_planning_problems, keep_ego, output_dir, tracks_df,
+                                 tracks_meta_df, meta_scenario, benchmark_id, frame_start,
+                                 frame_end, obstacle_initial_state_invalid)
+
+
+def create_ind_scenarios(input_dir: str, output_dir: str, num_time_steps_scenario: int,
+                         num_planning_problems: int, keep_ego: bool, obstacle_initial_state_invalid: bool,
+                         map_dir: str = "./inD/repaired_maps", seed: int = 0,
+                         verbose: bool = True):
 
     if verbose:
         LOGGER.setLevel(logging.INFO)
         logging.basicConfig(level=logging.INFO)
 
-    # Check if the given paths exist
-    input_d = Path(input_path)
-    if not input_d.exists():
-        print("Error: path {} does not exist".format(input_d))
-        exit(-1)
-
-    lanelet_d = Path(lanelets)
-    if not lanelet_d.exists():
-        print("Error: path {} does not exist".format(lanelet_d))
-        exit(-1)
-    if not lanelet_d.is_dir():
-        print("Error: path {} is not a directory".format(lanelet_d))
-        exit(-1)
-
     # Create output dir if necessary
-    output_d = Path(output_path)
-    output_d.mkdir(parents=True, exist_ok=True)
-    if pickle:
-        output_d.joinpath(META_SCENARIO).mkdir(exist_ok=True)
-        output_d.joinpath(PROBLEM).mkdir(exist_ok=True)
+    os.makedirs(output_dir, exist_ok=True)
 
-    load_lanelet_networks(lanelet_d)
-    # If pickling is enabled, dump these networks already
-    # as meta scenarios
-    if pickle:
-        store_meta_scenarios(output_d)
+
 
     # set the seed for random slices
     random.seed(seed)
 
-    # Decide whether to load all tracks or only given ones
-    if -1 in tracks:
-        numbers = list(range(33))
-    else:
-        numbers = tracks
-    total = len(numbers)
-    if multiprocessing:
-        with Pool() as p:
-            p.starmap(convert_recording_to_scenario, [(
-                number,
-                input_d,
-                i,
-                total,
-                num_problems,
-                output_d,
-                min_length,
-                max_length,
-                True,
-                pickle,
-                static_vehicles,
-                not no_obstacles,
-                keep_ego,
-            ) for i, number in enumerate(numbers, start=1)])
-    else:
-        for i, number in enumerate(numbers, start=1):
-            # if multiprocessing is enabled, start one process per recording
-            convert_recording_to_scenario(
-                number,
-                input_d,
-                i,
-                total,
-                num_problems,
-                output_d,
-                min_length,
-                max_length,
-                False,
-                pickle,
-                static_vehicles,
-                not no_obstacles,
-                keep_ego,
-            )
+    # generate path to highd data files
+    path_tracks = os.path.join(input_dir, "data/*_tracks.csv")
+    path_metas = os.path.join(input_dir, "data/*_tracksMeta.csv")
+    path_recording = os.path.join(input_dir, "data/*_recordingMeta.csv")
 
-    # merge problem_meta_scenario dicts
-    if pickle:
-        merge_problem_meta_scenario_dicts(total, output_d)
+    # get all file names
+    listing_tracks = sorted(glob.glob(path_tracks))
+    listing_metas = sorted(glob.glob(path_metas))
+    listing_recording = sorted(glob.glob(path_recording))
 
+    ind_config = load_yaml(os.path.dirname(os.path.abspath(__file__)) + "/config.yaml")
+    load_lanelet_networks(map_dir, ind_config=ind_config)
 
-def store_meta_scenarios(output_d):
-    """
-    Stores pickles of the 4 location meta scenarios as meta scenario reset dict pickles
-    Also initializes the META_SCENARIOS dictionary
-    """
-    meta_scenario_reset_dict = {}
-    for loc_scenario in meta_scenarios():
-        meta_scenario_reset_dict[loc_scenario.benchmark_id] = generate_reset_config(loc_scenario)
-        META_SCENARIOS[loc_scenario.benchmark_id] = loc_scenario
-    with output_d.joinpath(META_SCENARIO, "meta_scenario_reset_dict.pickle").open("wb") as file:
-        pkl.dump(meta_scenario_reset_dict, file)
-
-
-def merge_problem_meta_scenario_dicts(total, output_d):
-    """
-    Merge the resulting problem meta scenario mappings
-    and remove the original subfolders
-    """
-    LOGGER.info(f"Merging {total} problem meta scenario dictionaries in {output_d}")
-    merged_problem_meta_scenario_dict = {}
-    for i in range(1, total+1):
-        with output_d.joinpath(META_SCENARIO, str(i), "problem_meta_scenario_dict.pickle").open("rb") as file:
-            problem_meta_scenario_dict = pkl.load(file)
-        merged_problem_meta_scenario_dict.update(problem_meta_scenario_dict)
-    # dump merged dict
-    with output_d.joinpath(META_SCENARIO, "problem_meta_scenario_dict.pickle").open("wb") as file:
-        pkl.dump(merged_problem_meta_scenario_dict, file)
-    # remove temporary dicts
-    for i in range(1, total+1):
-        output_d.joinpath(META_SCENARIO, str(i), "problem_meta_scenario_dict.pickle").unlink()
-        output_d.joinpath(META_SCENARIO, str(i)).rmdir()
-
-
-def convert_recording_to_scenario(
-        number: int,
-        input_d: Path,
-        i: int,
-        total: int,
-        num_planning_problems: int,
-        output_d: Path,
-        min_length:int,
-        max_length: int,
-        overwrite=False,
-        pickle=True,
-        detect_static_vehicles=False,
-        include_obstacles=True,
-        keep_ego=False,
-):
-    """
-    Convert a given recording to scenarios and write them to disk
-    :param number: Number of the recording to load
-    :param input_d: Directory of all recordings
-    :param num_planning_problems: number of planning problems to extract
-    :param output_d: directory to output planning problems to
-    :param i: number of current recording in global scope
-    :param total: total number of loaded recordings in global scope
-    :param pickle: if set, also dumps a pickle of the scenario to be loaded by the commonroad gym env
-    :return: Nothing
-    """
-    # Load a recording
-    LOGGER.info("Loading track {} from {} ({}/{})".format(number, input_d, i, total))
-    file_names = [input_d.joinpath("{:02d}_{}.csv".format(number, a)) for a in ["tracks", "tracksMeta", "recordingMeta"]]
-    tracks, tracks_meta, recording_meta = read_from_csv(*file_names)
-
-    # keep track of which scenario belongs to which meta-scenario for pickling
-    problem_meta_scenario_dict = {}
-
-    # Extracts smaller planning problems from the one recording scenario created just now
-    # This is done first since writing the huge scenario will take a while
-    num_dynamic_obstacles = recording_meta["numVehicles"]
-    if num_planning_problems > num_dynamic_obstacles:
-        LOGGER.info("Extracting more planning problems than tracked vehicles, reducing to maxmimum possible")
-    # Extract min(dynamic_obstacles, n) planning problems or all if the argument was -1
-    num_planning_problems = min(num_dynamic_obstacles, num_planning_problems) if num_planning_problems != -1 else num_dynamic_obstacles
-
-    overwrite_policy = OverwriteExistingFile.ALWAYS if overwrite else OverwriteExistingFile.ASK_USER_INPUT
-
-    j = 0
-    for res_scenario, res_problem_set in planning_problems_from_recording(
-            tracks,
-            tracks_meta,
-            recording_meta,
-            num_planning_problems,
-            min_length=min_length,
-            max_length=max_length,
-            detect_static_vehicles=detect_static_vehicles,
-            include_obstacles=include_obstacles,
-            keep_ego=keep_ego,
-    ):
-        LOGGER.info("Writing planning problem {} of {} to {} ({}/{})".format(
-            j+1,
-            num_planning_problems,
-            output_d,
-            i,
-            total
-        ))
-        if not pickle:
-            # Write out the xml of the scenario
-            fw = CommonRoadFileWriter(res_scenario, res_problem_set, author, affiliation, source, tags)
-            fn = output_d.joinpath("{}.xml".format(res_scenario.benchmark_id))
-            fw.write_to_file(str(fn), overwrite_policy)
-        else:
-            # Dump a pickle of a generated problem dict
-            # attention: only works with up to 9 scenarios
-            meta_scenario_id = re.sub(r"DEU_AAH-(\d)", r"DEU_AAH-\1", res_scenario.benchmark_id)[:9] + "_0_T-1"
-            problem_meta_scenario_dict[res_scenario.benchmark_id] = META_SCENARIOS[meta_scenario_id]
-            # extract dynamic AND static obstacles
-            obstacle_list = res_scenario.obstacles
-            t_end = get_end_time(res_scenario)
-            problem_dict = {
-                'obstacle': obstacle_list,
-                'end_time': t_end,
-                'planning_problem_set': res_problem_set,
-                'obstacle_lanelet_id_dict': generate_obstacle_lanelet_id(res_scenario)
-            }
-
-            with output_d.joinpath(PROBLEM, f"{res_scenario.benchmark_id}.pickle").open("wb") as file:
-                pkl.dump(problem_dict, file)
-
-        j += 1
-
-    if pickle:
-        output_d.joinpath(META_SCENARIO, str(i)).mkdir(exist_ok=True)
-        with output_d.joinpath(META_SCENARIO, str(i), "problem_meta_scenario_dict.pickle").open("wb") as file:
-            pkl.dump(problem_meta_scenario_dict, file)
-
-
-if __name__ == '__main__':
-    parser = ArgumentParser(description=__desc__)
-    parser.add_argument("-i", default="../../data", help="Path to input directory (converts all files)", dest="input")
-    parser.add_argument("-t", "--tracks", default=[0], type=int, help="Track numbers to be read (-1 = all)", dest="numbers", nargs='+')
-    parser.add_argument("-o", default="../../data_cr", help="Path to output directory (if not existing, will be created)", dest="output")
-    parser.add_argument("-v", "--verbose", help="Print verbose", dest="verbose", action="store_true")
-    parser.add_argument("-l", "--lanelets", default=LANELET_DEFAULT, help="Path to directory containing commonroad formatted lanelets", dest="lanelets")
-    parser.add_argument("-n", "--numproblems", default=1, type=int, help="Number of smaller planning problems to be generated (-1 = all)", dest="planning_problems")
-    parser.add_argument("--min-length", default=125, type=int, help="Minimum number of timeframes per resulting scenario (default 125 ~ 5 seconds at 25fps)", dest="min_length")
-    parser.add_argument("--max-length", default=250, type=int, help="Maximum number of timeframes per resulting scenario (default 250 ~ 10 seconds at 25 fps)", dest="max_length")
-    parser.add_argument("--multiprocessing", action="store_true", help="Enable multiprocessing")
-    parser.add_argument("--static-vehicles", action="store_true", help="Enable detection of static vehicles", dest="static_vehicles")
-    parser.add_argument("--no-obstacles", action="store_true", help="Disable all obstacles other than roads", dest="no_obstacles")
-    parser.add_argument("--keep-ego", action="store_true", help="Keep the ego vehicle in the generated planning problem", dest="keep_ego")
-    parser.add_argument("-p", "--pickle", action="store_true", help="Dump a pickle of meta scenarios and scenarios instead of xml-files")
-    parser.add_argument("-s", "--seed", help="Set the seed for randomization", default="0")
-    args = parser.parse_args()
-    create_ind_scenarios(
-        args.input,
-        args.output,
-        args.numbers,
-        args.planning_problems,
-        args.lanelets,
-        args.min_length,
-        args.max_length,
-        args.multitprocessing,
-        args.static_vehicles,
-        args.no_obstacles,
-        args.pickle,
-        args.seed,
-        args.verbose,
-        args.keep_ego,
-    )
+    for index, (recording_meta_fn, tracks_meta_fn, tracks_fn) in \
+            enumerate(zip(listing_recording, listing_metas, listing_tracks)):
+        print("=" * 80)
+        print("Processing file {}...".format(tracks_fn), end='\n')
+        generate_scenarios_for_record(recording_meta_fn, tracks_meta_fn, tracks_fn, num_time_steps_scenario,
+                                      num_planning_problems, keep_ego, output_dir, ind_config,
+                                      obstacle_initial_state_invalid)
