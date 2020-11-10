@@ -20,7 +20,7 @@ There are two bugs in commonroad-io==2020.2 that have to be fixed if you want to
 
 1. in `$CONDA_PREFIX/lib/python3.6/site-packages/commonroad/scenario/lanelet.py`
 
-    line 65: `MOTORCYCLE = 'motorycle'` has to be changed to `MOTORCYCLE = 'motorcycle'`, otherwise the converter scenario
+    line 65: `MOTORCYCLE = 'motorycle'` has to be changed to `MOTORCYCLE = 'motorcycle'`, otherwise the converted scenario
     will not pass the validity check.
 
 2. in `$CONDA_PREFIX/lib/python3.6/site-packages/commonroad/scenario/scenario.py`
