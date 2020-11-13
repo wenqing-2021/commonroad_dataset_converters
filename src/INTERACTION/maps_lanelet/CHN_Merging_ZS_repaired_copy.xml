@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<commonRoad timeStepSize="0.1" commonRoadVersion="2020a" author="" affiliation="" source="OpenDRIVE 2 Lanelet Converter" benchmarkID="none" date="2020-11-13">
+<commonRoad timeStepSize="0.1" commonRoadVersion="2020a" author="" affiliation="" source="OpenDRIVE 2 Lanelet Converter" benchmarkID="none" date="2020-11-05">
   <location>
     <geoNameId>-999</geoNameId>
     <gpsLatitude>999</gpsLatitude>
@@ -1412,8 +1412,8 @@
         <y>954.66458</y>
       </point>
     </rightBound>
-    <predecessor ref="135"/>
     <predecessor ref="134"/>
+    <predecessor ref="135"/>
     <successor ref="129"/>
     <adjacentLeft ref="132" drivingDir="same"/>
     <laneletType>highway</laneletType>

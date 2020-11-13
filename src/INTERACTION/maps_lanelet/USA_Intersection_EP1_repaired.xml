@@ -1,4686 +1,4124 @@
-<commonRoad timeStepSize="0.1" commonRoadVersion="2018b" author="Edmond Irani Liu" affiliation="Technical University of Munich, Germany" source="" tags="highway multi_lane no_oncoming_traffic parallel_lanes comfort" benchmarkID="none" date="2020-04-30">
+<?xml version='1.0' encoding='UTF-8'?>
+<commonRoad timeStepSize="0.1" commonRoadVersion="2020a" author="Matthias Hamacher" affiliation="Technical University of Munich, Germany" source="http://interaction-dataset.com//" benchmarkID="none" date="2020-11-13">
+  <location>
+    <geoNameId>-999</geoNameId>
+    <gpsLatitude>999.0</gpsLatitude>
+    <gpsLongitude>999.0</gpsLongitude>
+  </location>
+  <scenarioTags>
+    <speed_limit/>
+    <urban/>
+    <multi_lane/>
+    <intersection/>
+  </scenarioTags>
+  <lanelet id="100">
+    <leftBound>
+      <point>
+        <x>100.94000</x>
+        <y>35.636790</y>
+      </point>
+      <point>
+        <x>103.73000</x>
+        <y>35.053890</y>
+      </point>
+      <point>
+        <x>105.21000</x>
+        <y>34.269840</y>
+      </point>
+      <point>
+        <x>105.67000</x>
+        <y>32.401930</y>
+      </point>
+      <point>
+        <x>105.42000</x>
+        <y>27.343070</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>100.72000</x>
+        <y>32.242610</y>
+      </point>
+      <point>
+        <x>101.27000</x>
+        <y>31.992680</y>
+      </point>
+      <point>
+        <x>101.62000</x>
+        <y>31.412710</y>
+      </point>
+      <point>
+        <x>101.71000</x>
+        <y>29.471280</y>
+      </point>
+      <point>
+        <x>101.77000</x>
+        <y>27.528790</y>
+      </point>
+    </rightBound>
+    <predecessor ref="101"/>
+    <predecessor ref="102"/>
+    <successor ref="103"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="104">
+    <leftBound>
+      <point>
+        <x>110.72000</x>
+        <y>35.092840</y>
+      </point>
+      <point>
+        <x>113.29000</x>
+        <y>34.930210</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>110.53000</x>
+        <y>31.931270</y>
+      </point>
+      <point>
+        <x>112.70000</x>
+        <y>31.626620</y>
+      </point>
+    </rightBound>
+    <successor ref="105"/>
+    <adjacentLeft ref="106" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="107">
+    <leftBound>
+      <point>
+        <x>96.910000</x>
+        <y>45.38351</y>
+      </point>
+      <point>
+        <x>94.890000</x>
+        <y>45.429190</y>
+      </point>
+      <point>
+        <x>93.930000</x>
+        <y>45.457210</y>
+      </point>
+      <point>
+        <x>92.870000</x>
+        <y>45.482110</y>
+      </point>
+      <point>
+        <x>91.570000</x>
+        <y>45.599690</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>96.780000</x>
+        <y>48.932730</y>
+      </point>
+      <point>
+        <x>95.690000</x>
+        <y>48.998630</y>
+      </point>
+      <point>
+        <x>94.520000</x>
+        <y>49.068730</y>
+      </point>
+      <point>
+        <x>93.410000</x>
+        <y>49.131730</y>
+      </point>
+      <point>
+        <x>92.240000</x>
+        <y>49.19313</y>
+      </point>
+    </rightBound>
+    <predecessor ref="108"/>
+    <successor ref="109"/>
+    <adjacentLeft ref="110" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
   <lanelet id="111">
     <leftBound>
       <point>
-        <x>-504616.0500</x>
-        <y>990.8505</y>
+        <x>90.010000</x>
+        <y>36.465870</y>
       </point>
       <point>
-        <x>-504608.9400</x>
-        <y>990.4453</y>
+        <x>91.260000</x>
+        <y>36.386570</y>
       </point>
       <point>
-        <x>-504612.5000</x>
-        <y>990.6479</y>
+        <x>92.660000</x>
+        <y>36.288550</y>
       </point>
       <point>
-        <x>-504605.3900</x>
-        <y>990.2427</y>
+        <x>93.970000</x>
+        <y>36.190530</y>
+      </point>
+      <point>
+        <x>95.460000</x>
+        <y>36.089850</y>
       </point>
     </leftBound>
     <rightBound>
       <point>
-        <x>-504616.0500</x>
-        <y>990.8505</y>
+        <x>89.920000</x>
+        <y>34.197770</y>
       </point>
       <point>
-        <x>-504615.1100</x>
-        <y>990.6962</y>
+        <x>92.610000</x>
+        <y>34.067410</y>
       </point>
       <point>
-        <x>-504605.7900</x>
-        <y>987.9586</y>
+        <x>93.830000</x>
+        <y>32.720080</y>
       </point>
       <point>
-        <x>-504605.4800</x>
-        <y>987.9746</y>
+        <x>94.210000</x>
+        <y>32.529570</y>
+      </point>
+      <point>
+        <x>95.310000</x>
+        <y>32.485160</y>
       </point>
     </rightBound>
-    <successor ref="110"/>
+    <predecessor ref="112"/>
+    <predecessor ref="113"/>
+    <successor ref="101"/>
     <adjacentLeft ref="114" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
   </lanelet>
-  <lanelet id="142">
+  <lanelet id="114">
     <leftBound>
       <point>
-        <x>-504591.5600</x>
-        <y>958.7984</y>
+        <x>90.590000</x>
+        <y>41.159700</y>
       </point>
       <point>
-        <x>-504589.9900</x>
-        <y>980.9348</y>
+        <x>92.070000</x>
+        <y>41.068870</y>
       </point>
       <point>
-        <x>-504589.9800</x>
-        <y>981.1199</y>
+        <x>93.450000</x>
+        <y>40.977850</y>
+      </point>
+      <point>
+        <x>94.890000</x>
+        <y>40.886830</y>
+      </point>
+      <point>
+        <x>96.25</x>
+        <y>40.781710</y>
       </point>
     </leftBound>
     <rightBound>
       <point>
-        <x>-504588.3600</x>
-        <y>958.5263</y>
+        <x>90.010000</x>
+        <y>36.465870</y>
       </point>
       <point>
-        <x>-504586.4000</x>
-        <y>980.7449</y>
+        <x>91.260000</x>
+        <y>36.386570</y>
       </point>
       <point>
-        <x>-504586.3900</x>
-        <y>980.9643</y>
+        <x>92.660000</x>
+        <y>36.288550</y>
+      </point>
+      <point>
+        <x>93.970000</x>
+        <y>36.190530</y>
+      </point>
+      <point>
+        <x>95.460000</x>
+        <y>36.089850</y>
       </point>
     </rightBound>
-    <successor ref="143"/>
-    <adjacentLeft ref="175" drivingDir="opposite"/>
+    <predecessor ref="115"/>
+    <successor ref="116"/>
+    <adjacentLeft ref="110" drivingDir="opposite"/>
+    <adjacentRight ref="111" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="117">
+    <leftBound>
+      <point>
+        <x>85.570000</x>
+        <y>29.007830</y>
+      </point>
+      <point>
+        <x>85.75</x>
+        <y>31.646110</y>
+      </point>
+      <point>
+        <x>88.290000</x>
+        <y>37.426830</y>
+      </point>
+      <point>
+        <x>89.110000</x>
+        <y>38.530960</y>
+      </point>
+      <point>
+        <x>90.690000</x>
+        <y>39.627280</y>
+      </point>
+      <point>
+        <x>93.420000</x>
+        <y>40.793890</y>
+      </point>
+      <point>
+        <x>96.25</x>
+        <y>40.781710</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>89.140000</x>
+        <y>28.748960</y>
+      </point>
+      <point>
+        <x>89.070000</x>
+        <y>30.818740</y>
+      </point>
+      <point>
+        <x>89.100000</x>
+        <y>33.537990</y>
+      </point>
+      <point>
+        <x>90.810000</x>
+        <y>35.520650</y>
+      </point>
+      <point>
+        <x>91.940000</x>
+        <y>35.910620</y>
+      </point>
+      <point>
+        <x>93.240000</x>
+        <y>36.170970</y>
+      </point>
+      <point>
+        <x>95.460000</x>
+        <y>36.089850</y>
+      </point>
+    </rightBound>
+    <predecessor ref="118"/>
+    <successor ref="116"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="119">
+    <leftBound>
+      <point>
+        <x>113.64000</x>
+        <y>39.669250</y>
+      </point>
+      <point>
+        <x>111.05000</x>
+        <y>39.82745</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>114.58000</x>
+        <y>44.414080</y>
+      </point>
+      <point>
+        <x>111.99000</x>
+        <y>44.524340</y>
+      </point>
+    </rightBound>
+    <predecessor ref="120"/>
+    <predecessor ref="121"/>
+    <successor ref="122"/>
+    <adjacentLeft ref="106" drivingDir="opposite"/>
+    <adjacentRight ref="123" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="110">
+    <leftBound>
+      <point>
+        <x>96.25</x>
+        <y>40.781710</y>
+      </point>
+      <point>
+        <x>94.890000</x>
+        <y>40.886830</y>
+      </point>
+      <point>
+        <x>93.450000</x>
+        <y>40.977850</y>
+      </point>
+      <point>
+        <x>92.070000</x>
+        <y>41.068870</y>
+      </point>
+      <point>
+        <x>90.590000</x>
+        <y>41.159700</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>96.910000</x>
+        <y>45.38351</y>
+      </point>
+      <point>
+        <x>94.890000</x>
+        <y>45.429190</y>
+      </point>
+      <point>
+        <x>93.930000</x>
+        <y>45.457210</y>
+      </point>
+      <point>
+        <x>92.870000</x>
+        <y>45.482110</y>
+      </point>
+      <point>
+        <x>91.570000</x>
+        <y>45.599690</y>
+      </point>
+    </rightBound>
+    <adjacentLeft ref="114" drivingDir="opposite"/>
+    <adjacentRight ref="107" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="124">
+    <leftBound>
+      <point>
+        <x>80.200000</x>
+        <y>41.774340</y>
+      </point>
+      <point>
+        <x>82.160000</x>
+        <y>41.466350</y>
+      </point>
+      <point>
+        <x>84.380000</x>
+        <y>39.459240</y>
+      </point>
+      <point>
+        <x>84.930000</x>
+        <y>38.869340</y>
+      </point>
+      <point>
+        <x>85.690000</x>
+        <y>37.242330</y>
+      </point>
+      <point>
+        <x>85.850000</x>
+        <y>35.896770</y>
+      </point>
+      <point>
+        <x>85.930000</x>
+        <y>34.507630</y>
+      </point>
+      <point>
+        <x>85.570000</x>
+        <y>29.007830</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>79.350000</x>
+        <y>37.073590</y>
+      </point>
+      <point>
+        <x>80.330000</x>
+        <y>36.695250</y>
+      </point>
+      <point>
+        <x>80.950000</x>
+        <y>36.270250</y>
+      </point>
+      <point>
+        <x>81.520000</x>
+        <y>35.636930</y>
+      </point>
+      <point>
+        <x>81.970000</x>
+        <y>34.773750</y>
+      </point>
+      <point>
+        <x>82.150000</x>
+        <y>33.999410</y>
+      </point>
+      <point>
+        <x>82.070000</x>
+        <y>31.854630</y>
+      </point>
+      <point>
+        <x>81.960000</x>
+        <y>29.472600</y>
+      </point>
+    </rightBound>
+    <predecessor ref="125"/>
+    <successor ref="126"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="127">
+    <leftBound>
+      <point>
+        <x>131.39000</x>
+        <y>51.968130</y>
+      </point>
+      <point>
+        <x>131.31000</x>
+        <y>50.096930</y>
+      </point>
+      <point>
+        <x>131.45000</x>
+        <y>48.829830</y>
+      </point>
+      <point>
+        <x>131.67000</x>
+        <y>47.563930</y>
+      </point>
+      <point>
+        <x>131.85000</x>
+        <y>46.76513</y>
+      </point>
+      <point>
+        <x>132.15000</x>
+        <y>45.998180</y>
+      </point>
+      <point>
+        <x>132.86000</x>
+        <y>45.267270</y>
+      </point>
+      <point>
+        <x>133.54000</x>
+        <y>44.666330</y>
+      </point>
+      <point>
+        <x>134.48000</x>
+        <y>44.18939</y>
+      </point>
+      <point>
+        <x>135.44000</x>
+        <y>43.816510</y>
+      </point>
+      <point>
+        <x>137.31000</x>
+        <y>43.467250</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>134.91000</x>
+        <y>51.604230</y>
+      </point>
+      <point>
+        <x>134.89000</x>
+        <y>49.824630</y>
+      </point>
+      <point>
+        <x>135.0</x>
+        <y>49.099030</y>
+      </point>
+      <point>
+        <x>135.23000</x>
+        <y>48.567630</y>
+      </point>
+      <point>
+        <x>135.51000</x>
+        <y>48.183330</y>
+      </point>
+      <point>
+        <x>135.85000</x>
+        <y>47.766130</y>
+      </point>
+      <point>
+        <x>136.19000</x>
+        <y>47.436030</y>
+      </point>
+      <point>
+        <x>136.58000</x>
+        <y>47.188330</y>
+      </point>
+      <point>
+        <x>137.01000</x>
+        <y>46.928330</y>
+      </point>
+      <point>
+        <x>137.28000</x>
+        <y>46.807430</y>
+      </point>
+      <point>
+        <x>137.47000</x>
+        <y>46.792630</y>
+      </point>
+    </rightBound>
+    <predecessor ref="128"/>
+    <successor ref="129"/>
+    <successor ref="130"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="131">
+    <leftBound>
+      <point>
+        <x>48.790000</x>
+        <y>43.648630</y>
+      </point>
+      <point>
+        <x>51.090000</x>
+        <y>43.549190</y>
+      </point>
+      <point>
+        <x>53.190000</x>
+        <y>44.201360</y>
+      </point>
+      <point>
+        <x>54.090000</x>
+        <y>44.702300</y>
+      </point>
+      <point>
+        <x>54.860000</x>
+        <y>45.262200</y>
+      </point>
+      <point>
+        <x>55.680000</x>
+        <y>45.836100</y>
+      </point>
+      <point>
+        <x>56.530000</x>
+        <y>46.544930</y>
+      </point>
+      <point>
+        <x>57.660000</x>
+        <y>48.498430</y>
+      </point>
+      <point>
+        <x>58.480000</x>
+        <y>51.351230</y>
+      </point>
+      <point>
+        <x>59.140000</x>
+        <y>54.225630</y>
+      </point>
+      <point>
+        <x>59.5</x>
+        <y>58.075330</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>48.5</x>
+        <y>38.772190</y>
+      </point>
+      <point>
+        <x>49.600000</x>
+        <y>38.801490</y>
+      </point>
+      <point>
+        <x>50.980000</x>
+        <y>39.057010</y>
+      </point>
+      <point>
+        <x>54.650000</x>
+        <y>39.734230</y>
+      </point>
+      <point>
+        <x>57.170000</x>
+        <y>40.605610</y>
+      </point>
+      <point>
+        <x>59.400000</x>
+        <y>41.670180</y>
+      </point>
+      <point>
+        <x>60.530000</x>
+        <y>42.896400</y>
+      </point>
+      <point>
+        <x>61.570000</x>
+        <y>44.318810</y>
+      </point>
+      <point>
+        <x>63.280000</x>
+        <y>47.731830</y>
+      </point>
+      <point>
+        <x>64.450000</x>
+        <y>52.342330</y>
+      </point>
+      <point>
+        <x>64.730000</x>
+        <y>57.113230</y>
+      </point>
+    </rightBound>
+    <predecessor ref="132"/>
+    <predecessor ref="133"/>
+    <successor ref="134"/>
+    <adjacentLeft ref="135" drivingDir="opposite"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="136">
+    <leftBound>
+      <point>
+        <x>59.5</x>
+        <y>58.075330</y>
+      </point>
+      <point>
+        <x>59.370000</x>
+        <y>54.752730</y>
+      </point>
+      <point>
+        <x>59.290000</x>
+        <y>51.735430</y>
+      </point>
+      <point>
+        <x>59.620000</x>
+        <y>49.825430</y>
+      </point>
+      <point>
+        <x>60.270000</x>
+        <y>47.850530</y>
+      </point>
+      <point>
+        <x>61.590000</x>
+        <y>45.511120</y>
+      </point>
+      <point>
+        <x>63.380000</x>
+        <y>43.495230</y>
+      </point>
+      <point>
+        <x>66.080000</x>
+        <y>42.516640</y>
+      </point>
+      <point>
+        <x>68.870000</x>
+        <y>42.25126</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>54.420000</x>
+        <y>58.295630</y>
+      </point>
+      <point>
+        <x>54.300000</x>
+        <y>55.448130</y>
+      </point>
+      <point>
+        <x>54.670000</x>
+        <y>52.193730</y>
+      </point>
+      <point>
+        <x>55.380000</x>
+        <y>49.241230</y>
+      </point>
+      <point>
+        <x>56.610000</x>
+        <y>45.079000</y>
+      </point>
+      <point>
+        <x>58.970000</x>
+        <y>41.806170</y>
+      </point>
+      <point>
+        <x>62.660000</x>
+        <y>39.368970</y>
+      </point>
+      <point>
+        <x>66.180000</x>
+        <y>37.863050</y>
+      </point>
+      <point>
+        <x>68.650000</x>
+        <y>37.710650</y>
+      </point>
+    </rightBound>
+    <predecessor ref="137"/>
+    <successor ref="133"/>
+    <successor ref="125"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="135">
+    <leftBound>
+      <point>
+        <x>59.5</x>
+        <y>58.075330</y>
+      </point>
+      <point>
+        <x>59.140000</x>
+        <y>54.225630</y>
+      </point>
+      <point>
+        <x>58.480000</x>
+        <y>51.351230</y>
+      </point>
+      <point>
+        <x>57.660000</x>
+        <y>48.498430</y>
+      </point>
+      <point>
+        <x>56.530000</x>
+        <y>46.544930</y>
+      </point>
+      <point>
+        <x>55.680000</x>
+        <y>45.836100</y>
+      </point>
+      <point>
+        <x>54.860000</x>
+        <y>45.262200</y>
+      </point>
+      <point>
+        <x>54.090000</x>
+        <y>44.702300</y>
+      </point>
+      <point>
+        <x>53.190000</x>
+        <y>44.201360</y>
+      </point>
+      <point>
+        <x>51.090000</x>
+        <y>43.549190</y>
+      </point>
+      <point>
+        <x>48.790000</x>
+        <y>43.648630</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>54.420000</x>
+        <y>58.295630</y>
+      </point>
+      <point>
+        <x>54.310000</x>
+        <y>55.100430</y>
+      </point>
+      <point>
+        <x>54.190000</x>
+        <y>53.089630</y>
+      </point>
+      <point>
+        <x>53.810000</x>
+        <y>51.191030</y>
+      </point>
+      <point>
+        <x>53.620000</x>
+        <y>50.612930</y>
+      </point>
+      <point>
+        <x>53.230000</x>
+        <y>49.856230</y>
+      </point>
+      <point>
+        <x>52.400000</x>
+        <y>48.973330</y>
+      </point>
+      <point>
+        <x>51.980000</x>
+        <y>48.59483</y>
+      </point>
+      <point>
+        <x>51.320000</x>
+        <y>48.282630</y>
+      </point>
+      <point>
+        <x>50.410000</x>
+        <y>47.990530</y>
+      </point>
+      <point>
+        <x>49.050000</x>
+        <y>47.906530</y>
+      </point>
+    </rightBound>
+    <predecessor ref="137"/>
+    <successor ref="138"/>
+    <adjacentLeft ref="131" drivingDir="opposite"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
   </lanelet>
   <lanelet id="139">
     <leftBound>
       <point>
-        <x>-504593.6300</x>
-        <y>981.3057</y>
+        <x>101.77000</x>
+        <y>27.528790</y>
       </point>
       <point>
-        <x>-504593.5700</x>
-        <y>990.1956</y>
+        <x>101.83000</x>
+        <y>36.418780</y>
       </point>
       <point>
-        <x>-504595.3800</x>
-        <y>993.7441</y>
+        <x>100.02000</x>
+        <y>39.967240</y>
       </point>
       <point>
-        <x>-504598.5500</x>
-        <y>995.7676</y>
+        <x>96.850000</x>
+        <y>41.99077</y>
       </point>
       <point>
-        <x>-504601.8500</x>
-        <y>997.4959</y>
+        <x>93.550000</x>
+        <y>43.719070</y>
       </point>
       <point>
-        <x>-504605.9300</x>
-        <y>998.4059</y>
+        <x>89.470000</x>
+        <y>44.629030</y>
       </point>
       <point>
-        <x>-504611.6000</x>
-        <y>999.7467</y>
+        <x>83.800000</x>
+        <y>45.969840</y>
       </point>
       <point>
-        <x>-504614.9500</x>
-        <y>999.9712</y>
+        <x>80.450000</x>
+        <y>46.194330</y>
       </point>
     </leftBound>
     <rightBound>
       <point>
-        <x>-504589.9800</x>
-        <y>981.1199</y>
+        <x>105.42000</x>
+        <y>27.343070</y>
       </point>
       <point>
-        <x>-504588.9900</x>
-        <y>990.0292</y>
+        <x>106.41000</x>
+        <y>36.252370</y>
       </point>
       <point>
-        <x>-504589.5500</x>
-        <y>995.7996</y>
+        <x>105.85000</x>
+        <y>42.022760</y>
       </point>
       <point>
-        <x>-504593.3100</x>
-        <y>1000.0570</y>
+        <x>102.09000</x>
+        <y>46.280130</y>
       </point>
       <point>
-        <x>-504598.7300</x>
-        <y>1002.1452</y>
+        <x>96.670000</x>
+        <y>48.368330</y>
       </point>
       <point>
-        <x>-504607.3500</x>
-        <y>1002.7998</y>
+        <x>88.050000</x>
+        <y>49.022930</y>
       </point>
       <point>
-        <x>-504612.9000</x>
-        <y>1003.3707</y>
+        <x>82.5</x>
+        <y>49.593830</y>
       </point>
       <point>
-        <x>-504614.8200</x>
-        <y>1003.5799</y>
+        <x>80.580000</x>
+        <y>49.803030</y>
       </point>
     </rightBound>
     <successor ref="140"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
   </lanelet>
-  <lanelet id="122">
+  <lanelet id="141">
     <leftBound>
       <point>
-        <x>-504593.6300</x>
-        <y>981.3057</y>
+        <x>105.42000</x>
+        <y>27.343070</y>
       </point>
       <point>
-        <x>-504593.6900</x>
-        <y>986.9074</y>
+        <x>105.74000</x>
+        <y>30.197010</y>
       </point>
       <point>
-        <x>-504594.7200</x>
-        <y>989.0940</y>
+        <x>105.95000</x>
+        <y>31.248940</y>
       </point>
       <point>
-        <x>-504595.8000</x>
-        <y>991.1598</y>
+        <x>106.23000</x>
+        <y>32.281290</y>
       </point>
       <point>
-        <x>-504598.1500</x>
-        <y>992.5032</y>
+        <x>106.63000</x>
+        <y>33.134000</y>
       </point>
       <point>
-        <x>-504601.3000</x>
-        <y>993.7078</y>
+        <x>107.40000</x>
+        <y>33.894540</y>
       </point>
       <point>
-        <x>-504604.8100</x>
-        <y>994.9366</y>
+        <x>108.37000</x>
+        <y>34.373960</y>
+      </point>
+      <point>
+        <x>109.29000</x>
+        <y>34.615370</y>
+      </point>
+      <point>
+        <x>110.15000</x>
+        <y>34.794960</y>
+      </point>
+      <point>
+        <x>112.25</x>
+        <y>35.131580</y>
+      </point>
+      <point>
+        <x>113.29000</x>
+        <y>34.930210</y>
       </point>
     </leftBound>
     <rightBound>
       <point>
-        <x>-504589.9800</x>
-        <y>981.1199</y>
+        <x>109.01000</x>
+        <y>27.187460</y>
       </point>
       <point>
-        <x>-504589.2300</x>
-        <y>989.6049</y>
+        <x>109.11000</x>
+        <y>28.067930</y>
       </point>
       <point>
-        <x>-504590.4300</x>
-        <y>993.0875</y>
+        <x>109.20000</x>
+        <y>28.743180</y>
       </point>
       <point>
-        <x>-504592.5600</x>
-        <y>996.0970</y>
+        <x>109.31000</x>
+        <y>29.373200</y>
       </point>
       <point>
-        <x>-504596.3500</x>
-        <y>997.9151</y>
+        <x>109.52000</x>
+        <y>29.998550</y>
       </point>
       <point>
-        <x>-504601.9500</x>
-        <y>999.0655</y>
+        <x>109.71000</x>
+        <y>30.399380</y>
       </point>
       <point>
-        <x>-504603.8300</x>
-        <y>999.3766</y>
+        <x>110.23000</x>
+        <y>30.878470</y>
+      </point>
+      <point>
+        <x>110.76000</x>
+        <y>31.222280</y>
+      </point>
+      <point>
+        <x>111.19000</x>
+        <y>31.452740</y>
+      </point>
+      <point>
+        <x>112.0</x>
+        <y>31.655250</y>
+      </point>
+      <point>
+        <x>112.70000</x>
+        <y>31.626620</y>
       </point>
     </rightBound>
-    <successor ref="123"/>
+    <successor ref="105"/>
+    <adjacentLeft ref="142" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="142">
+    <leftBound>
+      <point>
+        <x>105.42000</x>
+        <y>27.343070</y>
+      </point>
+      <point>
+        <x>105.91000</x>
+        <y>32.766440</y>
+      </point>
+      <point>
+        <x>107.06000</x>
+        <y>36.557890</y>
+      </point>
+      <point>
+        <x>108.05000</x>
+        <y>37.694960</y>
+      </point>
+      <point>
+        <x>109.24000</x>
+        <y>38.783660</y>
+      </point>
+      <point>
+        <x>111.07000</x>
+        <y>39.280230</y>
+      </point>
+      <point>
+        <x>112.59000</x>
+        <y>39.686120</y>
+      </point>
+      <point>
+        <x>113.64000</x>
+        <y>39.669250</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>109.01000</x>
+        <y>27.187460</y>
+      </point>
+      <point>
+        <x>109.0</x>
+        <y>29.398920</y>
+      </point>
+      <point>
+        <x>109.18000</x>
+        <y>32.074590</y>
+      </point>
+      <point>
+        <x>109.5</x>
+        <y>33.049860</y>
+      </point>
+      <point>
+        <x>110.16000</x>
+        <y>33.851460</y>
+      </point>
+      <point>
+        <x>111.34000</x>
+        <y>34.48496</y>
+      </point>
+      <point>
+        <x>112.55000</x>
+        <y>34.953500</y>
+      </point>
+      <point>
+        <x>113.29000</x>
+        <y>34.930210</y>
+      </point>
+    </rightBound>
+    <successor ref="143"/>
+    <adjacentRight ref="141" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="144">
+    <leftBound>
+      <point>
+        <x>131.39000</x>
+        <y>51.968130</y>
+      </point>
+      <point>
+        <x>131.19000</x>
+        <y>49.90733</y>
+      </point>
+      <point>
+        <x>130.97000</x>
+        <y>48.479530</y>
+      </point>
+      <point>
+        <x>130.47000</x>
+        <y>46.579830</y>
+      </point>
+      <point>
+        <x>129.68000</x>
+        <y>45.433420</y>
+      </point>
+      <point>
+        <x>128.80000</x>
+        <y>44.793320</y>
+      </point>
+      <point>
+        <x>127.55000</x>
+        <y>44.388630</y>
+      </point>
+      <point>
+        <x>126.25</x>
+        <y>43.871010</y>
+      </point>
+      <point>
+        <x>125.08000</x>
+        <y>43.928480</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>127.51000</x>
+        <y>52.016330</y>
+      </point>
+      <point>
+        <x>127.34000</x>
+        <y>50.470930</y>
+      </point>
+      <point>
+        <x>127.27000</x>
+        <y>49.454630</y>
+      </point>
+      <point>
+        <x>127.07000</x>
+        <y>49.020930</y>
+      </point>
+      <point>
+        <x>126.90000</x>
+        <y>48.696930</y>
+      </point>
+      <point>
+        <x>126.68000</x>
+        <y>48.386630</y>
+      </point>
+      <point>
+        <x>126.30000</x>
+        <y>48.037030</y>
+      </point>
+      <point>
+        <x>125.81000</x>
+        <y>47.782930</y>
+      </point>
+      <point>
+        <x>125.14000</x>
+        <y>47.633530</y>
+      </point>
+    </rightBound>
+    <predecessor ref="145"/>
+    <successor ref="146"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="120">
+    <leftBound>
+      <point>
+        <x>131.39000</x>
+        <y>51.968130</y>
+      </point>
+      <point>
+        <x>131.30000</x>
+        <y>50.792130</y>
+      </point>
+      <point>
+        <x>130.83000</x>
+        <y>48.447130</y>
+      </point>
+      <point>
+        <x>130.44000</x>
+        <y>47.084130</y>
+      </point>
+      <point>
+        <x>129.19000</x>
+        <y>44.760030</y>
+      </point>
+      <point>
+        <x>128.41000</x>
+        <y>43.069160</y>
+      </point>
+      <point>
+        <x>127.02000</x>
+        <y>41.787560</y>
+      </point>
+      <point>
+        <x>124.38000</x>
+        <y>41.105850</y>
+      </point>
+      <point>
+        <x>120.52000</x>
+        <y>40.668280</y>
+      </point>
+      <point>
+        <x>117.36000</x>
+        <y>40.760300</y>
+      </point>
+      <point>
+        <x>114.51000</x>
+        <y>40.799740</y>
+      </point>
+      <point>
+        <x>113.87000</x>
+        <y>40.361210</y>
+      </point>
+      <point>
+        <x>113.64000</x>
+        <y>39.669250</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>127.51000</x>
+        <y>52.016330</y>
+      </point>
+      <point>
+        <x>127.37000</x>
+        <y>49.662630</y>
+      </point>
+      <point>
+        <x>127.23000</x>
+        <y>48.888430</y>
+      </point>
+      <point>
+        <x>126.82000</x>
+        <y>48.085230</y>
+      </point>
+      <point>
+        <x>126.36000</x>
+        <y>47.359730</y>
+      </point>
+      <point>
+        <x>125.65000</x>
+        <y>46.678730</y>
+      </point>
+      <point>
+        <x>124.58000</x>
+        <y>46.016370</y>
+      </point>
+      <point>
+        <x>123.43000</x>
+        <y>45.383120</y>
+      </point>
+      <point>
+        <x>121.90000</x>
+        <y>45.071570</y>
+      </point>
+      <point>
+        <x>120.21000</x>
+        <y>44.808590</y>
+      </point>
+      <point>
+        <x>118.39000</x>
+        <y>44.54674</y>
+      </point>
+      <point>
+        <x>116.54000</x>
+        <y>44.372780</y>
+      </point>
+      <point>
+        <x>114.58000</x>
+        <y>44.414080</y>
+      </point>
+    </rightBound>
+    <predecessor ref="145"/>
+    <successor ref="119"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="147">
+    <leftBound>
+      <point>
+        <x>69.010000</x>
+        <y>46.636930</y>
+      </point>
+      <point>
+        <x>67.960000</x>
+        <y>46.690330</y>
+      </point>
+      <point>
+        <x>66.020000</x>
+        <y>47.289830</y>
+      </point>
+      <point>
+        <x>63.200000</x>
+        <y>48.562730</y>
+      </point>
+      <point>
+        <x>62.120000</x>
+        <y>49.979330</y>
+      </point>
+      <point>
+        <x>61.210000</x>
+        <y>51.430330</y>
+      </point>
+      <point>
+        <x>60.400000</x>
+        <y>52.988930</y>
+      </point>
+      <point>
+        <x>59.770000</x>
+        <y>54.594030</y>
+      </point>
+      <point>
+        <x>59.350000</x>
+        <y>56.346230</y>
+      </point>
+      <point>
+        <x>59.5</x>
+        <y>58.075330</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>69.210000</x>
+        <y>50.415530</y>
+      </point>
+      <point>
+        <x>68.460000</x>
+        <y>50.521530</y>
+      </point>
+      <point>
+        <x>67.580000</x>
+        <y>50.771130</y>
+      </point>
+      <point>
+        <x>66.860000</x>
+        <y>51.122630</y>
+      </point>
+      <point>
+        <x>66.200000</x>
+        <y>51.594230</y>
+      </point>
+      <point>
+        <x>65.620000</x>
+        <y>52.14963</y>
+      </point>
+      <point>
+        <x>65.270000</x>
+        <y>52.709230</y>
+      </point>
+      <point>
+        <x>64.940000</x>
+        <y>53.508830</y>
+      </point>
+      <point>
+        <x>64.570000</x>
+        <y>54.597130</y>
+      </point>
+      <point>
+        <x>64.730000</x>
+        <y>57.113230</y>
+      </point>
+    </rightBound>
+    <predecessor ref="140"/>
+    <successor ref="134"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="148">
+    <leftBound>
+      <point>
+        <x>174.08000</x>
+        <y>51.406830</y>
+      </point>
+      <point>
+        <x>171.92000</x>
+        <y>25.275210</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>167.76000</x>
+        <y>51.719130</y>
+      </point>
+      <point>
+        <x>165.71000</x>
+        <y>25.556090</y>
+      </point>
+    </rightBound>
+    <adjacentLeft ref="149" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="149">
+    <leftBound>
+      <point>
+        <x>178.64000</x>
+        <y>51.181230</y>
+      </point>
+      <point>
+        <x>176.59000</x>
+        <y>24.91494</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>174.08000</x>
+        <y>51.406830</y>
+      </point>
+      <point>
+        <x>171.92000</x>
+        <y>25.275210</y>
+      </point>
+    </rightBound>
+    <adjacentRight ref="148" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="106">
+    <leftBound>
+      <point>
+        <x>111.05000</x>
+        <y>39.82745</y>
+      </point>
+      <point>
+        <x>113.64000</x>
+        <y>39.669250</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>110.72000</x>
+        <y>35.092840</y>
+      </point>
+      <point>
+        <x>113.29000</x>
+        <y>34.930210</y>
+      </point>
+    </rightBound>
+    <predecessor ref="150"/>
+    <successor ref="143"/>
+    <adjacentLeft ref="119" drivingDir="opposite"/>
+    <adjacentRight ref="104" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="121">
+    <leftBound>
+      <point>
+        <x>124.40000</x>
+        <y>40.234480</y>
+      </point>
+      <point>
+        <x>114.81000</x>
+        <y>40.752130</y>
+      </point>
+      <point>
+        <x>114.44000</x>
+        <y>40.748600</y>
+      </point>
+      <point>
+        <x>114.10000</x>
+        <y>40.600060</y>
+      </point>
+      <point>
+        <x>113.87000</x>
+        <y>40.348130</y>
+      </point>
+      <point>
+        <x>113.74000</x>
+        <y>40.037030</y>
+      </point>
+      <point>
+        <x>113.67000</x>
+        <y>39.783490</y>
+      </point>
+      <point>
+        <x>113.64000</x>
+        <y>39.669250</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>125.08000</x>
+        <y>43.928480</y>
+      </point>
+      <point>
+        <x>123.87000</x>
+        <y>43.972690</y>
+      </point>
+      <point>
+        <x>122.5</x>
+        <y>44.042700</y>
+      </point>
+      <point>
+        <x>121.19000</x>
+        <y>44.112730</y>
+      </point>
+      <point>
+        <x>119.85000</x>
+        <y>44.175750</y>
+      </point>
+      <point>
+        <x>118.69000</x>
+        <y>44.238780</y>
+      </point>
+      <point>
+        <x>117.37000</x>
+        <y>44.322800</y>
+      </point>
+      <point>
+        <x>114.58000</x>
+        <y>44.414080</y>
+      </point>
+    </rightBound>
+    <predecessor ref="151"/>
+    <successor ref="119"/>
+    <adjacentRight ref="146" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="152">
+    <leftBound>
+      <point>
+        <x>96.25</x>
+        <y>40.781710</y>
+      </point>
+      <point>
+        <x>101.02000</x>
+        <y>40.462360</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>96.910000</x>
+        <y>45.38351</y>
+      </point>
+      <point>
+        <x>100.97000</x>
+        <y>45.160030</y>
+      </point>
+    </rightBound>
+    <successor ref="153"/>
+    <adjacentLeft ref="116" drivingDir="opposite"/>
+    <adjacentRight ref="108" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="154">
+    <leftBound>
+      <point>
+        <x>26.700000</x>
+        <y>44.573360</y>
+      </point>
+      <point>
+        <x>42.0</x>
+        <y>43.874790</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>26.400000</x>
+        <y>39.998590</y>
+      </point>
+      <point>
+        <x>41.850000</x>
+        <y>39.145120</y>
+      </point>
+    </rightBound>
+    <predecessor ref="155"/>
+    <successor ref="132"/>
+    <adjacentLeft ref="156" drivingDir="opposite"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="116">
+    <leftBound>
+      <point>
+        <x>96.25</x>
+        <y>40.781710</y>
+      </point>
+      <point>
+        <x>101.02000</x>
+        <y>40.462360</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>95.460000</x>
+        <y>36.089850</y>
+      </point>
+      <point>
+        <x>100.94000</x>
+        <y>35.636790</y>
+      </point>
+    </rightBound>
+    <predecessor ref="114"/>
+    <predecessor ref="117"/>
+    <successor ref="150"/>
+    <adjacentLeft ref="152" drivingDir="opposite"/>
+    <adjacentRight ref="101" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="132">
+    <leftBound>
+      <point>
+        <x>42.0</x>
+        <y>43.874790</y>
+      </point>
+      <point>
+        <x>48.790000</x>
+        <y>43.648630</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>41.850000</x>
+        <y>39.145120</y>
+      </point>
+      <point>
+        <x>48.5</x>
+        <y>38.772190</y>
+      </point>
+    </rightBound>
+    <predecessor ref="154"/>
+    <successor ref="131"/>
+    <adjacentLeft ref="138" drivingDir="opposite"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="105">
+    <leftBound>
+      <point>
+        <x>113.29000</x>
+        <y>34.930210</y>
+      </point>
+      <point>
+        <x>121.52000</x>
+        <y>34.504580</y>
+      </point>
+      <point>
+        <x>128.58000</x>
+        <y>34.135160</y>
+      </point>
+      <point>
+        <x>136.41000</x>
+        <y>33.700630</y>
+      </point>
+      <point>
+        <x>142.66000</x>
+        <y>33.387090</y>
+      </point>
+      <point>
+        <x>147.5</x>
+        <y>33.115290</y>
+      </point>
+      <point>
+        <x>152.12000</x>
+        <y>32.854730</y>
+      </point>
+      <point>
+        <x>156.56000</x>
+        <y>32.640360</y>
+      </point>
+      <point>
+        <x>160.77000</x>
+        <y>32.410180</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>112.70000</x>
+        <y>31.626620</y>
+      </point>
+      <point>
+        <x>114.52000</x>
+        <y>31.503250</y>
+      </point>
+      <point>
+        <x>127.22000</x>
+        <y>30.841620</y>
+      </point>
+      <point>
+        <x>136.87000</x>
+        <y>30.377180</y>
+      </point>
+      <point>
+        <x>144.10000</x>
+        <y>30.010090</y>
+      </point>
+      <point>
+        <x>147.31000</x>
+        <y>29.854580</y>
+      </point>
+      <point>
+        <x>151.01000</x>
+        <y>29.6884</y>
+      </point>
+      <point>
+        <x>155.90000</x>
+        <y>29.445700</y>
+      </point>
+      <point>
+        <x>160.54000</x>
+        <y>29.152370</y>
+      </point>
+    </rightBound>
+    <predecessor ref="141"/>
+    <predecessor ref="104"/>
+    <successor ref="157"/>
+    <successor ref="158"/>
+    <adjacentLeft ref="143" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="115">
+    <leftBound>
+      <point>
+        <x>80.200000</x>
+        <y>41.774340</y>
+      </point>
+      <point>
+        <x>84.560000</x>
+        <y>41.487250</y>
+      </point>
+      <point>
+        <x>86.530000</x>
+        <y>41.420730</y>
+      </point>
+      <point>
+        <x>90.590000</x>
+        <y>41.159700</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>79.350000</x>
+        <y>37.073590</y>
+      </point>
+      <point>
+        <x>82.370000</x>
+        <y>36.890730</y>
+      </point>
+      <point>
+        <x>84.990000</x>
+        <y>36.750680</y>
+      </point>
+      <point>
+        <x>90.010000</x>
+        <y>36.465870</y>
+      </point>
+    </rightBound>
+    <predecessor ref="125"/>
+    <successor ref="114"/>
+    <adjacentLeft ref="159" drivingDir="opposite"/>
+    <adjacentRight ref="112" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="160">
+    <leftBound>
+      <point>
+        <x>26.700000</x>
+        <y>44.573360</y>
+      </point>
+      <point>
+        <x>24.410000</x>
+        <y>44.68903</y>
+      </point>
+      <point>
+        <x>23.270000</x>
+        <y>44.738050</y>
+      </point>
+      <point>
+        <x>22.050000</x>
+        <y>44.780070</y>
+      </point>
+      <point>
+        <x>20.970000</x>
+        <y>44.829090</y>
+      </point>
+      <point>
+        <x>19.710000</x>
+        <y>44.892120</y>
+      </point>
+      <point>
+        <x>18.550000</x>
+        <y>44.948140</y>
+      </point>
+      <point>
+        <x>17.290000</x>
+        <y>45.002550</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>27.220000</x>
+        <y>49.031130</y>
+      </point>
+      <point>
+        <x>25.170000</x>
+        <y>49.196430</y>
+      </point>
+      <point>
+        <x>24.110000</x>
+        <y>49.252430</y>
+      </point>
+      <point>
+        <x>22.790000</x>
+        <y>49.308430</y>
+      </point>
+      <point>
+        <x>21.730000</x>
+        <y>49.378430</y>
+      </point>
+      <point>
+        <x>20.570000</x>
+        <y>49.462430</y>
+      </point>
+      <point>
+        <x>19.420000</x>
+        <y>49.532430</y>
+      </point>
+      <point>
+        <x>18.180000</x>
+        <y>49.595030</y>
+      </point>
+    </rightBound>
+    <predecessor ref="156"/>
+    <successor ref="161"/>
+    <adjacentLeft ref="155" drivingDir="opposite"/>
+    <adjacentRight ref="162" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="140">
+    <leftBound>
+      <point>
+        <x>80.450000</x>
+        <y>46.194330</y>
+      </point>
+      <point>
+        <x>76.220000</x>
+        <y>46.469430</y>
+      </point>
+      <point>
+        <x>72.570000</x>
+        <y>46.647030</y>
+      </point>
+      <point>
+        <x>69.010000</x>
+        <y>46.636930</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>80.580000</x>
+        <y>49.803030</y>
+      </point>
+      <point>
+        <x>75.120000</x>
+        <y>50.112130</y>
+      </point>
+      <point>
+        <x>71.130000</x>
+        <y>50.330730</y>
+      </point>
+      <point>
+        <x>69.210000</x>
+        <y>50.415530</y>
+      </point>
+    </rightBound>
+    <predecessor ref="139"/>
+    <predecessor ref="109"/>
+    <successor ref="147"/>
+    <adjacentLeft ref="163" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
   </lanelet>
   <lanelet id="163">
     <leftBound>
       <point>
-        <x>-504668.1800</x>
-        <y>1002.8080</y>
+        <x>80.200000</x>
+        <y>41.774340</y>
       </point>
       <point>
-        <x>-504675.4100</x>
-        <y>1003.2592</y>
+        <x>76.970000</x>
+        <y>41.919110</y>
       </point>
       <point>
-        <x>-504673.6000</x>
-        <y>1003.1464</y>
+        <x>73.830000</x>
+        <y>42.101230</y>
       </point>
       <point>
-        <x>-504671.8000</x>
-        <y>1003.0336</y>
-      </point>
-      <point>
-        <x>-504669.9900</x>
-        <y>1002.9208</y>
-      </point>
-      <point>
-        <x>-504677.2200</x>
-        <y>1003.3719</y>
+        <x>68.870000</x>
+        <y>42.25126</y>
       </point>
     </leftBound>
     <rightBound>
       <point>
-        <x>-504668.1800</x>
-        <y>1002.8080</y>
+        <x>80.450000</x>
+        <y>46.194330</y>
       </point>
       <point>
-        <x>-504670.2600</x>
-        <y>1003.4110</y>
+        <x>76.220000</x>
+        <y>46.469430</y>
       </point>
       <point>
-        <x>-504671.3700</x>
-        <y>1004.0450</y>
+        <x>72.570000</x>
+        <y>46.647030</y>
       </point>
       <point>
-        <x>-504674.0500</x>
-        <y>1005.8320</y>
-      </point>
-      <point>
-        <x>-504675.2000</x>
-        <y>1006.4262</y>
-      </point>
-      <point>
-        <x>-504676.6900</x>
-        <y>1006.8158</y>
+        <x>69.010000</x>
+        <y>46.636930</y>
       </point>
     </rightBound>
+    <successor ref="164"/>
+    <adjacentLeft ref="125" drivingDir="opposite"/>
+    <adjacentRight ref="140" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="165">
+    <leftBound>
+      <point>
+        <x>101.77000</x>
+        <y>27.528790</y>
+      </point>
+      <point>
+        <x>101.71000</x>
+        <y>33.130580</y>
+      </point>
+      <point>
+        <x>100.68000</x>
+        <y>35.317120</y>
+      </point>
+      <point>
+        <x>99.600000</x>
+        <y>37.382900</y>
+      </point>
+      <point>
+        <x>97.25</x>
+        <y>38.726280</y>
+      </point>
+      <point>
+        <x>94.100000</x>
+        <y>39.930940</y>
+      </point>
+      <point>
+        <x>90.590000</x>
+        <y>41.159700</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>105.42000</x>
+        <y>27.343070</y>
+      </point>
+      <point>
+        <x>106.17000</x>
+        <y>35.828010</y>
+      </point>
+      <point>
+        <x>104.97000</x>
+        <y>39.310620</y>
+      </point>
+      <point>
+        <x>102.84000</x>
+        <y>42.32011</y>
+      </point>
+      <point>
+        <x>99.050000</x>
+        <y>44.138220</y>
+      </point>
+      <point>
+        <x>93.450000</x>
+        <y>45.288600</y>
+      </point>
+      <point>
+        <x>91.570000</x>
+        <y>45.599690</y>
+      </point>
+    </rightBound>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="112">
+    <leftBound>
+      <point>
+        <x>79.350000</x>
+        <y>37.073590</y>
+      </point>
+      <point>
+        <x>82.370000</x>
+        <y>36.890730</y>
+      </point>
+      <point>
+        <x>84.990000</x>
+        <y>36.750680</y>
+      </point>
+      <point>
+        <x>90.010000</x>
+        <y>36.465870</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>79.350000</x>
+        <y>37.073590</y>
+      </point>
+      <point>
+        <x>80.290000</x>
+        <y>36.919310</y>
+      </point>
+      <point>
+        <x>89.610000</x>
+        <y>34.181720</y>
+      </point>
+      <point>
+        <x>89.920000</x>
+        <y>34.197770</y>
+      </point>
+    </rightBound>
+    <successor ref="111"/>
+    <adjacentLeft ref="115" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="113">
+    <leftBound>
+      <point>
+        <x>85.570000</x>
+        <y>29.007830</y>
+      </point>
+      <point>
+        <x>86.140000</x>
+        <y>34.250200</y>
+      </point>
+      <point>
+        <x>86.760000</x>
+        <y>35.506580</y>
+      </point>
+      <point>
+        <x>87.850000</x>
+        <y>36.150200</y>
+      </point>
+      <point>
+        <x>89.190000</x>
+        <y>36.492350</y>
+      </point>
+      <point>
+        <x>90.010000</x>
+        <y>36.465870</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>89.140000</x>
+        <y>28.748960</y>
+      </point>
+      <point>
+        <x>89.120000</x>
+        <y>32.101510</y>
+      </point>
+      <point>
+        <x>89.190000</x>
+        <y>32.817120</y>
+      </point>
+      <point>
+        <x>89.330000</x>
+        <y>33.482920</y>
+      </point>
+      <point>
+        <x>89.630000</x>
+        <y>34.168510</y>
+      </point>
+      <point>
+        <x>89.920000</x>
+        <y>34.197770</y>
+      </point>
+    </rightBound>
+    <predecessor ref="118"/>
+    <successor ref="111"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="108">
+    <leftBound>
+      <point>
+        <x>100.97000</x>
+        <y>45.160030</y>
+      </point>
+      <point>
+        <x>96.910000</x>
+        <y>45.38351</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>100.76000</x>
+        <y>48.757330</y>
+      </point>
+      <point>
+        <x>96.780000</x>
+        <y>48.932730</y>
+      </point>
+    </rightBound>
+    <predecessor ref="166"/>
+    <successor ref="107"/>
+    <adjacentLeft ref="152" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="150">
+    <leftBound>
+      <point>
+        <x>101.02000</x>
+        <y>40.462360</y>
+      </point>
+      <point>
+        <x>108.87000</x>
+        <y>39.960740</y>
+      </point>
+      <point>
+        <x>111.05000</x>
+        <y>39.82745</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>100.94000</x>
+        <y>35.636790</y>
+      </point>
+      <point>
+        <x>106.02000</x>
+        <y>35.35037</y>
+      </point>
+      <point>
+        <x>110.72000</x>
+        <y>35.092840</y>
+      </point>
+    </rightBound>
+    <predecessor ref="116"/>
+    <successor ref="106"/>
+    <adjacentLeft ref="153" drivingDir="opposite"/>
+    <adjacentRight ref="102" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="161">
+    <leftBound>
+      <point>
+        <x>17.290000</x>
+        <y>45.002550</y>
+      </point>
+      <point>
+        <x>15.0</x>
+        <y>45.119830</y>
+      </point>
+      <point>
+        <x>9.9600000</x>
+        <y>45.452070</y>
+      </point>
+      <point>
+        <x>4.4700000</x>
+        <y>45.731380</y>
+      </point>
+      <point>
+        <x>0.0</x>
+        <y>45.993960</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>18.180000</x>
+        <y>49.595030</y>
+      </point>
+      <point>
+        <x>13.220000</x>
+        <y>49.797630</y>
+      </point>
+      <point>
+        <x>8.2800000</x>
+        <y>50.073630</y>
+      </point>
+      <point>
+        <x>4.7000000</x>
+        <y>50.265530</y>
+      </point>
+      <point>
+        <x>0.72000000</x>
+        <y>50.517330</y>
+      </point>
+    </rightBound>
+    <predecessor ref="160"/>
+    <adjacentLeft ref="167" drivingDir="opposite"/>
+    <adjacentRight ref="168" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="169">
+    <leftBound>
+      <point>
+        <x>174.08000</x>
+        <y>51.406830</y>
+      </point>
+      <point>
+        <x>174.20000</x>
+        <y>48.683730</y>
+      </point>
+      <point>
+        <x>172.33000</x>
+        <y>43.390690</y>
+      </point>
+      <point>
+        <x>170.39000</x>
+        <y>41.463430</y>
+      </point>
+      <point>
+        <x>168.03000</x>
+        <y>40.018070</y>
+      </point>
+      <point>
+        <x>164.42000</x>
+        <y>37.884800</y>
+      </point>
+      <point>
+        <x>161.07000</x>
+        <y>38.135020</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>167.76000</x>
+        <y>51.719130</y>
+      </point>
+      <point>
+        <x>167.57000</x>
+        <y>50.419030</y>
+      </point>
+      <point>
+        <x>167.18000</x>
+        <y>48.468330</y>
+      </point>
+      <point>
+        <x>166.02000</x>
+        <y>45.409370</y>
+      </point>
+      <point>
+        <x>164.61000</x>
+        <y>43.692090</y>
+      </point>
+      <point>
+        <x>162.70000</x>
+        <y>42.166450</y>
+      </point>
+      <point>
+        <x>161.37000</x>
+        <y>42.254380</y>
+      </point>
+    </rightBound>
+    <adjacentRight ref="170" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="157">
+    <leftBound>
+      <point>
+        <x>160.77000</x>
+        <y>32.410180</y>
+      </point>
+      <point>
+        <x>163.47000</x>
+        <y>32.128420</y>
+      </point>
+      <point>
+        <x>166.51000</x>
+        <y>31.346570</y>
+      </point>
+      <point>
+        <x>168.48000</x>
+        <y>30.679920</y>
+      </point>
+      <point>
+        <x>170.80000</x>
+        <y>29.121160</y>
+      </point>
+      <point>
+        <x>171.61000</x>
+        <y>27.445720</y>
+      </point>
+      <point>
+        <x>172.02000</x>
+        <y>26.157870</y>
+      </point>
+      <point>
+        <x>171.92000</x>
+        <y>25.275210</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>160.54000</x>
+        <y>29.152370</y>
+      </point>
+      <point>
+        <x>162.11000</x>
+        <y>29.049170</y>
+      </point>
+      <point>
+        <x>163.22000</x>
+        <y>28.682360</y>
+      </point>
+      <point>
+        <x>164.09000</x>
+        <y>28.201140</y>
+      </point>
+      <point>
+        <x>164.77000</x>
+        <y>27.470910</y>
+      </point>
+      <point>
+        <x>165.29000</x>
+        <y>26.640240</y>
+      </point>
+      <point>
+        <x>165.61000</x>
+        <y>26.018150</y>
+      </point>
+      <point>
+        <x>165.71000</x>
+        <y>25.556090</y>
+      </point>
+    </rightBound>
+    <predecessor ref="105"/>
+    <adjacentLeft ref="158" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="153">
+    <leftBound>
+      <point>
+        <x>101.02000</x>
+        <y>40.462360</y>
+      </point>
+      <point>
+        <x>108.87000</x>
+        <y>39.960740</y>
+      </point>
+      <point>
+        <x>111.05000</x>
+        <y>39.82745</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>100.97000</x>
+        <y>45.160030</y>
+      </point>
+      <point>
+        <x>104.16000</x>
+        <y>44.8587</y>
+      </point>
+      <point>
+        <x>111.99000</x>
+        <y>44.524340</y>
+      </point>
+    </rightBound>
+    <predecessor ref="152"/>
+    <successor ref="122"/>
+    <adjacentLeft ref="150" drivingDir="opposite"/>
+    <adjacentRight ref="166" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="123">
+    <leftBound>
+      <point>
+        <x>114.58000</x>
+        <y>44.414080</y>
+      </point>
+      <point>
+        <x>111.99000</x>
+        <y>44.524340</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>115.0</x>
+        <y>47.993530</y>
+      </point>
+      <point>
+        <x>112.51000</x>
+        <y>48.108930</y>
+      </point>
+    </rightBound>
+    <predecessor ref="146"/>
+    <successor ref="166"/>
+    <adjacentLeft ref="119" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="162">
+    <leftBound>
+      <point>
+        <x>26.700000</x>
+        <y>44.573360</y>
+      </point>
+      <point>
+        <x>23.310000</x>
+        <y>45.376100</y>
+      </point>
+      <point>
+        <x>21.590000</x>
+        <y>46.362430</y>
+      </point>
+      <point>
+        <x>19.550000</x>
+        <y>48.038730</y>
+      </point>
+      <point>
+        <x>19.0</x>
+        <y>48.447730</y>
+      </point>
+      <point>
+        <x>18.180000</x>
+        <y>49.595030</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>27.220000</x>
+        <y>49.031130</y>
+      </point>
+      <point>
+        <x>25.140000</x>
+        <y>49.634130</y>
+      </point>
+      <point>
+        <x>24.030000</x>
+        <y>50.268130</y>
+      </point>
+      <point>
+        <x>21.350000</x>
+        <y>52.055130</y>
+      </point>
+      <point>
+        <x>20.200000</x>
+        <y>52.649330</y>
+      </point>
+      <point>
+        <x>18.710000</x>
+        <y>53.038930</y>
+      </point>
+    </rightBound>
+    <predecessor ref="156"/>
     <successor ref="168"/>
+    <adjacentLeft ref="160" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="151">
+    <leftBound>
+      <point>
+        <x>137.24000</x>
+        <y>39.577850</y>
+      </point>
+      <point>
+        <x>133.01000</x>
+        <y>39.771280</y>
+      </point>
+      <point>
+        <x>124.40000</x>
+        <y>40.234480</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>137.31000</x>
+        <y>43.467250</y>
+      </point>
+      <point>
+        <x>131.33000</x>
+        <y>43.72055</y>
+      </point>
+      <point>
+        <x>125.08000</x>
+        <y>43.928480</y>
+      </point>
+    </rightBound>
+    <successor ref="121"/>
+    <adjacentRight ref="130" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="143">
+    <leftBound>
+      <point>
+        <x>113.64000</x>
+        <y>39.669250</y>
+      </point>
+      <point>
+        <x>113.64000</x>
+        <y>39.630000</y>
+      </point>
+      <point>
+        <x>113.71000</x>
+        <y>39.113090</y>
+      </point>
+      <point>
+        <x>113.91000</x>
+        <y>38.853820</y>
+      </point>
+      <point>
+        <x>114.24000</x>
+        <y>38.639350</y>
+      </point>
+      <point>
+        <x>114.62000</x>
+        <y>38.531830</y>
+      </point>
+      <point>
+        <x>157.12000</x>
+        <y>36.101780</y>
+      </point>
+      <point>
+        <x>159.45000</x>
+        <y>35.515740</y>
+      </point>
+      <point>
+        <x>160.94000</x>
+        <y>35.312210</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>113.29000</x>
+        <y>34.930210</y>
+      </point>
+      <point>
+        <x>121.52000</x>
+        <y>34.504580</y>
+      </point>
+      <point>
+        <x>128.58000</x>
+        <y>34.135160</y>
+      </point>
+      <point>
+        <x>136.41000</x>
+        <y>33.700630</y>
+      </point>
+      <point>
+        <x>142.66000</x>
+        <y>33.387090</y>
+      </point>
+      <point>
+        <x>147.5</x>
+        <y>33.115290</y>
+      </point>
+      <point>
+        <x>152.12000</x>
+        <y>32.854730</y>
+      </point>
+      <point>
+        <x>156.56000</x>
+        <y>32.640360</y>
+      </point>
+      <point>
+        <x>160.77000</x>
+        <y>32.410180</y>
+      </point>
+    </rightBound>
+    <predecessor ref="142"/>
+    <predecessor ref="106"/>
+    <adjacentRight ref="105" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="159">
+    <leftBound>
+      <point>
+        <x>80.200000</x>
+        <y>41.774340</y>
+      </point>
+      <point>
+        <x>84.560000</x>
+        <y>41.487250</y>
+      </point>
+      <point>
+        <x>86.530000</x>
+        <y>41.420730</y>
+      </point>
+      <point>
+        <x>90.590000</x>
+        <y>41.159700</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>80.450000</x>
+        <y>46.194330</y>
+      </point>
+      <point>
+        <x>84.330000</x>
+        <y>46.053550</y>
+      </point>
+      <point>
+        <x>87.520000</x>
+        <y>45.890810</y>
+      </point>
+      <point>
+        <x>91.570000</x>
+        <y>45.599690</y>
+      </point>
+    </rightBound>
+    <adjacentLeft ref="115" drivingDir="opposite"/>
+    <adjacentRight ref="109" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="168">
+    <leftBound>
+      <point>
+        <x>18.180000</x>
+        <y>49.595030</y>
+      </point>
+      <point>
+        <x>13.220000</x>
+        <y>49.797630</y>
+      </point>
+      <point>
+        <x>8.2800000</x>
+        <y>50.073630</y>
+      </point>
+      <point>
+        <x>4.7000000</x>
+        <y>50.265530</y>
+      </point>
+      <point>
+        <x>0.72000000</x>
+        <y>50.517330</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>18.710000</x>
+        <y>53.038930</y>
+      </point>
+      <point>
+        <x>15.390000</x>
+        <y>53.243630</y>
+      </point>
+      <point>
+        <x>8.4000000</x>
+        <y>53.684630</y>
+      </point>
+      <point>
+        <x>4.7400000</x>
+        <y>53.902130</y>
+      </point>
+      <point>
+        <x>0.52000000</x>
+        <y>54.141630</y>
+      </point>
+    </rightBound>
+    <predecessor ref="162"/>
     <adjacentLeft ref="161" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="133">
+    <leftBound>
+      <point>
+        <x>68.870000</x>
+        <y>42.25126</y>
+      </point>
+      <point>
+        <x>48.790000</x>
+        <y>43.648630</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>68.650000</x>
+        <y>37.710650</y>
+      </point>
+      <point>
+        <x>48.5</x>
+        <y>38.772190</y>
+      </point>
+    </rightBound>
+    <predecessor ref="136"/>
+    <successor ref="131"/>
+    <adjacentLeft ref="164" drivingDir="opposite"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="125">
+    <leftBound>
+      <point>
+        <x>68.870000</x>
+        <y>42.25126</y>
+      </point>
+      <point>
+        <x>73.830000</x>
+        <y>42.101230</y>
+      </point>
+      <point>
+        <x>76.970000</x>
+        <y>41.919110</y>
+      </point>
+      <point>
+        <x>80.200000</x>
+        <y>41.774340</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>68.650000</x>
+        <y>37.710650</y>
+      </point>
+      <point>
+        <x>71.120000</x>
+        <y>37.534750</y>
+      </point>
+      <point>
+        <x>75.680000</x>
+        <y>37.331160</y>
+      </point>
+      <point>
+        <x>79.350000</x>
+        <y>37.073590</y>
+      </point>
+    </rightBound>
+    <predecessor ref="136"/>
+    <successor ref="115"/>
+    <successor ref="124"/>
+    <adjacentLeft ref="163" drivingDir="opposite"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
   </lanelet>
   <lanelet id="167">
     <leftBound>
       <point>
-        <x>-504695.4000</x>
-        <y>999.7708</y>
+        <x>0.0</x>
+        <y>45.993960</y>
       </point>
       <point>
-        <x>-504692.9000</x>
-        <y>999.6049</y>
+        <x>4.4700000</x>
+        <y>45.731380</y>
       </point>
       <point>
-        <x>-504690.9300</x>
-        <y>999.5082</y>
+        <x>9.9600000</x>
+        <y>45.452070</y>
       </point>
       <point>
-        <x>-504687.8100</x>
-        <y>999.3267</y>
+        <x>15.0</x>
+        <y>45.119830</y>
       </point>
       <point>
-        <x>-504685.4400</x>
-        <y>999.2289</y>
-      </point>
-      <point>
-        <x>-504682.8600</x>
-        <y>999.0572</y>
-      </point>
-      <point>
-        <x>-504680.4000</x>
-        <y>998.8967</y>
-      </point>
-      <point>
-        <x>-504678.1100</x>
-        <y>998.7794</y>
+        <x>17.290000</x>
+        <y>45.002550</y>
       </point>
     </leftBound>
     <rightBound>
       <point>
-        <x>-504695.3200</x>
-        <y>994.8745</y>
+        <x>0.050000000</x>
+        <y>41.349620</y>
       </point>
       <point>
-        <x>-504693.8100</x>
-        <y>995.0944</y>
+        <x>1.5900000</x>
+        <y>41.317500</y>
       </point>
       <point>
-        <x>-504692.2000</x>
-        <y>995.0650</y>
+        <x>3.2000000</x>
+        <y>41.28814</y>
       </point>
       <point>
-        <x>-504689.5700</x>
-        <y>994.8920</y>
+        <x>12.220000</x>
+        <y>40.748660</y>
       </point>
       <point>
-        <x>-504686.2900</x>
-        <y>994.7268</y>
-      </point>
-      <point>
-        <x>-504683.1800</x>
-        <y>994.5255</y>
-      </point>
-      <point>
-        <x>-504680.1900</x>
-        <y>994.3796</y>
-      </point>
-      <point>
-        <x>-504677.9000</x>
-        <y>994.2807</y>
+        <x>17.5</x>
+        <y>40.503790</y>
       </point>
     </rightBound>
-    <successor ref="158"/>
-    <adjacentLeft ref="162" drivingDir="opposite"/>
+    <successor ref="155"/>
+    <adjacentLeft ref="161" drivingDir="opposite"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="122">
+    <leftBound>
+      <point>
+        <x>111.05000</x>
+        <y>39.82745</y>
+      </point>
+      <point>
+        <x>109.87000</x>
+        <y>39.897030</y>
+      </point>
+      <point>
+        <x>108.96000</x>
+        <y>39.213730</y>
+      </point>
+      <point>
+        <x>108.14000</x>
+        <y>38.404070</y>
+      </point>
+      <point>
+        <x>106.69000</x>
+        <y>36.258090</y>
+      </point>
+      <point>
+        <x>106.47000</x>
+        <y>34.962280</y>
+      </point>
+      <point>
+        <x>105.78000</x>
+        <y>30.783150</y>
+      </point>
+      <point>
+        <x>105.42000</x>
+        <y>27.343070</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>111.99000</x>
+        <y>44.524340</y>
+      </point>
+      <point>
+        <x>110.73000</x>
+        <y>44.556450</y>
+      </point>
+      <point>
+        <x>108.24000</x>
+        <y>43.878140</y>
+      </point>
+      <point>
+        <x>105.04000</x>
+        <y>41.678760</y>
+      </point>
+      <point>
+        <x>102.99000</x>
+        <y>38.584830</y>
+      </point>
+      <point>
+        <x>101.95000</x>
+        <y>34.686200</y>
+      </point>
+      <point>
+        <x>101.76000</x>
+        <y>31.009710</y>
+      </point>
+      <point>
+        <x>101.77000</x>
+        <y>27.528790</y>
+      </point>
+    </rightBound>
+    <predecessor ref="153"/>
+    <predecessor ref="119"/>
+    <successor ref="103"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="155">
+    <leftBound>
+      <point>
+        <x>17.290000</x>
+        <y>45.002550</y>
+      </point>
+      <point>
+        <x>18.550000</x>
+        <y>44.948140</y>
+      </point>
+      <point>
+        <x>19.710000</x>
+        <y>44.892120</y>
+      </point>
+      <point>
+        <x>20.970000</x>
+        <y>44.829090</y>
+      </point>
+      <point>
+        <x>22.050000</x>
+        <y>44.780070</y>
+      </point>
+      <point>
+        <x>23.270000</x>
+        <y>44.738050</y>
+      </point>
+      <point>
+        <x>24.410000</x>
+        <y>44.68903</y>
+      </point>
+      <point>
+        <x>26.700000</x>
+        <y>44.573360</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>17.5</x>
+        <y>40.503790</y>
+      </point>
+      <point>
+        <x>19.100000</x>
+        <y>40.396940</y>
+      </point>
+      <point>
+        <x>19.890000</x>
+        <y>40.654510</y>
+      </point>
+      <point>
+        <x>20.600000</x>
+        <y>40.925430</y>
+      </point>
+      <point>
+        <x>21.490000</x>
+        <y>40.918330</y>
+      </point>
+      <point>
+        <x>22.230000</x>
+        <y>40.658380</y>
+      </point>
+      <point>
+        <x>22.960000</x>
+        <y>40.175740</y>
+      </point>
+      <point>
+        <x>26.400000</x>
+        <y>39.998590</y>
+      </point>
+    </rightBound>
+    <predecessor ref="167"/>
+    <successor ref="154"/>
+    <adjacentLeft ref="160" drivingDir="opposite"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="101">
+    <leftBound>
+      <point>
+        <x>95.460000</x>
+        <y>36.089850</y>
+      </point>
+      <point>
+        <x>100.94000</x>
+        <y>35.636790</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>95.310000</x>
+        <y>32.485160</y>
+      </point>
+      <point>
+        <x>100.72000</x>
+        <y>32.242610</y>
+      </point>
+    </rightBound>
+    <predecessor ref="111"/>
+    <successor ref="100"/>
+    <adjacentLeft ref="116" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="171">
+    <leftBound>
+      <point>
+        <x>137.24000</x>
+        <y>39.577850</y>
+      </point>
+      <point>
+        <x>143.47000</x>
+        <y>39.240890</y>
+      </point>
+      <point>
+        <x>146.57000</x>
+        <y>39.128840</y>
+      </point>
+      <point>
+        <x>149.34000</x>
+        <y>38.904800</y>
+      </point>
+      <point>
+        <x>161.07000</x>
+        <y>38.135020</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>137.31000</x>
+        <y>43.467250</y>
+      </point>
+      <point>
+        <x>143.30000</x>
+        <y>43.188330</y>
+      </point>
+      <point>
+        <x>146.60000</x>
+        <y>42.964280</y>
+      </point>
+      <point>
+        <x>149.36000</x>
+        <y>42.824240</y>
+      </point>
+      <point>
+        <x>161.37000</x>
+        <y>42.254380</y>
+      </point>
+    </rightBound>
+    <adjacentRight ref="129" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="109">
+    <leftBound>
+      <point>
+        <x>91.570000</x>
+        <y>45.599690</y>
+      </point>
+      <point>
+        <x>87.520000</x>
+        <y>45.890810</y>
+      </point>
+      <point>
+        <x>84.330000</x>
+        <y>46.053550</y>
+      </point>
+      <point>
+        <x>80.450000</x>
+        <y>46.194330</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>92.240000</x>
+        <y>49.19313</y>
+      </point>
+      <point>
+        <x>88.960000</x>
+        <y>49.376830</y>
+      </point>
+      <point>
+        <x>85.440000</x>
+        <y>49.530330</y>
+      </point>
+      <point>
+        <x>80.580000</x>
+        <y>49.803030</y>
+      </point>
+    </rightBound>
+    <predecessor ref="107"/>
+    <successor ref="140"/>
+    <adjacentLeft ref="159" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="166">
+    <leftBound>
+      <point>
+        <x>111.99000</x>
+        <y>44.524340</y>
+      </point>
+      <point>
+        <x>104.16000</x>
+        <y>44.8587</y>
+      </point>
+      <point>
+        <x>100.97000</x>
+        <y>45.160030</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>112.51000</x>
+        <y>48.108930</y>
+      </point>
+      <point>
+        <x>107.09000</x>
+        <y>48.35933</y>
+      </point>
+      <point>
+        <x>100.76000</x>
+        <y>48.757330</y>
+      </point>
+    </rightBound>
+    <predecessor ref="123"/>
+    <successor ref="108"/>
+    <adjacentLeft ref="153" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="129">
+    <leftBound>
+      <point>
+        <x>137.31000</x>
+        <y>43.467250</y>
+      </point>
+      <point>
+        <x>143.30000</x>
+        <y>43.188330</y>
+      </point>
+      <point>
+        <x>146.60000</x>
+        <y>42.964280</y>
+      </point>
+      <point>
+        <x>149.36000</x>
+        <y>42.824240</y>
+      </point>
+      <point>
+        <x>161.37000</x>
+        <y>42.254380</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>137.47000</x>
+        <y>46.792630</y>
+      </point>
+      <point>
+        <x>138.01000</x>
+        <y>46.682330</y>
+      </point>
+      <point>
+        <x>157.71000</x>
+        <y>45.639440</y>
+      </point>
+      <point>
+        <x>159.76000</x>
+        <y>45.580830</y>
+      </point>
+      <point>
+        <x>161.59000</x>
+        <y>45.699920</y>
+      </point>
+    </rightBound>
+    <predecessor ref="127"/>
+    <adjacentLeft ref="171" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="146">
+    <leftBound>
+      <point>
+        <x>125.08000</x>
+        <y>43.928480</y>
+      </point>
+      <point>
+        <x>123.87000</x>
+        <y>43.972690</y>
+      </point>
+      <point>
+        <x>122.5</x>
+        <y>44.042700</y>
+      </point>
+      <point>
+        <x>121.19000</x>
+        <y>44.112730</y>
+      </point>
+      <point>
+        <x>119.85000</x>
+        <y>44.175750</y>
+      </point>
+      <point>
+        <x>118.69000</x>
+        <y>44.238780</y>
+      </point>
+      <point>
+        <x>117.37000</x>
+        <y>44.322800</y>
+      </point>
+      <point>
+        <x>114.58000</x>
+        <y>44.414080</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>125.14000</x>
+        <y>47.633530</y>
+      </point>
+      <point>
+        <x>124.70000</x>
+        <y>47.563530</y>
+      </point>
+      <point>
+        <x>123.80000</x>
+        <y>47.481130</y>
+      </point>
+      <point>
+        <x>122.28000</x>
+        <y>47.584230</y>
+      </point>
+      <point>
+        <x>120.64000</x>
+        <y>47.709830</y>
+      </point>
+      <point>
+        <x>117.92000</x>
+        <y>47.850230</y>
+      </point>
+      <point>
+        <x>116.57000</x>
+        <y>47.920330</y>
+      </point>
+      <point>
+        <x>115.0</x>
+        <y>47.993530</y>
+      </point>
+    </rightBound>
+    <predecessor ref="144"/>
+    <predecessor ref="130"/>
+    <successor ref="123"/>
+    <adjacentLeft ref="121" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="164">
+    <leftBound>
+      <point>
+        <x>68.870000</x>
+        <y>42.25126</y>
+      </point>
+      <point>
+        <x>48.790000</x>
+        <y>43.648630</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>69.010000</x>
+        <y>46.636930</y>
+      </point>
+      <point>
+        <x>49.050000</x>
+        <y>47.906530</y>
+      </point>
+    </rightBound>
+    <predecessor ref="163"/>
+    <successor ref="138"/>
+    <adjacentLeft ref="133" drivingDir="opposite"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="102">
+    <leftBound>
+      <point>
+        <x>110.72000</x>
+        <y>35.092840</y>
+      </point>
+      <point>
+        <x>106.02000</x>
+        <y>35.35037</y>
+      </point>
+      <point>
+        <x>100.94000</x>
+        <y>35.636790</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>110.53000</x>
+        <y>31.931270</y>
+      </point>
+      <point>
+        <x>107.45000</x>
+        <y>31.959390</y>
+      </point>
+      <point>
+        <x>100.72000</x>
+        <y>32.242610</y>
+      </point>
+    </rightBound>
+    <successor ref="100"/>
+    <adjacentLeft ref="150" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="138">
+    <leftBound>
+      <point>
+        <x>48.790000</x>
+        <y>43.648630</y>
+      </point>
+      <point>
+        <x>42.0</x>
+        <y>43.874790</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>49.050000</x>
+        <y>47.906530</y>
+      </point>
+      <point>
+        <x>42.350000</x>
+        <y>48.216230</y>
+      </point>
+    </rightBound>
+    <predecessor ref="164"/>
+    <predecessor ref="135"/>
+    <successor ref="156"/>
+    <adjacentLeft ref="132" drivingDir="opposite"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="156">
+    <leftBound>
+      <point>
+        <x>42.0</x>
+        <y>43.874790</y>
+      </point>
+      <point>
+        <x>26.700000</x>
+        <y>44.573360</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>42.350000</x>
+        <y>48.216230</y>
+      </point>
+      <point>
+        <x>27.220000</x>
+        <y>49.031130</y>
+      </point>
+    </rightBound>
+    <predecessor ref="138"/>
+    <successor ref="160"/>
+    <successor ref="162"/>
+    <adjacentLeft ref="154" drivingDir="opposite"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="130">
+    <leftBound>
+      <point>
+        <x>137.31000</x>
+        <y>43.467250</y>
+      </point>
+      <point>
+        <x>131.33000</x>
+        <y>43.72055</y>
+      </point>
+      <point>
+        <x>125.08000</x>
+        <y>43.928480</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>137.47000</x>
+        <y>46.792630</y>
+      </point>
+      <point>
+        <x>129.84000</x>
+        <y>47.150230</y>
+      </point>
+      <point>
+        <x>125.14000</x>
+        <y>47.633530</y>
+      </point>
+    </rightBound>
+    <predecessor ref="127"/>
+    <successor ref="146"/>
+    <adjacentLeft ref="151" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="158">
+    <leftBound>
+      <point>
+        <x>160.77000</x>
+        <y>32.410180</y>
+      </point>
+      <point>
+        <x>163.94000</x>
+        <y>32.304210</y>
+      </point>
+      <point>
+        <x>168.86000</x>
+        <y>31.684720</y>
+      </point>
+      <point>
+        <x>171.82000</x>
+        <y>30.968880</y>
+      </point>
+      <point>
+        <x>173.14000</x>
+        <y>30.257440</y>
+      </point>
+      <point>
+        <x>174.92000</x>
+        <y>28.852720</y>
+      </point>
+      <point>
+        <x>176.54000</x>
+        <y>26.438750</y>
+      </point>
+      <point>
+        <x>176.59000</x>
+        <y>24.91494</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>160.54000</x>
+        <y>29.152370</y>
+      </point>
+      <point>
+        <x>163.67000</x>
+        <y>28.940650</y>
+      </point>
+      <point>
+        <x>166.92000</x>
+        <y>28.728710</y>
+      </point>
+      <point>
+        <x>169.26000</x>
+        <y>28.161540</y>
+      </point>
+      <point>
+        <x>169.94000</x>
+        <y>27.797990</y>
+      </point>
+      <point>
+        <x>171.07000</x>
+        <y>26.905900</y>
+      </point>
+      <point>
+        <x>171.86000</x>
+        <y>25.735530</y>
+      </point>
+      <point>
+        <x>171.92000</x>
+        <y>25.275210</y>
+      </point>
+    </rightBound>
+    <predecessor ref="105"/>
+    <adjacentRight ref="157" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="170">
+    <leftBound>
+      <point>
+        <x>174.08000</x>
+        <y>51.406830</y>
+      </point>
+      <point>
+        <x>174.14000</x>
+        <y>49.775330</y>
+      </point>
+      <point>
+        <x>173.31000</x>
+        <y>47.242630</y>
+      </point>
+      <point>
+        <x>172.19000</x>
+        <y>45.560410</y>
+      </point>
+      <point>
+        <x>171.04000</x>
+        <y>44.923400</y>
+      </point>
+      <point>
+        <x>169.5</x>
+        <y>44.302060</y>
+      </point>
+      <point>
+        <x>165.57000</x>
+        <y>42.857750</y>
+      </point>
+      <point>
+        <x>163.42000</x>
+        <y>42.335890</y>
+      </point>
+      <point>
+        <x>161.37000</x>
+        <y>42.254380</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>167.76000</x>
+        <y>51.719130</y>
+      </point>
+      <point>
+        <x>167.59000</x>
+        <y>51.155430</y>
+      </point>
+      <point>
+        <x>167.01000</x>
+        <y>49.393430</y>
+      </point>
+      <point>
+        <x>166.37000</x>
+        <y>48.493730</y>
+      </point>
+      <point>
+        <x>165.40000</x>
+        <y>47.631230</y>
+      </point>
+      <point>
+        <x>164.21000</x>
+        <y>46.739330</y>
+      </point>
+      <point>
+        <x>163.06000</x>
+        <y>46.269630</y>
+      </point>
+      <point>
+        <x>162.34000</x>
+        <y>46.010460</y>
+      </point>
+      <point>
+        <x>161.59000</x>
+        <y>45.699920</y>
+      </point>
+    </rightBound>
+    <adjacentLeft ref="169" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="172">
+    <leftBound>
+      <point>
+        <x>174.08000</x>
+        <y>51.406830</y>
+      </point>
+      <point>
+        <x>176.55000</x>
+        <y>90.377630</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>167.76000</x>
+        <y>51.719130</y>
+      </point>
+      <point>
+        <x>171.02000</x>
+        <y>90.296230</y>
+      </point>
+    </rightBound>
+    <adjacentLeft ref="173" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
+  </lanelet>
+  <lanelet id="173">
+    <leftBound>
+      <point>
+        <x>178.64000</x>
+        <y>51.181230</y>
+      </point>
+      <point>
+        <x>178.81000</x>
+        <y>56.092030</y>
+      </point>
+    </leftBound>
+    <rightBound>
+      <point>
+        <x>174.08000</x>
+        <y>51.406830</y>
+      </point>
+      <point>
+        <x>176.55000</x>
+        <y>90.377630</y>
+      </point>
+    </rightBound>
+    <adjacentRight ref="172" drivingDir="same"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
   </lanelet>
   <lanelet id="137">
     <leftBound>
       <point>
-        <x>-504633.9400</x>
-        <y>1049.7621</y>
+        <x>61.460000</x>
+        <y>95.985230</y>
       </point>
       <point>
-        <x>-504634.7400</x>
-        <y>1034.2236</y>
-      </point>
-      <point>
-        <x>-504635.1200</x>
-        <y>1026.9979</y>
-      </point>
-      <point>
-        <x>-504635.3400</x>
-        <y>1022.7050</y>
-      </point>
-      <point>
-        <x>-504635.5600</x>
-        <y>1018.3869</y>
-      </point>
-      <point>
-        <x>-504635.7300</x>
-        <y>1015.2040</y>
-      </point>
-      <point>
-        <x>-504635.9000</x>
-        <y>1011.8522</y>
+        <x>59.5</x>
+        <y>58.075330</y>
       </point>
     </leftBound>
     <rightBound>
       <point>
-        <x>-504639.4700</x>
-        <y>1050.3150</y>
+        <x>55.930000</x>
+        <y>96.538130</y>
       </point>
       <point>
-        <x>-504640.7300</x>
-        <y>1018.4463</y>
-      </point>
-      <point>
-        <x>-504640.4700</x>
-        <y>1024.8200</y>
-      </point>
-      <point>
-        <x>-504640.2200</x>
-        <y>1031.1938</y>
-      </point>
-      <point>
-        <x>-504639.9700</x>
-        <y>1037.5675</y>
-      </point>
-      <point>
-        <x>-504639.7200</x>
-        <y>1043.9412</y>
-      </point>
-      <point>
-        <x>-504640.9800</x>
-        <y>1012.0725</y>
+        <x>54.420000</x>
+        <y>58.295630</y>
       </point>
     </rightBound>
     <successor ref="136"/>
     <successor ref="135"/>
     <adjacentLeft ref="134" drivingDir="opposite"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
   </lanelet>
   <lanelet id="145">
     <leftBound>
       <point>
-        <x>-504562.4700</x>
-        <y>1038.0892</y>
+        <x>133.04000</x>
+        <y>91.703230</y>
       </point>
       <point>
-        <x>-504563.7500</x>
-        <y>1011.1357</y>
+        <x>132.45000</x>
+        <y>76.363930</y>
       </point>
       <point>
-        <x>-504563.5000</x>
-        <y>1016.5264</y>
+        <x>131.95000</x>
+        <y>63.709730</y>
       </point>
       <point>
-        <x>-504563.2400</x>
-        <y>1021.9171</y>
-      </point>
-      <point>
-        <x>-504562.9800</x>
-        <y>1027.3078</y>
-      </point>
-      <point>
-        <x>-504562.7300</x>
-        <y>1032.6985</y>
-      </point>
-      <point>
-        <x>-504564.0100</x>
-        <y>1005.7450</y>
+        <x>131.39000</x>
+        <y>51.968130</y>
       </point>
     </leftBound>
     <rightBound>
       <point>
-        <x>-504565.3400</x>
-        <y>1045.6515</y>
+        <x>130.06000</x>
+        <y>91.874630</y>
       </point>
       <point>
-        <x>-504565.4800</x>
-        <y>1043.3404</y>
+        <x>129.92000</x>
+        <y>89.563530</y>
       </point>
       <point>
-        <x>-504565.4900</x>
-        <y>1043.1814</y>
+        <x>127.75</x>
+        <y>53.267230</y>
       </point>
       <point>
-        <x>-504565.7700</x>
-        <y>1038.2817</y>
-      </point>
-      <point>
-        <x>-504567.4800</x>
-        <y>1009.1461</y>
-      </point>
-      <point>
-        <x>-504567.6500</x>
-        <y>1007.0441</y>
-      </point>
-      <point>
-        <x>-504567.8900</x>
-        <y>1005.7932</y>
+        <x>127.51000</x>
+        <y>52.016330</y>
       </point>
     </rightBound>
+    <successor ref="120"/>
     <successor ref="144"/>
-    <successor ref="147"/>
-    <adjacentLeft ref="129" drivingDir="opposite"/>
-  </lanelet>
-  <lanelet id="117">
-    <leftBound>
-      <point>
-        <x>-504611.1900</x>
-        <y>959.3700</y>
-      </point>
-      <point>
-        <x>-504610.2800</x>
-        <y>974.9798</y>
-      </point>
-      <point>
-        <x>-504610.7400</x>
-        <y>967.1749</y>
-      </point>
-      <point>
-        <x>-504609.8300</x>
-        <y>982.7847</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504607.8200</x>
-        <y>958.8728</y>
-      </point>
-      <point>
-        <x>-504606.5900</x>
-        <y>977.0771</y>
-      </point>
-      <point>
-        <x>-504606.2700</x>
-        <y>982.4238</y>
-      </point>
-      <point>
-        <x>-504606.2600</x>
-        <y>982.5258</y>
-      </point>
-    </rightBound>
-    <successor ref="112"/>
-    <successor ref="116"/>
-    <adjacentLeft ref="126" drivingDir="opposite"/>
-  </lanelet>
-  <lanelet id="100">
-    <leftBound>
-      <point>
-        <x>-504594.4600</x>
-        <y>989.4137</y>
-      </point>
-      <point>
-        <x>-504591.6700</x>
-        <y>988.8308</y>
-      </point>
-      <point>
-        <x>-504590.1900</x>
-        <y>988.0467</y>
-      </point>
-      <point>
-        <x>-504589.7300</x>
-        <y>986.1788</y>
-      </point>
-      <point>
-        <x>-504589.9800</x>
-        <y>981.1199</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504594.6800</x>
-        <y>986.0195</y>
-      </point>
-      <point>
-        <x>-504594.1300</x>
-        <y>985.7696</y>
-      </point>
-      <point>
-        <x>-504593.9600</x>
-        <y>985.4796</y>
-      </point>
-      <point>
-        <x>-504593.7800</x>
-        <y>985.1896</y>
-      </point>
-      <point>
-        <x>-504593.6300</x>
-        <y>981.3057</y>
-      </point>
-    </rightBound>
-    <predecessor ref="101"/>
-    <successor ref="175"/>
-  </lanelet>
-  <lanelet id="103">
-    <leftBound>
-      <point>
-        <x>-504584.6800</x>
-        <y>988.8697</y>
-      </point>
-      <point>
-        <x>-504583.4800</x>
-        <y>988.7936</y>
-      </point>
-      <point>
-        <x>-504582.2700</x>
-        <y>988.7174</y>
-      </point>
-      <point>
-        <x>-504582.1100</x>
-        <y>988.7071</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504584.8700</x>
-        <y>985.7081</y>
-      </point>
-      <point>
-        <x>-504584.7100</x>
-        <y>985.7062</y>
-      </point>
-      <point>
-        <x>-504583.2200</x>
-        <y>985.7555</y>
-      </point>
-      <point>
-        <x>-504582.7000</x>
-        <y>985.4035</y>
-      </point>
-    </rightBound>
-    <predecessor ref="102"/>
-    <successor ref="104"/>
-    <successor ref="141"/>
-    <adjacentLeft ref="105" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="106">
-    <leftBound>
-      <point>
-        <x>-504598.4900</x>
-        <y>999.1604</y>
-      </point>
-      <point>
-        <x>-504602.5300</x>
-        <y>999.2590</y>
-      </point>
-      <point>
-        <x>-504603.8300</x>
-        <y>999.3766</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504598.6200</x>
-        <y>1002.7096</y>
-      </point>
-      <point>
-        <x>-504600.8900</x>
-        <y>1002.8398</y>
-      </point>
-      <point>
-        <x>-504603.1600</x>
-        <y>1002.9700</y>
-      </point>
-    </rightBound>
-    <predecessor ref="107"/>
-    <successor ref="108"/>
-    <adjacentLeft ref="109" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="110">
-    <leftBound>
-      <point>
-        <x>-504605.3900</x>
-        <y>990.2427</y>
-      </point>
-      <point>
-        <x>-504600.7200</x>
-        <y>989.9204</y>
-      </point>
-      <point>
-        <x>-504601.5000</x>
-        <y>989.9742</y>
-      </point>
-      <point>
-        <x>-504602.2700</x>
-        <y>990.0279</y>
-      </point>
-      <point>
-        <x>-504603.0500</x>
-        <y>990.0816</y>
-      </point>
-      <point>
-        <x>-504603.8300</x>
-        <y>990.1353</y>
-      </point>
-      <point>
-        <x>-504604.6100</x>
-        <y>990.1890</y>
-      </point>
-      <point>
-        <x>-504599.9400</x>
-        <y>989.8667</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504605.4800</x>
-        <y>987.9746</y>
-      </point>
-      <point>
-        <x>-504604.8500</x>
-        <y>987.9935</y>
-      </point>
-      <point>
-        <x>-504603.7800</x>
-        <y>987.9299</y>
-      </point>
-      <point>
-        <x>-504602.7900</x>
-        <y>987.8443</y>
-      </point>
-      <point>
-        <x>-504602.1600</x>
-        <y>987.1253</y>
-      </point>
-      <point>
-        <x>-504601.5700</x>
-        <y>986.4970</y>
-      </point>
-      <point>
-        <x>-504601.1900</x>
-        <y>986.3064</y>
-      </point>
-      <point>
-        <x>-504600.0900</x>
-        <y>986.2620</y>
-      </point>
-    </rightBound>
-    <predecessor ref="112"/>
-    <predecessor ref="111"/>
-    <successor ref="101"/>
-    <adjacentLeft ref="113" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="113">
-    <leftBound>
-      <point>
-        <x>-504604.8100</x>
-        <y>994.9366</y>
-      </point>
-      <point>
-        <x>-504599.9600</x>
-        <y>994.6126</y>
-      </point>
-      <point>
-        <x>-504600.7700</x>
-        <y>994.6666</y>
-      </point>
-      <point>
-        <x>-504601.5800</x>
-        <y>994.7206</y>
-      </point>
-      <point>
-        <x>-504602.3900</x>
-        <y>994.7746</y>
-      </point>
-      <point>
-        <x>-504603.1900</x>
-        <y>994.8286</y>
-      </point>
-      <point>
-        <x>-504604.0000</x>
-        <y>994.8826</y>
-      </point>
-      <point>
-        <x>-504599.1500</x>
-        <y>994.5586</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504605.3900</x>
-        <y>990.2427</y>
-      </point>
-      <point>
-        <x>-504600.7200</x>
-        <y>989.9204</y>
-      </point>
-      <point>
-        <x>-504601.5000</x>
-        <y>989.9742</y>
-      </point>
-      <point>
-        <x>-504602.2700</x>
-        <y>990.0279</y>
-      </point>
-      <point>
-        <x>-504603.0500</x>
-        <y>990.0816</y>
-      </point>
-      <point>
-        <x>-504603.8300</x>
-        <y>990.1353</y>
-      </point>
-      <point>
-        <x>-504604.6100</x>
-        <y>990.1890</y>
-      </point>
-      <point>
-        <x>-504599.9400</x>
-        <y>989.8667</y>
-      </point>
-    </rightBound>
-    <predecessor ref="114"/>
-    <successor ref="115"/>
-    <adjacentLeft ref="109" drivingDir="opposite"/>
-    <adjacentRight ref="110" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="116">
-    <leftBound>
-      <point>
-        <x>-504609.8300</x>
-        <y>982.7847</y>
-      </point>
-      <point>
-        <x>-504609.6500</x>
-        <y>985.4230</y>
-      </point>
-      <point>
-        <x>-504607.1100</x>
-        <y>991.2037</y>
-      </point>
-      <point>
-        <x>-504606.2900</x>
-        <y>992.3078</y>
-      </point>
-      <point>
-        <x>-504604.7100</x>
-        <y>993.4042</y>
-      </point>
-      <point>
-        <x>-504601.9800</x>
-        <y>994.5708</y>
-      </point>
-      <point>
-        <x>-504599.1500</x>
-        <y>994.5586</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504606.2600</x>
-        <y>982.5258</y>
-      </point>
-      <point>
-        <x>-504606.3300</x>
-        <y>984.5956</y>
-      </point>
-      <point>
-        <x>-504606.3000</x>
-        <y>987.3149</y>
-      </point>
-      <point>
-        <x>-504605.4500</x>
-        <y>988.3062</y>
-      </point>
-      <point>
-        <x>-504604.5900</x>
-        <y>989.2975</y>
-      </point>
-      <point>
-        <x>-504602.1600</x>
-        <y>989.9478</y>
-      </point>
-      <point>
-        <x>-504599.9400</x>
-        <y>989.8667</y>
-      </point>
-    </rightBound>
-    <predecessor ref="117"/>
-    <successor ref="115"/>
+    <adjacentLeft ref="128" drivingDir="opposite"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
   </lanelet>
   <lanelet id="118">
     <leftBound>
       <point>
-        <x>-504581.7600</x>
-        <y>993.4461</y>
+        <x>84.210000</x>
+        <y>5.5930800</y>
       </point>
       <point>
-        <x>-504584.3500</x>
-        <y>993.6043</y>
+        <x>84.930000</x>
+        <y>17.489410</y>
+      </point>
+      <point>
+        <x>85.570000</x>
+        <y>29.007830</y>
       </point>
     </leftBound>
     <rightBound>
       <point>
-        <x>-504580.8200</x>
-        <y>998.1910</y>
+        <x>87.580000</x>
+        <y>5.0959800</y>
       </point>
       <point>
-        <x>-504583.4100</x>
-        <y>998.3012</y>
+        <x>89.130000</x>
+        <y>28.646980</y>
+      </point>
+      <point>
+        <x>89.140000</x>
+        <y>28.748960</y>
       </point>
     </rightBound>
-    <predecessor ref="120"/>
-    <predecessor ref="147"/>
-    <successor ref="171"/>
-    <successor ref="119"/>
-    <adjacentLeft ref="105" drivingDir="opposite"/>
-    <adjacentRight ref="121" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="109">
-    <leftBound>
-      <point>
-        <x>-504599.1500</x>
-        <y>994.5586</y>
-      </point>
-      <point>
-        <x>-504604.0000</x>
-        <y>994.8826</y>
-      </point>
-      <point>
-        <x>-504603.1900</x>
-        <y>994.8286</y>
-      </point>
-      <point>
-        <x>-504602.3900</x>
-        <y>994.7746</y>
-      </point>
-      <point>
-        <x>-504601.5800</x>
-        <y>994.7206</y>
-      </point>
-      <point>
-        <x>-504600.7700</x>
-        <y>994.6666</y>
-      </point>
-      <point>
-        <x>-504599.9600</x>
-        <y>994.6126</y>
-      </point>
-      <point>
-        <x>-504604.8100</x>
-        <y>994.9366</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504598.4900</x>
-        <y>999.1604</y>
-      </point>
-      <point>
-        <x>-504602.5300</x>
-        <y>999.2590</y>
-      </point>
-      <point>
-        <x>-504603.6100</x>
-        <y>999.3570</y>
-      </point>
-      <point>
-        <x>-504603.4000</x>
-        <y>999.3374</y>
-      </point>
-      <point>
-        <x>-504603.1800</x>
-        <y>999.3178</y>
-      </point>
-      <point>
-        <x>-504602.9600</x>
-        <y>999.2982</y>
-      </point>
-      <point>
-        <x>-504602.7500</x>
-        <y>999.2786</y>
-      </point>
-      <point>
-        <x>-504603.8300</x>
-        <y>999.3766</y>
-      </point>
-    </rightBound>
-    <predecessor ref="124"/>
-    <successor ref="123"/>
-    <adjacentLeft ref="113" drivingDir="opposite"/>
-    <adjacentRight ref="106" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="125">
-    <leftBound>
-      <point>
-        <x>-504615.2000</x>
-        <y>995.5512</y>
-      </point>
-      <point>
-        <x>-504613.2400</x>
-        <y>995.2432</y>
-      </point>
-      <point>
-        <x>-504611.0200</x>
-        <y>993.2361</y>
-      </point>
-      <point>
-        <x>-504610.4700</x>
-        <y>992.6462</y>
-      </point>
-      <point>
-        <x>-504610.0900</x>
-        <y>991.8327</y>
-      </point>
-      <point>
-        <x>-504609.7100</x>
-        <y>991.0192</y>
-      </point>
-      <point>
-        <x>-504609.4700</x>
-        <y>988.2845</y>
-      </point>
-      <point>
-        <x>-504609.8300</x>
-        <y>982.7847</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504616.0500</x>
-        <y>990.8505</y>
-      </point>
-      <point>
-        <x>-504615.0700</x>
-        <y>990.4721</y>
-      </point>
-      <point>
-        <x>-504614.4500</x>
-        <y>990.0471</y>
-      </point>
-      <point>
-        <x>-504613.8800</x>
-        <y>989.4138</y>
-      </point>
-      <point>
-        <x>-504613.4300</x>
-        <y>988.5506</y>
-      </point>
-      <point>
-        <x>-504613.2500</x>
-        <y>987.7763</y>
-      </point>
-      <point>
-        <x>-504613.3300</x>
-        <y>985.6315</y>
-      </point>
-      <point>
-        <x>-504613.4400</x>
-        <y>983.2495</y>
-      </point>
-    </rightBound>
-    <predecessor ref="127"/>
-    <successor ref="126"/>
+    <successor ref="113"/>
+    <successor ref="117"/>
+    <adjacentLeft ref="126" drivingDir="opposite"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
   </lanelet>
   <lanelet id="128">
     <leftBound>
       <point>
-        <x>-504558.0900</x>
-        <y>997.2441</y>
+        <x>133.04000</x>
+        <y>91.703230</y>
       </point>
       <point>
-        <x>-504559.9600</x>
-        <y>997.5934</y>
+        <x>132.45000</x>
+        <y>76.363930</y>
       </point>
       <point>
-        <x>-504561.8600</x>
-        <y>998.4432</y>
+        <x>131.95000</x>
+        <y>63.709730</y>
       </point>
       <point>
-        <x>-504562.9700</x>
-        <y>999.5087</y>
-      </point>
-      <point>
-        <x>-504562.6900</x>
-        <y>999.2423</y>
-      </point>
-      <point>
-        <x>-504562.4100</x>
-        <y>998.9759</y>
-      </point>
-      <point>
-        <x>-504562.1300</x>
-        <y>998.7096</y>
-      </point>
-      <point>
-        <x>-504563.2500</x>
-        <y>999.7750</y>
-      </point>
-      <point>
-        <x>-504563.7300</x>
-        <y>1001.3408</y>
-      </point>
-      <point>
-        <x>-504564.0900</x>
-        <y>1003.8738</y>
-      </point>
-      <point>
-        <x>-504564.0100</x>
-        <y>1005.7450</y>
+        <x>131.39000</x>
+        <y>51.968130</y>
       </point>
     </leftBound>
     <rightBound>
       <point>
-        <x>-504557.9300</x>
-        <y>1000.5695</y>
+        <x>136.14000</x>
+        <y>91.554130</y>
       </point>
       <point>
-        <x>-504558.1200</x>
-        <y>1000.5843</y>
+        <x>136.06000</x>
+        <y>89.138830</y>
       </point>
       <point>
-        <x>-504558.3900</x>
-        <y>1000.7052</y>
+        <x>135.67000</x>
+        <y>76.416130</y>
       </point>
       <point>
-        <x>-504558.8200</x>
-        <y>1000.9652</y>
-      </point>
-      <point>
-        <x>-504559.2100</x>
-        <y>1001.2129</y>
-      </point>
-      <point>
-        <x>-504559.5500</x>
-        <y>1001.5430</y>
-      </point>
-      <point>
-        <x>-504559.8900</x>
-        <y>1001.9602</y>
-      </point>
-      <point>
-        <x>-504560.1700</x>
-        <y>1002.3445</y>
-      </point>
-      <point>
-        <x>-504560.4000</x>
-        <y>1002.8759</y>
-      </point>
-      <point>
-        <x>-504560.5100</x>
-        <y>1003.6015</y>
-      </point>
-      <point>
-        <x>-504560.4900</x>
-        <y>1005.3811</y>
+        <x>134.91000</x>
+        <y>51.604230</y>
       </point>
     </rightBound>
-    <predecessor ref="130"/>
-    <successor ref="129"/>
-  </lanelet>
-  <lanelet id="132">
-    <leftBound>
-      <point>
-        <x>-504646.6100</x>
-        <y>997.4255</y>
-      </point>
-      <point>
-        <x>-504644.3100</x>
-        <y>997.3261</y>
-      </point>
-      <point>
-        <x>-504642.2100</x>
-        <y>997.9782</y>
-      </point>
-      <point>
-        <x>-504638.8700</x>
-        <y>1000.3218</y>
-      </point>
-      <point>
-        <x>-504638.0200</x>
-        <y>1001.7870</y>
-      </point>
-      <point>
-        <x>-504638.3100</x>
-        <y>1001.2986</y>
-      </point>
-      <point>
-        <x>-504638.5900</x>
-        <y>1000.8102</y>
-      </point>
-      <point>
-        <x>-504637.7400</x>
-        <y>1002.2753</y>
-      </point>
-      <point>
-        <x>-504636.2600</x>
-        <y>1008.0025</y>
-      </point>
-      <point>
-        <x>-504635.9000</x>
-        <y>1011.8522</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504646.9000</x>
-        <y>992.5491</y>
-      </point>
-      <point>
-        <x>-504645.8000</x>
-        <y>992.5784</y>
-      </point>
-      <point>
-        <x>-504644.4200</x>
-        <y>992.8339</y>
-      </point>
-      <point>
-        <x>-504640.7500</x>
-        <y>993.5111</y>
-      </point>
-      <point>
-        <x>-504638.2300</x>
-        <y>994.3825</y>
-      </point>
-      <point>
-        <x>-504636.0000</x>
-        <y>995.4470</y>
-      </point>
-      <point>
-        <x>-504633.8300</x>
-        <y>998.0957</y>
-      </point>
-      <point>
-        <x>-504632.1200</x>
-        <y>1001.5087</y>
-      </point>
-      <point>
-        <x>-504630.9500</x>
-        <y>1006.1192</y>
-      </point>
-      <point>
-        <x>-504630.6700</x>
-        <y>1010.8901</y>
-      </point>
-    </rightBound>
-    <predecessor ref="157"/>
-    <successor ref="134"/>
-    <adjacentLeft ref="135" drivingDir="opposite"/>
-  </lanelet>
-  <lanelet id="136">
-    <leftBound>
-      <point>
-        <x>-504635.9000</x>
-        <y>1011.8522</y>
-      </point>
-      <point>
-        <x>-504636.1100</x>
-        <y>1005.5123</y>
-      </point>
-      <point>
-        <x>-504635.1300</x>
-        <y>1001.6274</y>
-      </point>
-      <point>
-        <x>-504634.2500</x>
-        <y>1000.0678</y>
-      </point>
-      <point>
-        <x>-504634.6900</x>
-        <y>1000.8476</y>
-      </point>
-      <point>
-        <x>-504633.8100</x>
-        <y>999.2880</y>
-      </point>
-      <point>
-        <x>-504632.0200</x>
-        <y>997.2721</y>
-      </point>
-      <point>
-        <x>-504629.3200</x>
-        <y>996.2935</y>
-      </point>
-      <point>
-        <x>-504626.5300</x>
-        <y>996.0281</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504640.9800</x>
-        <y>1012.0725</y>
-      </point>
-      <point>
-        <x>-504641.1000</x>
-        <y>1009.2250</y>
-      </point>
-      <point>
-        <x>-504640.7300</x>
-        <y>1005.9706</y>
-      </point>
-      <point>
-        <x>-504640.0200</x>
-        <y>1003.0181</y>
-      </point>
-      <point>
-        <x>-504638.7900</x>
-        <y>998.8559</y>
-      </point>
-      <point>
-        <x>-504636.4300</x>
-        <y>995.5830</y>
-      </point>
-      <point>
-        <x>-504632.7400</x>
-        <y>993.1458</y>
-      </point>
-      <point>
-        <x>-504629.2200</x>
-        <y>991.6399</y>
-      </point>
-      <point>
-        <x>-504626.7500</x>
-        <y>991.4875</y>
-      </point>
-    </rightBound>
-    <predecessor ref="137"/>
     <successor ref="127"/>
-  </lanelet>
-  <lanelet id="135">
-    <leftBound>
-      <point>
-        <x>-504635.9000</x>
-        <y>1011.8522</y>
-      </point>
-      <point>
-        <x>-504636.2600</x>
-        <y>1008.0025</y>
-      </point>
-      <point>
-        <x>-504637.7400</x>
-        <y>1002.2753</y>
-      </point>
-      <point>
-        <x>-504638.5900</x>
-        <y>1000.8102</y>
-      </point>
-      <point>
-        <x>-504638.3100</x>
-        <y>1001.2986</y>
-      </point>
-      <point>
-        <x>-504638.1700</x>
-        <y>1001.5428</y>
-      </point>
-      <point>
-        <x>-504638.0200</x>
-        <y>1001.7870</y>
-      </point>
-      <point>
-        <x>-504638.8700</x>
-        <y>1000.3218</y>
-      </point>
-      <point>
-        <x>-504642.2100</x>
-        <y>997.9782</y>
-      </point>
-      <point>
-        <x>-504644.3100</x>
-        <y>997.3261</y>
-      </point>
-      <point>
-        <x>-504646.6100</x>
-        <y>997.4255</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504640.9800</x>
-        <y>1012.0725</y>
-      </point>
-      <point>
-        <x>-504641.0900</x>
-        <y>1008.8773</y>
-      </point>
-      <point>
-        <x>-504641.2100</x>
-        <y>1006.8665</y>
-      </point>
-      <point>
-        <x>-504641.5900</x>
-        <y>1004.9679</y>
-      </point>
-      <point>
-        <x>-504641.7800</x>
-        <y>1004.3898</y>
-      </point>
-      <point>
-        <x>-504642.1700</x>
-        <y>1003.6331</y>
-      </point>
-      <point>
-        <x>-504643.0000</x>
-        <y>1002.7502</y>
-      </point>
-      <point>
-        <x>-504643.4200</x>
-        <y>1002.3717</y>
-      </point>
-      <point>
-        <x>-504644.0800</x>
-        <y>1002.0595</y>
-      </point>
-      <point>
-        <x>-504644.9900</x>
-        <y>1001.7674</y>
-      </point>
-      <point>
-        <x>-504646.3500</x>
-        <y>1001.6834</y>
-      </point>
-    </rightBound>
-    <predecessor ref="137"/>
-    <successor ref="138"/>
-    <adjacentLeft ref="132" drivingDir="opposite"/>
-  </lanelet>
-  <lanelet id="141">
-    <leftBound>
-      <point>
-        <x>-504582.1100</x>
-        <y>988.7071</y>
-      </point>
-      <point>
-        <x>-504583.1500</x>
-        <y>988.9084</y>
-      </point>
-      <point>
-        <x>-504585.2500</x>
-        <y>988.5718</y>
-      </point>
-      <point>
-        <x>-504587.0300</x>
-        <y>988.1508</y>
-      </point>
-      <point>
-        <x>-504588.3300</x>
-        <y>987.2209</y>
-      </point>
-      <point>
-        <x>-504587.9000</x>
-        <y>987.5308</y>
-      </point>
-      <point>
-        <x>-504587.4600</x>
-        <y>987.8408</y>
-      </point>
-      <point>
-        <x>-504588.7700</x>
-        <y>986.9109</y>
-      </point>
-      <point>
-        <x>-504589.1700</x>
-        <y>986.0582</y>
-      </point>
-      <point>
-        <x>-504589.6600</x>
-        <y>983.9739</y>
-      </point>
-      <point>
-        <x>-504589.9800</x>
-        <y>981.1199</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504582.7000</x>
-        <y>985.4035</y>
-      </point>
-      <point>
-        <x>-504583.4000</x>
-        <y>985.4321</y>
-      </point>
-      <point>
-        <x>-504584.2100</x>
-        <y>985.2296</y>
-      </point>
-      <point>
-        <x>-504584.6400</x>
-        <y>984.9992</y>
-      </point>
-      <point>
-        <x>-504585.1700</x>
-        <y>984.6553</y>
-      </point>
-      <point>
-        <x>-504585.6900</x>
-        <y>984.1762</y>
-      </point>
-      <point>
-        <x>-504585.8800</x>
-        <y>983.7754</y>
-      </point>
-      <point>
-        <x>-504586.0900</x>
-        <y>983.1501</y>
-      </point>
-      <point>
-        <x>-504586.2000</x>
-        <y>982.5200</y>
-      </point>
-      <point>
-        <x>-504586.2900</x>
-        <y>981.8448</y>
-      </point>
-      <point>
-        <x>-504586.3900</x>
-        <y>980.9643</y>
-      </point>
-    </rightBound>
-    <predecessor ref="103"/>
-    <successor ref="143"/>
-  </lanelet>
-  <lanelet id="143">
-    <leftBound>
-      <point>
-        <x>-504589.9800</x>
-        <y>981.1199</y>
-      </point>
-      <point>
-        <x>-504589.4900</x>
-        <y>986.5433</y>
-      </point>
-      <point>
-        <x>-504588.3400</x>
-        <y>990.3348</y>
-      </point>
-      <point>
-        <x>-504587.2500</x>
-        <y>991.4476</y>
-      </point>
-      <point>
-        <x>-504586.1600</x>
-        <y>992.5605</y>
-      </point>
-      <point>
-        <x>-504584.3300</x>
-        <y>993.0571</y>
-      </point>
-      <point>
-        <x>-504582.8100</x>
-        <y>993.4630</y>
-      </point>
-      <point>
-        <x>-504581.7600</x>
-        <y>993.4461</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504586.3900</x>
-        <y>980.9643</y>
-      </point>
-      <point>
-        <x>-504586.4000</x>
-        <y>983.1758</y>
-      </point>
-      <point>
-        <x>-504586.2200</x>
-        <y>985.8515</y>
-      </point>
-      <point>
-        <x>-504585.9000</x>
-        <y>986.8267</y>
-      </point>
-      <point>
-        <x>-504585.2400</x>
-        <y>987.6283</y>
-      </point>
-      <point>
-        <x>-504584.0600</x>
-        <y>988.2618</y>
-      </point>
-      <point>
-        <x>-504582.8500</x>
-        <y>988.7304</y>
-      </point>
-      <point>
-        <x>-504582.1100</x>
-        <y>988.7071</y>
-      </point>
-    </rightBound>
-    <predecessor ref="141"/>
-    <predecessor ref="142"/>
-    <successor ref="154"/>
-  </lanelet>
-  <lanelet id="144">
-    <leftBound>
-      <point>
-        <x>-504564.0100</x>
-        <y>1005.7450</y>
-      </point>
-      <point>
-        <x>-504564.2100</x>
-        <y>1003.6842</y>
-      </point>
-      <point>
-        <x>-504564.4300</x>
-        <y>1002.2564</y>
-      </point>
-      <point>
-        <x>-504564.9300</x>
-        <y>1000.3567</y>
-      </point>
-      <point>
-        <x>-504565.7200</x>
-        <y>999.2103</y>
-      </point>
-      <point>
-        <x>-504566.6000</x>
-        <y>998.5702</y>
-      </point>
-      <point>
-        <x>-504567.8500</x>
-        <y>998.1655</y>
-      </point>
-      <point>
-        <x>-504569.1500</x>
-        <y>997.6479</y>
-      </point>
-      <point>
-        <x>-504570.3200</x>
-        <y>997.7054</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504567.8900</x>
-        <y>1005.7932</y>
-      </point>
-      <point>
-        <x>-504568.0600</x>
-        <y>1004.2478</y>
-      </point>
-      <point>
-        <x>-504568.1300</x>
-        <y>1003.2315</y>
-      </point>
-      <point>
-        <x>-504568.3300</x>
-        <y>1002.7978</y>
-      </point>
-      <point>
-        <x>-504568.5300</x>
-        <y>1002.4806</y>
-      </point>
-      <point>
-        <x>-504568.7200</x>
-        <y>1002.1635</y>
-      </point>
-      <point>
-        <x>-504569.1000</x>
-        <y>1001.8139</y>
-      </point>
-      <point>
-        <x>-504569.5900</x>
-        <y>1001.5598</y>
-      </point>
-      <point>
-        <x>-504570.2600</x>
-        <y>1001.4104</y>
-      </point>
-    </rightBound>
-    <predecessor ref="145"/>
-    <successor ref="146"/>
-  </lanelet>
-  <lanelet id="147">
-    <leftBound>
-      <point>
-        <x>-504564.0100</x>
-        <y>1005.7450</y>
-      </point>
-      <point>
-        <x>-504564.1000</x>
-        <y>1004.5690</y>
-      </point>
-      <point>
-        <x>-504564.5700</x>
-        <y>1002.2240</y>
-      </point>
-      <point>
-        <x>-504564.9600</x>
-        <y>1000.8610</y>
-      </point>
-      <point>
-        <x>-504566.2100</x>
-        <y>998.5369</y>
-      </point>
-      <point>
-        <x>-504566.9900</x>
-        <y>996.8460</y>
-      </point>
-      <point>
-        <x>-504568.3800</x>
-        <y>995.5644</y>
-      </point>
-      <point>
-        <x>-504571.0200</x>
-        <y>994.8827</y>
-      </point>
-      <point>
-        <x>-504574.8800</x>
-        <y>994.4452</y>
-      </point>
-      <point>
-        <x>-504581.0300</x>
-        <y>994.6466</y>
-      </point>
-      <point>
-        <x>-504581.7400</x>
-        <y>994.1188</y>
-      </point>
-      <point>
-        <x>-504581.7700</x>
-        <y>993.5162</y>
-      </point>
-      <point>
-        <x>-504581.4000</x>
-        <y>993.4233</y>
-      </point>
-      <point>
-        <x>-504581.7600</x>
-        <y>993.4461</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504567.8900</x>
-        <y>1005.7932</y>
-      </point>
-      <point>
-        <x>-504568.0300</x>
-        <y>1003.4395</y>
-      </point>
-      <point>
-        <x>-504568.1700</x>
-        <y>1002.6653</y>
-      </point>
-      <point>
-        <x>-504568.5800</x>
-        <y>1001.8621</y>
-      </point>
-      <point>
-        <x>-504569.0400</x>
-        <y>1001.1366</y>
-      </point>
-      <point>
-        <x>-504569.6100</x>
-        <y>1000.5918</y>
-      </point>
-      <point>
-        <x>-504569.4700</x>
-        <y>1000.7280</y>
-      </point>
-      <point>
-        <x>-504569.3200</x>
-        <y>1000.8642</y>
-      </point>
-      <point>
-        <x>-504569.1800</x>
-        <y>1001.0004</y>
-      </point>
-      <point>
-        <x>-504569.7500</x>
-        <y>1000.4556</y>
-      </point>
-      <point>
-        <x>-504571.9700</x>
-        <y>999.1600</y>
-      </point>
-      <point>
-        <x>-504575.2600</x>
-        <y>998.6554</y>
-      </point>
-      <point>
-        <x>-504578.8600</x>
-        <y>998.1496</y>
-      </point>
-      <point>
-        <x>-504580.8200</x>
-        <y>998.1910</y>
-      </point>
-    </rightBound>
-    <predecessor ref="145"/>
-    <successor ref="118"/>
-  </lanelet>
-  <lanelet id="148">
-    <leftBound>
-      <point>
-        <x>-504626.3900</x>
-        <y>1000.4138</y>
-      </point>
-      <point>
-        <x>-504627.4400</x>
-        <y>1000.4672</y>
-      </point>
-      <point>
-        <x>-504629.3800</x>
-        <y>1001.0667</y>
-      </point>
-      <point>
-        <x>-504632.2000</x>
-        <y>1002.3396</y>
-      </point>
-      <point>
-        <x>-504633.7900</x>
-        <y>1004.6337</y>
-      </point>
-      <point>
-        <x>-504633.3900</x>
-        <y>1004.0602</y>
-      </point>
-      <point>
-        <x>-504633.0000</x>
-        <y>1003.4866</y>
-      </point>
-      <point>
-        <x>-504632.6000</x>
-        <y>1002.9131</y>
-      </point>
-      <point>
-        <x>-504634.1900</x>
-        <y>1005.2072</y>
-      </point>
-      <point>
-        <x>-504635.4400</x>
-        <y>1008.4969</y>
-      </point>
-      <point>
-        <x>-504636.0500</x>
-        <y>1010.1231</y>
-      </point>
-      <point>
-        <x>-504635.9000</x>
-        <y>1011.8522</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504626.1900</x>
-        <y>1004.1924</y>
-      </point>
-      <point>
-        <x>-504626.9400</x>
-        <y>1004.2984</y>
-      </point>
-      <point>
-        <x>-504627.8200</x>
-        <y>1004.5480</y>
-      </point>
-      <point>
-        <x>-504628.5400</x>
-        <y>1004.8995</y>
-      </point>
-      <point>
-        <x>-504629.2000</x>
-        <y>1005.3711</y>
-      </point>
-      <point>
-        <x>-504629.7800</x>
-        <y>1005.9265</y>
-      </point>
-      <point>
-        <x>-504630.1300</x>
-        <y>1006.4861</y>
-      </point>
-      <point>
-        <x>-504630.4600</x>
-        <y>1007.2857</y>
-      </point>
-      <point>
-        <x>-504630.7100</x>
-        <y>1008.3600</y>
-      </point>
-      <point>
-        <x>-504630.6700</x>
-        <y>1009.9226</y>
-      </point>
-      <point>
-        <x>-504630.7100</x>
-        <y>1010.4109</y>
-      </point>
-      <point>
-        <x>-504630.6700</x>
-        <y>1010.8901</y>
-      </point>
-    </rightBound>
-    <predecessor ref="140"/>
-    <successor ref="134"/>
-  </lanelet>
-  <lanelet id="149">
-    <leftBound>
-      <point>
-        <x>-504521.3200</x>
-        <y>1005.1837</y>
-      </point>
-      <point>
-        <x>-504523.4800</x>
-        <y>979.0521</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504527.6400</x>
-        <y>1005.4960</y>
-      </point>
-      <point>
-        <x>-504529.6900</x>
-        <y>979.3330</y>
-      </point>
-    </rightBound>
-    <predecessor ref="173"/>
-    <successor ref="170"/>
-    <adjacentLeft ref="152" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="152">
-    <leftBound>
-      <point>
-        <x>-504516.7600</x>
-        <y>1004.9581</y>
-      </point>
-      <point>
-        <x>-504518.8100</x>
-        <y>978.6918</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504521.3200</x>
-        <y>1005.1837</y>
-      </point>
-      <point>
-        <x>-504523.4800</x>
-        <y>979.0521</y>
-      </point>
-    </rightBound>
-    <predecessor ref="174"/>
-    <adjacentRight ref="149" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="105">
-    <leftBound>
-      <point>
-        <x>-504584.3500</x>
-        <y>993.6043</y>
-      </point>
-      <point>
-        <x>-504582.6200</x>
-        <y>993.4988</y>
-      </point>
-      <point>
-        <x>-504583.4900</x>
-        <y>993.5516</y>
-      </point>
-      <point>
-        <x>-504581.7600</x>
-        <y>993.4461</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504584.6800</x>
-        <y>988.8697</y>
-      </point>
-      <point>
-        <x>-504583.4800</x>
-        <y>988.7936</y>
-      </point>
-      <point>
-        <x>-504582.2700</x>
-        <y>988.7174</y>
-      </point>
-      <point>
-        <x>-504582.1100</x>
-        <y>988.7071</y>
-      </point>
-    </rightBound>
-    <predecessor ref="153"/>
-    <successor ref="154"/>
-    <adjacentLeft ref="118" drivingDir="opposite"/>
-    <adjacentRight ref="103" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="120">
-    <leftBound>
-      <point>
-        <x>-504571.0000</x>
-        <y>994.0114</y>
-      </point>
-      <point>
-        <x>-504575.2800</x>
-        <y>994.2170</y>
-      </point>
-      <point>
-        <x>-504576.9100</x>
-        <y>994.2998</y>
-      </point>
-      <point>
-        <x>-504578.5300</x>
-        <y>994.4000</y>
-      </point>
-      <point>
-        <x>-504579.9800</x>
-        <y>994.4927</y>
-      </point>
-      <point>
-        <x>-504580.5900</x>
-        <y>994.5290</y>
-      </point>
-      <point>
-        <x>-504581.0000</x>
-        <y>994.5290</y>
-      </point>
-      <point>
-        <x>-504581.3400</x>
-        <y>994.3804</y>
-      </point>
-      <point>
-        <x>-504581.5700</x>
-        <y>994.1285</y>
-      </point>
-      <point>
-        <x>-504581.7000</x>
-        <y>993.8174</y>
-      </point>
-      <point>
-        <x>-504581.7700</x>
-        <y>993.5446</y>
-      </point>
-      <point>
-        <x>-504581.6600</x>
-        <y>993.4426</y>
-      </point>
-      <point>
-        <x>-504581.7600</x>
-        <y>993.4461</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504570.3200</x>
-        <y>997.7054</y>
-      </point>
-      <point>
-        <x>-504579.9500</x>
-        <y>998.1505</y>
-      </point>
-      <point>
-        <x>-504579.0700</x>
-        <y>998.1100</y>
-      </point>
-      <point>
-        <x>-504578.2000</x>
-        <y>998.0696</y>
-      </point>
-      <point>
-        <x>-504577.3200</x>
-        <y>998.0291</y>
-      </point>
-      <point>
-        <x>-504576.4500</x>
-        <y>997.9886</y>
-      </point>
-      <point>
-        <x>-504575.5700</x>
-        <y>997.9482</y>
-      </point>
-      <point>
-        <x>-504574.7000</x>
-        <y>997.9077</y>
-      </point>
-      <point>
-        <x>-504573.8200</x>
-        <y>997.8672</y>
-      </point>
-      <point>
-        <x>-504572.9500</x>
-        <y>997.8268</y>
-      </point>
-      <point>
-        <x>-504572.0700</x>
-        <y>997.7863</y>
-      </point>
-      <point>
-        <x>-504571.2000</x>
-        <y>997.7458</y>
-      </point>
-      <point>
-        <x>-504580.8200</x>
-        <y>998.1910</y>
-      </point>
-    </rightBound>
-    <predecessor ref="155"/>
-    <successor ref="118"/>
-    <adjacentRight ref="146" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="124">
-    <leftBound>
-      <point>
-        <x>-504594.3800</x>
-        <y>994.2392</y>
-      </point>
-      <point>
-        <x>-504599.1500</x>
-        <y>994.5586</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504594.4300</x>
-        <y>998.9369</y>
-      </point>
-      <point>
-        <x>-504598.4900</x>
-        <y>999.1604</y>
-      </point>
-    </rightBound>
-    <predecessor ref="119"/>
-    <successor ref="109"/>
-    <adjacentLeft ref="115" drivingDir="opposite"/>
-    <adjacentRight ref="107" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="156">
-    <leftBound>
-      <point>
-        <x>-504668.7000</x>
-        <y>998.3502</y>
-      </point>
-      <point>
-        <x>-504656.4600</x>
-        <y>997.7914</y>
-      </point>
-      <point>
-        <x>-504659.5200</x>
-        <y>997.9311</y>
-      </point>
-      <point>
-        <x>-504662.5800</x>
-        <y>998.0708</y>
-      </point>
-      <point>
-        <x>-504665.6400</x>
-        <y>998.2105</y>
-      </point>
-      <point>
-        <x>-504653.4000</x>
-        <y>997.6517</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504669.0000</x>
-        <y>993.7755</y>
-      </point>
-      <point>
-        <x>-504666.7100</x>
-        <y>993.6188</y>
-      </point>
-      <point>
-        <x>-504662.6200</x>
-        <y>993.3679</y>
-      </point>
-      <point>
-        <x>-504659.6500</x>
-        <y>993.2441</y>
-      </point>
-      <point>
-        <x>-504656.5400</x>
-        <y>993.1008</y>
-      </point>
-      <point>
-        <x>-504653.5500</x>
-        <y>992.9220</y>
-      </point>
-    </rightBound>
-    <predecessor ref="158"/>
-    <successor ref="157"/>
-    <adjacentLeft ref="159" drivingDir="opposite"/>
-  </lanelet>
-  <lanelet id="115">
-    <leftBound>
-      <point>
-        <x>-504599.1500</x>
-        <y>994.5586</y>
-      </point>
-      <point>
-        <x>-504594.3800</x>
-        <y>994.2392</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504599.9400</x>
-        <y>989.8667</y>
-      </point>
-      <point>
-        <x>-504594.4600</x>
-        <y>989.4137</y>
-      </point>
-    </rightBound>
-    <predecessor ref="113"/>
-    <predecessor ref="116"/>
-    <successor ref="153"/>
-    <adjacentLeft ref="124" drivingDir="opposite"/>
-    <adjacentRight ref="101" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="157">
-    <leftBound>
-      <point>
-        <x>-504653.4000</x>
-        <y>997.6517</y>
-      </point>
-      <point>
-        <x>-504649.2200</x>
-        <y>997.5459</y>
-      </point>
-      <point>
-        <x>-504646.6100</x>
-        <y>997.4255</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504653.5500</x>
-        <y>992.9220</y>
-      </point>
-      <point>
-        <x>-504650.2200</x>
-        <y>992.7355</y>
-      </point>
-      <point>
-        <x>-504646.9000</x>
-        <y>992.5491</y>
-      </point>
-    </rightBound>
-    <predecessor ref="156"/>
-    <successor ref="132"/>
-    <successor ref="133"/>
-    <adjacentLeft ref="138" drivingDir="opposite"/>
-  </lanelet>
-  <lanelet id="104">
-    <leftBound>
-      <point>
-        <x>-504582.1100</x>
-        <y>988.7071</y>
-      </point>
-      <point>
-        <x>-504573.8800</x>
-        <y>988.2814</y>
-      </point>
-      <point>
-        <x>-504566.8200</x>
-        <y>987.9120</y>
-      </point>
-      <point>
-        <x>-504558.9900</x>
-        <y>987.4775</y>
-      </point>
-      <point>
-        <x>-504553.9900</x>
-        <y>987.2267</y>
-      </point>
-      <point>
-        <x>-504555.2400</x>
-        <y>987.2894</y>
-      </point>
-      <point>
-        <x>-504556.4900</x>
-        <y>987.3521</y>
-      </point>
-      <point>
-        <x>-504557.7400</x>
-        <y>987.4148</y>
-      </point>
-      <point>
-        <x>-504552.7400</x>
-        <y>987.1640</y>
-      </point>
-      <point>
-        <x>-504547.9000</x>
-        <y>986.8922</y>
-      </point>
-      <point>
-        <x>-504543.2800</x>
-        <y>986.6316</y>
-      </point>
-      <point>
-        <x>-504538.8400</x>
-        <y>986.4172</y>
-      </point>
-      <point>
-        <x>-504534.6300</x>
-        <y>986.1870</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504582.7000</x>
-        <y>985.4035</y>
-      </point>
-      <point>
-        <x>-504580.8800</x>
-        <y>985.2801</y>
-      </point>
-      <point>
-        <x>-504577.1700</x>
-        <y>985.1553</y>
-      </point>
-      <point>
-        <x>-504568.1800</x>
-        <y>984.6185</y>
-      </point>
-      <point>
-        <x>-504564.3100</x>
-        <y>984.4718</y>
-      </point>
-      <point>
-        <x>-504561.1800</x>
-        <y>984.3461</y>
-      </point>
-      <point>
-        <x>-504558.5300</x>
-        <y>984.1540</y>
-      </point>
-      <point>
-        <x>-504555.0900</x>
-        <y>983.9805</y>
-      </point>
-      <point>
-        <x>-504551.3000</x>
-        <y>983.7870</y>
-      </point>
-      <point>
-        <x>-504548.0900</x>
-        <y>983.6314</y>
-      </point>
-      <point>
-        <x>-504544.3900</x>
-        <y>983.4653</y>
-      </point>
-      <point>
-        <x>-504539.5000</x>
-        <y>983.2226</y>
-      </point>
-      <point>
-        <x>-504534.8600</x>
-        <y>982.9292</y>
-      </point>
-    </rightBound>
-    <predecessor ref="103"/>
-    <successor ref="160"/>
-    <successor ref="151"/>
-    <adjacentLeft ref="154" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="114">
-    <leftBound>
-      <point>
-        <x>-504615.2000</x>
-        <y>995.5512</y>
-      </point>
-      <point>
-        <x>-504610.8400</x>
-        <y>995.2641</y>
-      </point>
-      <point>
-        <x>-504608.8700</x>
-        <y>995.1976</y>
-      </point>
-      <point>
-        <x>-504604.8100</x>
-        <y>994.9366</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504616.0500</x>
-        <y>990.8505</y>
-      </point>
-      <point>
-        <x>-504608.9400</x>
-        <y>990.4453</y>
-      </point>
-      <point>
-        <x>-504612.5000</x>
-        <y>990.6479</y>
-      </point>
-      <point>
-        <x>-504605.3900</x>
-        <y>990.2427</y>
-      </point>
-    </rightBound>
-    <predecessor ref="127"/>
-    <successor ref="113"/>
-    <adjacentLeft ref="123" drivingDir="opposite"/>
-    <adjacentRight ref="111" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="161">
-    <leftBound>
-      <point>
-        <x>-504668.7000</x>
-        <y>998.3502</y>
-      </point>
-      <point>
-        <x>-504678.1100</x>
-        <y>998.7794</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504668.1800</x>
-        <y>1002.8080</y>
-      </point>
-      <point>
-        <x>-504677.2200</x>
-        <y>1003.3719</y>
-      </point>
-    </rightBound>
-    <predecessor ref="159"/>
-    <successor ref="162"/>
-    <adjacentLeft ref="158" drivingDir="opposite"/>
-    <adjacentRight ref="163" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="140">
-    <leftBound>
-      <point>
-        <x>-504614.9500</x>
-        <y>999.9712</y>
-      </point>
-      <point>
-        <x>-504619.1800</x>
-        <y>1000.2463</y>
-      </point>
-      <point>
-        <x>-504621.6100</x>
-        <y>1000.3647</y>
-      </point>
-      <point>
-        <x>-504620.4000</x>
-        <y>1000.3055</y>
-      </point>
-      <point>
-        <x>-504622.8300</x>
-        <y>1000.4239</y>
-      </point>
-      <point>
-        <x>-504626.3900</x>
-        <y>1000.4138</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504614.8200</x>
-        <y>1003.5799</y>
-      </point>
-      <point>
-        <x>-504617.9800</x>
-        <y>1003.7582</y>
-      </point>
-      <point>
-        <x>-504620.2800</x>
-        <y>1003.8890</y>
-      </point>
-      <point>
-        <x>-504622.3100</x>
-        <y>1004.0037</y>
-      </point>
-      <point>
-        <x>-504624.2700</x>
-        <y>1004.1076</y>
-      </point>
-      <point>
-        <x>-504626.1900</x>
-        <y>1004.1924</y>
-      </point>
-    </rightBound>
-    <predecessor ref="139"/>
-    <predecessor ref="108"/>
-    <successor ref="148"/>
-    <adjacentLeft ref="164" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="164">
-    <leftBound>
-      <point>
-        <x>-504615.2000</x>
-        <y>995.5512</y>
-      </point>
-      <point>
-        <x>-504618.4300</x>
-        <y>995.6960</y>
-      </point>
-      <point>
-        <x>-504620.5300</x>
-        <y>995.8174</y>
-      </point>
-      <point>
-        <x>-504619.4800</x>
-        <y>995.7567</y>
-      </point>
-      <point>
-        <x>-504621.5700</x>
-        <y>995.8781</y>
-      </point>
-      <point>
-        <x>-504626.5300</x>
-        <y>996.0281</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504614.9500</x>
-        <y>999.9712</y>
-      </point>
-      <point>
-        <x>-504619.1800</x>
-        <y>1000.2463</y>
-      </point>
-      <point>
-        <x>-504621.6100</x>
-        <y>1000.3647</y>
-      </point>
-      <point>
-        <x>-504620.4000</x>
-        <y>1000.3055</y>
-      </point>
-      <point>
-        <x>-504622.8300</x>
-        <y>1000.4239</y>
-      </point>
-      <point>
-        <x>-504626.3900</x>
-        <y>1000.4138</y>
-      </point>
-    </rightBound>
-    <predecessor ref="123"/>
-    <successor ref="165"/>
-    <adjacentLeft ref="127" drivingDir="opposite"/>
-    <adjacentRight ref="140" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="112">
-    <leftBound>
-      <point>
-        <x>-504609.8300</x>
-        <y>982.7847</y>
-      </point>
-      <point>
-        <x>-504609.2600</x>
-        <y>988.0271</y>
-      </point>
-      <point>
-        <x>-504608.6400</x>
-        <y>989.2834</y>
-      </point>
-      <point>
-        <x>-504607.5500</x>
-        <y>989.9271</y>
-      </point>
-      <point>
-        <x>-504606.2100</x>
-        <y>990.2692</y>
-      </point>
-      <point>
-        <x>-504605.3900</x>
-        <y>990.2427</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504606.2600</x>
-        <y>982.5258</y>
-      </point>
-      <point>
-        <x>-504606.2800</x>
-        <y>985.8784</y>
-      </point>
-      <point>
-        <x>-504606.1800</x>
-        <y>986.5691</y>
-      </point>
-      <point>
-        <x>-504606.0700</x>
-        <y>987.2598</y>
-      </point>
-      <point>
-        <x>-504605.7700</x>
-        <y>987.9454</y>
-      </point>
-      <point>
-        <x>-504605.4800</x>
-        <y>987.9746</y>
-      </point>
-    </rightBound>
-    <predecessor ref="117"/>
-    <successor ref="110"/>
-  </lanelet>
-  <lanelet id="107">
-    <leftBound>
-      <point>
-        <x>-504594.4300</x>
-        <y>998.9369</y>
-      </point>
-      <point>
-        <x>-504598.4900</x>
-        <y>999.1604</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504594.6400</x>
-        <y>1002.5342</y>
-      </point>
-      <point>
-        <x>-504598.6200</x>
-        <y>1002.7096</y>
-      </point>
-    </rightBound>
-    <predecessor ref="166"/>
-    <successor ref="106"/>
-    <adjacentLeft ref="124" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="153">
-    <leftBound>
-      <point>
-        <x>-504594.3800</x>
-        <y>994.2392</y>
-      </point>
-      <point>
-        <x>-504590.4800</x>
-        <y>993.9788</y>
-      </point>
-      <point>
-        <x>-504586.5300</x>
-        <y>993.7376</y>
-      </point>
-      <point>
-        <x>-504584.3500</x>
-        <y>993.6043</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504594.4600</x>
-        <y>989.4137</y>
-      </point>
-      <point>
-        <x>-504587.9400</x>
-        <y>989.0510</y>
-      </point>
-      <point>
-        <x>-504591.2000</x>
-        <y>989.2323</y>
-      </point>
-      <point>
-        <x>-504584.6800</x>
-        <y>988.8697</y>
-      </point>
-    </rightBound>
-    <predecessor ref="115"/>
-    <successor ref="105"/>
-    <adjacentLeft ref="119" drivingDir="opposite"/>
-    <adjacentRight ref="102" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="162">
-    <leftBound>
-      <point>
-        <x>-504678.1100</x>
-        <y>998.7794</y>
-      </point>
-      <point>
-        <x>-504680.4000</x>
-        <y>998.8967</y>
-      </point>
-      <point>
-        <x>-504682.8600</x>
-        <y>999.0572</y>
-      </point>
-      <point>
-        <x>-504685.4400</x>
-        <y>999.2289</y>
-      </point>
-      <point>
-        <x>-504687.8100</x>
-        <y>999.3267</y>
-      </point>
-      <point>
-        <x>-504690.9300</x>
-        <y>999.5082</y>
-      </point>
-      <point>
-        <x>-504692.9000</x>
-        <y>999.6049</y>
-      </point>
-      <point>
-        <x>-504695.4000</x>
-        <y>999.7708</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504677.2200</x>
-        <y>1003.3719</y>
-      </point>
-      <point>
-        <x>-504682.1800</x>
-        <y>1003.5745</y>
-      </point>
-      <point>
-        <x>-504685.8900</x>
-        <y>1003.7815</y>
-      </point>
-      <point>
-        <x>-504684.6500</x>
-        <y>1003.7125</y>
-      </point>
-      <point>
-        <x>-504683.4200</x>
-        <y>1003.6435</y>
-      </point>
-      <point>
-        <x>-504687.1200</x>
-        <y>1003.8505</y>
-      </point>
-      <point>
-        <x>-504690.7000</x>
-        <y>1004.0424</y>
-      </point>
-      <point>
-        <x>-504694.6800</x>
-        <y>1004.2942</y>
-      </point>
-    </rightBound>
-    <predecessor ref="161"/>
-    <adjacentLeft ref="167" drivingDir="opposite"/>
-    <adjacentRight ref="168" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="169">
-    <leftBound>
-      <point>
-        <x>-504521.3200</x>
-        <y>1005.1837</y>
-      </point>
-      <point>
-        <x>-504521.2000</x>
-        <y>1002.4606</y>
-      </point>
-      <point>
-        <x>-504523.0700</x>
-        <y>997.1676</y>
-      </point>
-      <point>
-        <x>-504525.0100</x>
-        <y>995.2403</y>
-      </point>
-      <point>
-        <x>-504527.3700</x>
-        <y>993.7949</y>
-      </point>
-      <point>
-        <x>-504530.9800</x>
-        <y>991.6617</y>
-      </point>
-      <point>
-        <x>-504534.3300</x>
-        <y>991.9119</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504527.6400</x>
-        <y>1005.4960</y>
-      </point>
-      <point>
-        <x>-504527.8300</x>
-        <y>1004.1959</y>
-      </point>
-      <point>
-        <x>-504528.2200</x>
-        <y>1002.2452</y>
-      </point>
-      <point>
-        <x>-504529.3800</x>
-        <y>999.1862</y>
-      </point>
-      <point>
-        <x>-504530.7900</x>
-        <y>997.4690</y>
-      </point>
-      <point>
-        <x>-504532.7000</x>
-        <y>995.9433</y>
-      </point>
-      <point>
-        <x>-504534.0300</x>
-        <y>996.0312</y>
-      </point>
-    </rightBound>
-    <predecessor ref="173"/>
-    <successor ref="172"/>
-  </lanelet>
-  <lanelet id="151">
-    <leftBound>
-      <point>
-        <x>-504534.6300</x>
-        <y>986.1870</y>
-      </point>
-      <point>
-        <x>-504531.9300</x>
-        <y>985.9053</y>
-      </point>
-      <point>
-        <x>-504528.8900</x>
-        <y>985.1234</y>
-      </point>
-      <point>
-        <x>-504526.9200</x>
-        <y>984.4568</y>
-      </point>
-      <point>
-        <x>-504524.6000</x>
-        <y>982.8980</y>
-      </point>
-      <point>
-        <x>-504523.7900</x>
-        <y>981.2226</y>
-      </point>
-      <point>
-        <x>-504523.3800</x>
-        <y>979.9347</y>
-      </point>
-      <point>
-        <x>-504523.4800</x>
-        <y>979.0521</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504534.8600</x>
-        <y>982.9292</y>
-      </point>
-      <point>
-        <x>-504533.2900</x>
-        <y>982.8260</y>
-      </point>
-      <point>
-        <x>-504532.1800</x>
-        <y>982.4592</y>
-      </point>
-      <point>
-        <x>-504531.3100</x>
-        <y>981.9780</y>
-      </point>
-      <point>
-        <x>-504530.6300</x>
-        <y>981.2478</y>
-      </point>
-      <point>
-        <x>-504530.1100</x>
-        <y>980.4171</y>
-      </point>
-      <point>
-        <x>-504529.7900</x>
-        <y>979.7950</y>
-      </point>
-      <point>
-        <x>-504529.6900</x>
-        <y>979.3330</y>
-      </point>
-    </rightBound>
-    <predecessor ref="104"/>
-    <successor ref="170"/>
-    <adjacentRight ref="160" drivingDir="opposite"/>
-  </lanelet>
-  <lanelet id="119">
-    <leftBound>
-      <point>
-        <x>-504584.3500</x>
-        <y>993.6043</y>
-      </point>
-      <point>
-        <x>-504586.5300</x>
-        <y>993.7376</y>
-      </point>
-      <point>
-        <x>-504590.4800</x>
-        <y>993.9788</y>
-      </point>
-      <point>
-        <x>-504594.3800</x>
-        <y>994.2392</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504583.4100</x>
-        <y>998.3012</y>
-      </point>
-      <point>
-        <x>-504591.2400</x>
-        <y>998.6356</y>
-      </point>
-      <point>
-        <x>-504592.8400</x>
-        <y>998.7862</y>
-      </point>
-      <point>
-        <x>-504594.4300</x>
-        <y>998.9369</y>
-      </point>
-    </rightBound>
-    <predecessor ref="118"/>
-    <successor ref="124"/>
-    <adjacentLeft ref="153" drivingDir="opposite"/>
-    <adjacentRight ref="166" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="121">
-    <leftBound>
-      <point>
-        <x>-504580.8200</x>
-        <y>998.1910</y>
-      </point>
-      <point>
-        <x>-504583.4100</x>
-        <y>998.3012</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504580.4000</x>
-        <y>1001.7704</y>
-      </point>
-      <point>
-        <x>-504582.8900</x>
-        <y>1001.8858</y>
-      </point>
-    </rightBound>
-    <predecessor ref="146"/>
-    <successor ref="166"/>
-    <adjacentLeft ref="118" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="155">
-    <leftBound>
-      <point>
-        <x>-504558.1600</x>
-        <y>993.3547</y>
-      </point>
-      <point>
-        <x>-504562.3900</x>
-        <y>993.5482</y>
-      </point>
-      <point>
-        <x>-504567.0200</x>
-        <y>993.7824</y>
-      </point>
-      <point>
-        <x>-504568.7400</x>
-        <y>993.8979</y>
-      </point>
-      <point>
-        <x>-504571.0000</x>
-        <y>994.0114</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504558.0900</x>
-        <y>997.2441</y>
-      </point>
-      <point>
-        <x>-504567.2600</x>
-        <y>997.5900</y>
-      </point>
-      <point>
-        <x>-504564.2000</x>
-        <y>997.4747</y>
-      </point>
-      <point>
-        <x>-504561.1500</x>
-        <y>997.3594</y>
-      </point>
-      <point>
-        <x>-504570.3200</x>
-        <y>997.7054</y>
-      </point>
-    </rightBound>
-    <predecessor ref="172"/>
-    <successor ref="120"/>
-    <adjacentRight ref="131" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="154">
-    <leftBound>
-      <point>
-        <x>-504581.7600</x>
-        <y>993.4461</y>
-      </point>
-      <point>
-        <x>-504581.6200</x>
-        <y>993.4350</y>
-      </point>
-      <point>
-        <x>-504581.7600</x>
-        <y>993.4069</y>
-      </point>
-      <point>
-        <x>-504581.6900</x>
-        <y>992.8900</y>
-      </point>
-      <point>
-        <x>-504581.4900</x>
-        <y>992.6307</y>
-      </point>
-      <point>
-        <x>-504581.1600</x>
-        <y>992.4162</y>
-      </point>
-      <point>
-        <x>-504580.7800</x>
-        <y>992.3087</y>
-      </point>
-      <point>
-        <x>-504579.5000</x>
-        <y>992.2348</y>
-      </point>
-      <point>
-        <x>-504576.0700</x>
-        <y>991.9801</y>
-      </point>
-      <point>
-        <x>-504573.1100</x>
-        <y>991.8246</y>
-      </point>
-      <point>
-        <x>-504570.1200</x>
-        <y>991.6070</y>
-      </point>
-      <point>
-        <x>-504567.0000</x>
-        <y>991.4764</y>
-      </point>
-      <point>
-        <x>-504563.7700</x>
-        <y>991.3007</y>
-      </point>
-      <point>
-        <x>-504561.3800</x>
-        <y>991.1857</y>
-      </point>
-      <point>
-        <x>-504558.8200</x>
-        <y>991.0572</y>
-      </point>
-      <point>
-        <x>-504556.9500</x>
-        <y>990.9614</y>
-      </point>
-      <point>
-        <x>-504555.1400</x>
-        <y>990.8596</y>
-      </point>
-      <point>
-        <x>-504553.1200</x>
-        <y>990.7356</y>
-      </point>
-      <point>
-        <x>-504550.7300</x>
-        <y>990.5917</y>
-      </point>
-      <point>
-        <x>-504548.5500</x>
-        <y>990.4793</y>
-      </point>
-      <point>
-        <x>-504546.5400</x>
-        <y>990.3261</y>
-      </point>
-      <point>
-        <x>-504544.6000</x>
-        <y>990.2595</y>
-      </point>
-      <point>
-        <x>-504542.7800</x>
-        <y>990.1812</y>
-      </point>
-      <point>
-        <x>-504538.2800</x>
-        <y>989.8786</y>
-      </point>
-      <point>
-        <x>-504535.9500</x>
-        <y>989.2926</y>
-      </point>
-      <point>
-        <x>-504534.4600</x>
-        <y>989.0891</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504582.1100</x>
-        <y>988.7071</y>
-      </point>
-      <point>
-        <x>-504573.8800</x>
-        <y>988.2814</y>
-      </point>
-      <point>
-        <x>-504566.8200</x>
-        <y>987.9120</y>
-      </point>
-      <point>
-        <x>-504558.9900</x>
-        <y>987.4775</y>
-      </point>
-      <point>
-        <x>-504553.9900</x>
-        <y>987.2267</y>
-      </point>
-      <point>
-        <x>-504555.2400</x>
-        <y>987.2894</y>
-      </point>
-      <point>
-        <x>-504556.4000</x>
-        <y>987.3476</y>
-      </point>
-      <point>
-        <x>-504556.3100</x>
-        <y>987.3431</y>
-      </point>
-      <point>
-        <x>-504556.2200</x>
-        <y>987.3386</y>
-      </point>
-      <point>
-        <x>-504556.1300</x>
-        <y>987.3342</y>
-      </point>
-      <point>
-        <x>-504556.0400</x>
-        <y>987.3297</y>
-      </point>
-      <point>
-        <x>-504555.9500</x>
-        <y>987.3252</y>
-      </point>
-      <point>
-        <x>-504555.8700</x>
-        <y>987.3207</y>
-      </point>
-      <point>
-        <x>-504555.7800</x>
-        <y>987.3162</y>
-      </point>
-      <point>
-        <x>-504555.6900</x>
-        <y>987.3118</y>
-      </point>
-      <point>
-        <x>-504555.6000</x>
-        <y>987.3073</y>
-      </point>
-      <point>
-        <x>-504555.5100</x>
-        <y>987.3028</y>
-      </point>
-      <point>
-        <x>-504555.4200</x>
-        <y>987.2983</y>
-      </point>
-      <point>
-        <x>-504555.3300</x>
-        <y>987.2939</y>
-      </point>
-      <point>
-        <x>-504556.4900</x>
-        <y>987.3521</y>
-      </point>
-      <point>
-        <x>-504557.7400</x>
-        <y>987.4148</y>
-      </point>
-      <point>
-        <x>-504552.7400</x>
-        <y>987.1640</y>
-      </point>
-      <point>
-        <x>-504547.9000</x>
-        <y>986.8922</y>
-      </point>
-      <point>
-        <x>-504543.2800</x>
-        <y>986.6316</y>
-      </point>
-      <point>
-        <x>-504538.8400</x>
-        <y>986.4172</y>
-      </point>
-      <point>
-        <x>-504534.6300</x>
-        <y>986.1870</y>
-      </point>
-    </rightBound>
-    <predecessor ref="105"/>
-    <predecessor ref="143"/>
-    <adjacentRight ref="104" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="123">
-    <leftBound>
-      <point>
-        <x>-504604.8100</x>
-        <y>994.9366</y>
-      </point>
-      <point>
-        <x>-504608.8700</x>
-        <y>995.1976</y>
-      </point>
-      <point>
-        <x>-504610.8400</x>
-        <y>995.2641</y>
-      </point>
-      <point>
-        <x>-504615.2000</x>
-        <y>995.5512</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504603.8300</x>
-        <y>999.3766</y>
-      </point>
-      <point>
-        <x>-504607.8800</x>
-        <y>999.6677</y>
-      </point>
-      <point>
-        <x>-504611.0700</x>
-        <y>999.8304</y>
-      </point>
-      <point>
-        <x>-504614.9500</x>
-        <y>999.9712</y>
-      </point>
-    </rightBound>
-    <predecessor ref="122"/>
-    <predecessor ref="109"/>
-    <successor ref="164"/>
-    <adjacentLeft ref="114" drivingDir="opposite"/>
-    <adjacentRight ref="108" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="168">
-    <leftBound>
-      <point>
-        <x>-504677.2200</x>
-        <y>1003.3719</y>
-      </point>
-      <point>
-        <x>-504682.1800</x>
-        <y>1003.5745</y>
-      </point>
-      <point>
-        <x>-504685.8900</x>
-        <y>1003.7815</y>
-      </point>
-      <point>
-        <x>-504684.6500</x>
-        <y>1003.7125</y>
-      </point>
-      <point>
-        <x>-504683.4200</x>
-        <y>1003.6435</y>
-      </point>
-      <point>
-        <x>-504687.1200</x>
-        <y>1003.8505</y>
-      </point>
-      <point>
-        <x>-504690.7000</x>
-        <y>1004.0424</y>
-      </point>
-      <point>
-        <x>-504694.6800</x>
-        <y>1004.2942</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504676.6900</x>
-        <y>1006.8158</y>
-      </point>
-      <point>
-        <x>-504680.0100</x>
-        <y>1007.0205</y>
-      </point>
-      <point>
-        <x>-504683.1600</x>
-        <y>1007.1883</y>
-      </point>
-      <point>
-        <x>-504685.7200</x>
-        <y>1007.3704</y>
-      </point>
-      <point>
-        <x>-504684.4400</x>
-        <y>1007.2794</y>
-      </point>
-      <point>
-        <x>-504687.0000</x>
-        <y>1007.4615</y>
-      </point>
-      <point>
-        <x>-504690.6600</x>
-        <y>1007.6790</y>
-      </point>
-      <point>
-        <x>-504694.8800</x>
-        <y>1007.9185</y>
-      </point>
-    </rightBound>
-    <predecessor ref="163"/>
-    <adjacentLeft ref="162" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="133">
-    <leftBound>
-      <point>
-        <x>-504646.6100</x>
-        <y>997.4255</y>
-      </point>
-      <point>
-        <x>-504629.4000</x>
-        <y>996.2278</y>
-      </point>
-      <point>
-        <x>-504632.2700</x>
-        <y>996.4274</y>
-      </point>
-      <point>
-        <x>-504635.1400</x>
-        <y>996.6270</y>
-      </point>
-      <point>
-        <x>-504638.0000</x>
-        <y>996.8266</y>
-      </point>
-      <point>
-        <x>-504640.8700</x>
-        <y>997.0262</y>
-      </point>
-      <point>
-        <x>-504643.7400</x>
-        <y>997.2259</y>
-      </point>
-      <point>
-        <x>-504626.5300</x>
-        <y>996.0281</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504646.9000</x>
-        <y>992.5491</y>
-      </point>
-      <point>
-        <x>-504645.6100</x>
-        <y>992.4817</y>
-      </point>
-      <point>
-        <x>-504642.7500</x>
-        <y>992.3002</y>
-      </point>
-      <point>
-        <x>-504639.7700</x>
-        <y>992.1353</y>
-      </point>
-      <point>
-        <x>-504636.9000</x>
-        <y>992.0100</y>
-      </point>
-      <point>
-        <x>-504633.4300</x>
-        <y>991.8420</y>
-      </point>
-      <point>
-        <x>-504630.3000</x>
-        <y>991.6504</y>
-      </point>
-      <point>
-        <x>-504626.7500</x>
-        <y>991.4875</y>
-      </point>
-    </rightBound>
-    <predecessor ref="157"/>
-    <successor ref="127"/>
-    <adjacentLeft ref="165" drivingDir="opposite"/>
-  </lanelet>
-  <lanelet id="127">
-    <leftBound>
-      <point>
-        <x>-504626.5300</x>
-        <y>996.0281</y>
-      </point>
-      <point>
-        <x>-504621.5700</x>
-        <y>995.8781</y>
-      </point>
-      <point>
-        <x>-504619.4800</x>
-        <y>995.7567</y>
-      </point>
-      <point>
-        <x>-504620.5300</x>
-        <y>995.8174</y>
-      </point>
-      <point>
-        <x>-504618.4300</x>
-        <y>995.6960</y>
-      </point>
-      <point>
-        <x>-504615.2000</x>
-        <y>995.5512</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504626.7500</x>
-        <y>991.4875</y>
-      </point>
-      <point>
-        <x>-504624.2800</x>
-        <y>991.3116</y>
-      </point>
-      <point>
-        <x>-504621.9000</x>
-        <y>991.2198</y>
-      </point>
-      <point>
-        <x>-504619.7200</x>
-        <y>991.1080</y>
-      </point>
-      <point>
-        <x>-504618.3000</x>
-        <y>991.0330</y>
-      </point>
-      <point>
-        <x>-504616.0500</x>
-        <y>990.8505</y>
-      </point>
-    </rightBound>
-    <predecessor ref="136"/>
-    <predecessor ref="133"/>
-    <successor ref="114"/>
-    <successor ref="125"/>
-    <adjacentLeft ref="164" drivingDir="opposite"/>
-  </lanelet>
-  <lanelet id="171">
-    <leftBound>
-      <point>
-        <x>-504584.3500</x>
-        <y>993.6043</y>
-      </point>
-      <point>
-        <x>-504585.5300</x>
-        <y>993.6739</y>
-      </point>
-      <point>
-        <x>-504587.2600</x>
-        <y>992.1809</y>
-      </point>
-      <point>
-        <x>-504587.9900</x>
-        <y>991.1080</y>
-      </point>
-      <point>
-        <x>-504588.7100</x>
-        <y>990.0350</y>
-      </point>
-      <point>
-        <x>-504588.9300</x>
-        <y>988.7392</y>
-      </point>
-      <point>
-        <x>-504589.6200</x>
-        <y>984.5600</y>
-      </point>
-      <point>
-        <x>-504589.9800</x>
-        <y>981.1199</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504583.4100</x>
-        <y>998.3012</y>
-      </point>
-      <point>
-        <x>-504584.6700</x>
-        <y>998.3333</y>
-      </point>
-      <point>
-        <x>-504587.1600</x>
-        <y>997.6550</y>
-      </point>
-      <point>
-        <x>-504590.3600</x>
-        <y>995.4556</y>
-      </point>
-      <point>
-        <x>-504592.4100</x>
-        <y>992.3617</y>
-      </point>
-      <point>
-        <x>-504593.4500</x>
-        <y>988.4631</y>
-      </point>
-      <point>
-        <x>-504593.6400</x>
-        <y>984.7866</y>
-      </point>
-      <point>
-        <x>-504593.6300</x>
-        <y>981.3057</y>
-      </point>
-    </rightBound>
-    <predecessor ref="118"/>
-    <successor ref="175"/>
-  </lanelet>
-  <lanelet id="158">
-    <leftBound>
-      <point>
-        <x>-504678.1100</x>
-        <y>998.7794</y>
-      </point>
-      <point>
-        <x>-504669.8800</x>
-        <y>998.4039</y>
-      </point>
-      <point>
-        <x>-504671.0500</x>
-        <y>998.4575</y>
-      </point>
-      <point>
-        <x>-504672.2300</x>
-        <y>998.5112</y>
-      </point>
-      <point>
-        <x>-504673.4100</x>
-        <y>998.5648</y>
-      </point>
-      <point>
-        <x>-504674.5800</x>
-        <y>998.6185</y>
-      </point>
-      <point>
-        <x>-504675.7600</x>
-        <y>998.6721</y>
-      </point>
-      <point>
-        <x>-504676.9300</x>
-        <y>998.7258</y>
-      </point>
-      <point>
-        <x>-504668.7000</x>
-        <y>998.3502</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504677.9000</x>
-        <y>994.2807</y>
-      </point>
-      <point>
-        <x>-504676.3000</x>
-        <y>994.1738</y>
-      </point>
-      <point>
-        <x>-504675.5100</x>
-        <y>994.4314</y>
-      </point>
-      <point>
-        <x>-504674.8000</x>
-        <y>994.7023</y>
-      </point>
-      <point>
-        <x>-504673.9100</x>
-        <y>994.6952</y>
-      </point>
-      <point>
-        <x>-504673.1700</x>
-        <y>994.4352</y>
-      </point>
-      <point>
-        <x>-504672.4400</x>
-        <y>993.9526</y>
-      </point>
-      <point>
-        <x>-504671.9400</x>
-        <y>993.8789</y>
-      </point>
-      <point>
-        <x>-504669.0000</x>
-        <y>993.7755</y>
-      </point>
-    </rightBound>
-    <predecessor ref="167"/>
-    <successor ref="156"/>
-    <adjacentLeft ref="161" drivingDir="opposite"/>
-  </lanelet>
-  <lanelet id="101">
-    <leftBound>
-      <point>
-        <x>-504599.9400</x>
-        <y>989.8667</y>
-      </point>
-      <point>
-        <x>-504595.8300</x>
-        <y>989.5269</y>
-      </point>
-      <point>
-        <x>-504597.2000</x>
-        <y>989.6402</y>
-      </point>
-      <point>
-        <x>-504598.5700</x>
-        <y>989.7534</y>
-      </point>
-      <point>
-        <x>-504594.4600</x>
-        <y>989.4137</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504600.0900</x>
-        <y>986.2620</y>
-      </point>
-      <point>
-        <x>-504598.7500</x>
-        <y>986.1619</y>
-      </point>
-      <point>
-        <x>-504597.3200</x>
-        <y>986.0944</y>
-      </point>
-      <point>
-        <x>-504595.7400</x>
-        <y>986.0408</y>
-      </point>
-      <point>
-        <x>-504594.6800</x>
-        <y>986.0195</y>
-      </point>
-    </rightBound>
-    <predecessor ref="110"/>
-    <successor ref="100"/>
-    <successor ref="102"/>
-    <adjacentLeft ref="115" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="172">
-    <leftBound>
-      <point>
-        <x>-504534.3300</x>
-        <y>991.9119</y>
-      </point>
-      <point>
-        <x>-504558.1600</x>
-        <y>993.3547</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504534.0300</x>
-        <y>996.0312</y>
-      </point>
-      <point>
-        <x>-504558.0900</x>
-        <y>997.2441</y>
-      </point>
-    </rightBound>
-    <predecessor ref="169"/>
-    <successor ref="155"/>
-    <adjacentRight ref="130" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="108">
-    <leftBound>
-      <point>
-        <x>-504603.8300</x>
-        <y>999.3766</y>
-      </point>
-      <point>
-        <x>-504607.8800</x>
-        <y>999.6677</y>
-      </point>
-      <point>
-        <x>-504611.0700</x>
-        <y>999.8304</y>
-      </point>
-      <point>
-        <x>-504614.9500</x>
-        <y>999.9712</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504603.1600</x>
-        <y>1002.9700</y>
-      </point>
-      <point>
-        <x>-504606.5600</x>
-        <y>1003.1386</y>
-      </point>
-      <point>
-        <x>-504609.9600</x>
-        <y>1003.3072</y>
-      </point>
-      <point>
-        <x>-504614.8200</x>
-        <y>1003.5799</y>
-      </point>
-    </rightBound>
-    <predecessor ref="106"/>
-    <successor ref="140"/>
-    <adjacentLeft ref="123" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="166">
-    <leftBound>
-      <point>
-        <x>-504583.4100</x>
-        <y>998.3012</y>
-      </point>
-      <point>
-        <x>-504591.2400</x>
-        <y>998.6356</y>
-      </point>
-      <point>
-        <x>-504592.8400</x>
-        <y>998.7862</y>
-      </point>
-      <point>
-        <x>-504594.4300</x>
-        <y>998.9369</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504582.8900</x>
-        <y>1001.8858</y>
-      </point>
-      <point>
-        <x>-504585.6000</x>
-        <y>1002.0110</y>
-      </point>
-      <point>
-        <x>-504588.3100</x>
-        <y>1002.1362</y>
-      </point>
-      <point>
-        <x>-504594.6400</x>
-        <y>1002.5342</y>
-      </point>
-    </rightBound>
-    <predecessor ref="121"/>
-    <successor ref="107"/>
-    <adjacentLeft ref="119" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="130">
-    <leftBound>
-      <point>
-        <x>-504534.0300</x>
-        <y>996.0312</y>
-      </point>
-      <point>
-        <x>-504555.4100</x>
-        <y>997.1094</y>
-      </point>
-      <point>
-        <x>-504552.7400</x>
-        <y>996.9746</y>
-      </point>
-      <point>
-        <x>-504550.0700</x>
-        <y>996.8398</y>
-      </point>
-      <point>
-        <x>-504547.4000</x>
-        <y>996.7051</y>
-      </point>
-      <point>
-        <x>-504544.7200</x>
-        <y>996.5703</y>
-      </point>
-      <point>
-        <x>-504542.0500</x>
-        <y>996.4355</y>
-      </point>
-      <point>
-        <x>-504539.3800</x>
-        <y>996.3008</y>
-      </point>
-      <point>
-        <x>-504536.7000</x>
-        <y>996.1660</y>
-      </point>
-      <point>
-        <x>-504558.0900</x>
-        <y>997.2441</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504533.8100</x>
-        <y>999.4768</y>
-      </point>
-      <point>
-        <x>-504535.6400</x>
-        <y>999.3577</y>
-      </point>
-      <point>
-        <x>-504537.6900</x>
-        <y>999.4163</y>
-      </point>
-      <point>
-        <x>-504541.7400</x>
-        <y>999.6635</y>
-      </point>
-      <point>
-        <x>-504545.5400</x>
-        <y>999.8830</y>
-      </point>
-      <point>
-        <x>-504549.1500</x>
-        <y>1000.0813</y>
-      </point>
-      <point>
-        <x>-504552.9200</x>
-        <y>1000.2427</y>
-      </point>
-      <point>
-        <x>-504556.6100</x>
-        <y>1000.4271</y>
-      </point>
-      <point>
-        <x>-504557.3900</x>
-        <y>1000.4592</y>
-      </point>
-      <point>
-        <x>-504557.9300</x>
-        <y>1000.5695</y>
-      </point>
-    </rightBound>
-    <predecessor ref="150"/>
-    <successor ref="128"/>
-    <successor ref="131"/>
-    <adjacentLeft ref="172" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="146">
-    <leftBound>
-      <point>
-        <x>-504570.3200</x>
-        <y>997.7054</y>
-      </point>
-      <point>
-        <x>-504579.9500</x>
-        <y>998.1505</y>
-      </point>
-      <point>
-        <x>-504579.0700</x>
-        <y>998.1100</y>
-      </point>
-      <point>
-        <x>-504578.2000</x>
-        <y>998.0696</y>
-      </point>
-      <point>
-        <x>-504577.3200</x>
-        <y>998.0291</y>
-      </point>
-      <point>
-        <x>-504576.4500</x>
-        <y>997.9886</y>
-      </point>
-      <point>
-        <x>-504575.5700</x>
-        <y>997.9482</y>
-      </point>
-      <point>
-        <x>-504574.7000</x>
-        <y>997.9077</y>
-      </point>
-      <point>
-        <x>-504573.8200</x>
-        <y>997.8672</y>
-      </point>
-      <point>
-        <x>-504572.9500</x>
-        <y>997.8268</y>
-      </point>
-      <point>
-        <x>-504572.0700</x>
-        <y>997.7863</y>
-      </point>
-      <point>
-        <x>-504571.2000</x>
-        <y>997.7458</y>
-      </point>
-      <point>
-        <x>-504580.8200</x>
-        <y>998.1910</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504570.2600</x>
-        <y>1001.4104</y>
-      </point>
-      <point>
-        <x>-504570.7000</x>
-        <y>1001.3404</y>
-      </point>
-      <point>
-        <x>-504571.5000</x>
-        <y>1001.2671</y>
-      </point>
-      <point>
-        <x>-504571.4000</x>
-        <y>1001.2763</y>
-      </point>
-      <point>
-        <x>-504571.3000</x>
-        <y>1001.2854</y>
-      </point>
-      <point>
-        <x>-504571.2000</x>
-        <y>1001.2946</y>
-      </point>
-      <point>
-        <x>-504571.1000</x>
-        <y>1001.3038</y>
-      </point>
-      <point>
-        <x>-504571.0000</x>
-        <y>1001.3129</y>
-      </point>
-      <point>
-        <x>-504570.9000</x>
-        <y>1001.3221</y>
-      </point>
-      <point>
-        <x>-504570.8000</x>
-        <y>1001.3312</y>
-      </point>
-      <point>
-        <x>-504571.6000</x>
-        <y>1001.2580</y>
-      </point>
-      <point>
-        <x>-504574.7600</x>
-        <y>1001.4867</y>
-      </point>
-      <point>
-        <x>-504580.4000</x>
-        <y>1001.7704</y>
-      </point>
-    </rightBound>
-    <predecessor ref="144"/>
-    <predecessor ref="131"/>
-    <successor ref="121"/>
-    <adjacentLeft ref="120" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="165">
-    <leftBound>
-      <point>
-        <x>-504626.5300</x>
-        <y>996.0281</y>
-      </point>
-      <point>
-        <x>-504643.7400</x>
-        <y>997.2259</y>
-      </point>
-      <point>
-        <x>-504640.8700</x>
-        <y>997.0262</y>
-      </point>
-      <point>
-        <x>-504638.0000</x>
-        <y>996.8266</y>
-      </point>
-      <point>
-        <x>-504635.1400</x>
-        <y>996.6270</y>
-      </point>
-      <point>
-        <x>-504632.2700</x>
-        <y>996.4274</y>
-      </point>
-      <point>
-        <x>-504629.4000</x>
-        <y>996.2278</y>
-      </point>
-      <point>
-        <x>-504646.6100</x>
-        <y>997.4255</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504626.3900</x>
-        <y>1000.4138</y>
-      </point>
-      <point>
-        <x>-504643.5000</x>
-        <y>1001.5020</y>
-      </point>
-      <point>
-        <x>-504640.6500</x>
-        <y>1001.3207</y>
-      </point>
-      <point>
-        <x>-504637.7900</x>
-        <y>1001.1393</y>
-      </point>
-      <point>
-        <x>-504634.9400</x>
-        <y>1000.9579</y>
-      </point>
-      <point>
-        <x>-504632.0900</x>
-        <y>1000.7766</y>
-      </point>
-      <point>
-        <x>-504629.2400</x>
-        <y>1000.5952</y>
-      </point>
-      <point>
-        <x>-504646.3500</x>
-        <y>1001.6834</y>
-      </point>
-    </rightBound>
-    <predecessor ref="164"/>
-    <successor ref="138"/>
-    <adjacentLeft ref="133" drivingDir="opposite"/>
-  </lanelet>
-  <lanelet id="102">
-    <leftBound>
-      <point>
-        <x>-504594.4600</x>
-        <y>989.4137</y>
-      </point>
-      <point>
-        <x>-504587.9400</x>
-        <y>989.0510</y>
-      </point>
-      <point>
-        <x>-504591.2000</x>
-        <y>989.2323</y>
-      </point>
-      <point>
-        <x>-504584.6800</x>
-        <y>988.8697</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504594.6800</x>
-        <y>986.0195</y>
-      </point>
-      <point>
-        <x>-504587.9500</x>
-        <y>985.7363</y>
-      </point>
-      <point>
-        <x>-504586.4100</x>
-        <y>985.7222</y>
-      </point>
-      <point>
-        <x>-504584.8700</x>
-        <y>985.7081</y>
-      </point>
-    </rightBound>
-    <predecessor ref="101"/>
-    <successor ref="103"/>
-    <adjacentLeft ref="153" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="138">
-    <leftBound>
-      <point>
-        <x>-504646.6100</x>
-        <y>997.4255</y>
-      </point>
-      <point>
-        <x>-504649.2200</x>
-        <y>997.5459</y>
-      </point>
-      <point>
-        <x>-504651.3100</x>
-        <y>997.5988</y>
-      </point>
-      <point>
-        <x>-504653.4000</x>
-        <y>997.6517</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504646.3500</x>
-        <y>1001.6834</y>
-      </point>
-      <point>
-        <x>-504647.1000</x>
-        <y>1001.6840</y>
-      </point>
-      <point>
-        <x>-504649.3100</x>
-        <y>1001.7878</y>
-      </point>
-      <point>
-        <x>-504653.0500</x>
-        <y>1001.9931</y>
-      </point>
-    </rightBound>
-    <predecessor ref="165"/>
-    <predecessor ref="135"/>
-    <successor ref="159"/>
-    <adjacentLeft ref="157" drivingDir="opposite"/>
-  </lanelet>
-  <lanelet id="159">
-    <leftBound>
-      <point>
-        <x>-504653.4000</x>
-        <y>997.6517</y>
-      </point>
-      <point>
-        <x>-504665.6400</x>
-        <y>998.2105</y>
-      </point>
-      <point>
-        <x>-504662.5800</x>
-        <y>998.0708</y>
-      </point>
-      <point>
-        <x>-504659.5200</x>
-        <y>997.9311</y>
-      </point>
-      <point>
-        <x>-504656.4600</x>
-        <y>997.7914</y>
-      </point>
-      <point>
-        <x>-504668.7000</x>
-        <y>998.3502</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504653.0500</x>
-        <y>1001.9931</y>
-      </point>
-      <point>
-        <x>-504654.4700</x>
-        <y>1002.0017</y>
-      </point>
-      <point>
-        <x>-504656.6000</x>
-        <y>1002.0991</y>
-      </point>
-      <point>
-        <x>-504658.7400</x>
-        <y>1002.1964</y>
-      </point>
-      <point>
-        <x>-504666.2400</x>
-        <y>1002.6907</y>
-      </point>
-      <point>
-        <x>-504668.1800</x>
-        <y>1002.8080</y>
-      </point>
-    </rightBound>
-    <predecessor ref="138"/>
-    <successor ref="161"/>
-    <adjacentLeft ref="156" drivingDir="opposite"/>
-  </lanelet>
-  <lanelet id="131">
-    <leftBound>
-      <point>
-        <x>-504558.0900</x>
-        <y>997.2441</y>
-      </point>
-      <point>
-        <x>-504567.2600</x>
-        <y>997.5900</y>
-      </point>
-      <point>
-        <x>-504564.2000</x>
-        <y>997.4747</y>
-      </point>
-      <point>
-        <x>-504561.1500</x>
-        <y>997.3594</y>
-      </point>
-      <point>
-        <x>-504570.3200</x>
-        <y>997.7054</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504557.9300</x>
-        <y>1000.5695</y>
-      </point>
-      <point>
-        <x>-504563.0200</x>
-        <y>1000.8079</y>
-      </point>
-      <point>
-        <x>-504560.4700</x>
-        <y>1000.6887</y>
-      </point>
-      <point>
-        <x>-504565.5600</x>
-        <y>1000.9271</y>
-      </point>
-      <point>
-        <x>-504570.2600</x>
-        <y>1001.4104</y>
-      </point>
-    </rightBound>
-    <predecessor ref="130"/>
-    <successor ref="146"/>
-    <adjacentLeft ref="155" drivingDir="same"/>
-  </lanelet>
-  <lanelet id="160">
-    <leftBound>
-      <point>
-        <x>-504534.6300</x>
-        <y>986.1870</y>
-      </point>
-      <point>
-        <x>-504531.4600</x>
-        <y>986.0811</y>
-      </point>
-      <point>
-        <x>-504526.5400</x>
-        <y>985.4616</y>
-      </point>
-      <point>
-        <x>-504523.5800</x>
-        <y>984.7458</y>
-      </point>
-      <point>
-        <x>-504522.2600</x>
-        <y>984.0343</y>
-      </point>
-      <point>
-        <x>-504520.4800</x>
-        <y>982.6296</y>
-      </point>
-      <point>
-        <x>-504518.8600</x>
-        <y>980.2156</y>
-      </point>
-      <point>
-        <x>-504518.8100</x>
-        <y>978.6918</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504534.8600</x>
-        <y>982.9292</y>
-      </point>
-      <point>
-        <x>-504533.2900</x>
-        <y>982.8260</y>
-      </point>
-      <point>
-        <x>-504532.1800</x>
-        <y>982.4592</y>
-      </point>
-      <point>
-        <x>-504531.3100</x>
-        <y>981.9780</y>
-      </point>
-      <point>
-        <x>-504530.6300</x>
-        <y>981.2478</y>
-      </point>
-      <point>
-        <x>-504530.1100</x>
-        <y>980.4171</y>
-      </point>
-      <point>
-        <x>-504529.7900</x>
-        <y>979.7950</y>
-      </point>
-      <point>
-        <x>-504529.6900</x>
-        <y>979.3330</y>
-      </point>
-    </rightBound>
-    <predecessor ref="104"/>
-    <adjacentRight ref="151" drivingDir="opposite"/>
-  </lanelet>
-  <lanelet id="150">
-    <leftBound>
-      <point>
-        <x>-504521.3200</x>
-        <y>1005.1837</y>
-      </point>
-      <point>
-        <x>-504521.2600</x>
-        <y>1003.5522</y>
-      </point>
-      <point>
-        <x>-504522.0900</x>
-        <y>1001.0195</y>
-      </point>
-      <point>
-        <x>-504523.2100</x>
-        <y>999.3373</y>
-      </point>
-      <point>
-        <x>-504524.5500</x>
-        <y>998.7081</y>
-      </point>
-      <point>
-        <x>-504525.9000</x>
-        <y>998.0789</y>
-      </point>
-      <point>
-        <x>-504529.8300</x>
-        <y>996.6346</y>
-      </point>
-      <point>
-        <x>-504531.9800</x>
-        <y>996.1128</y>
-      </point>
-      <point>
-        <x>-504534.0300</x>
-        <y>996.0312</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504527.6400</x>
-        <y>1005.4960</y>
-      </point>
-      <point>
-        <x>-504527.8100</x>
-        <y>1004.9323</y>
-      </point>
-      <point>
-        <x>-504528.3900</x>
-        <y>1003.1703</y>
-      </point>
-      <point>
-        <x>-504529.0300</x>
-        <y>1002.2706</y>
-      </point>
-      <point>
-        <x>-504530.0000</x>
-        <y>1001.4081</y>
-      </point>
-      <point>
-        <x>-504531.1900</x>
-        <y>1000.5162</y>
-      </point>
-      <point>
-        <x>-504532.3400</x>
-        <y>1000.0465</y>
-      </point>
-      <point>
-        <x>-504533.0600</x>
-        <y>999.7873</y>
-      </point>
-      <point>
-        <x>-504533.8100</x>
-        <y>999.4768</y>
-      </point>
-    </rightBound>
-    <predecessor ref="173"/>
-    <successor ref="130"/>
-  </lanelet>
-  <lanelet id="173">
-    <leftBound>
-      <point>
-        <x>-504518.8500</x>
-        <y>1044.1545</y>
-      </point>
-      <point>
-        <x>-504520.7000</x>
-        <y>1014.9264</y>
-      </point>
-      <point>
-        <x>-504520.0800</x>
-        <y>1024.6691</y>
-      </point>
-      <point>
-        <x>-504519.4700</x>
-        <y>1034.4118</y>
-      </point>
-      <point>
-        <x>-504521.3200</x>
-        <y>1005.1837</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504524.3800</x>
-        <y>1044.0731</y>
-      </point>
-      <point>
-        <x>-504527.4000</x>
-        <y>1008.4730</y>
-      </point>
-      <point>
-        <x>-504527.5100</x>
-        <y>1007.0029</y>
-      </point>
-      <point>
-        <x>-504527.6000</x>
-        <y>1006.3666</y>
-      </point>
-      <point>
-        <x>-504527.6400</x>
-        <y>1005.4960</y>
-      </point>
-    </rightBound>
-    <successor ref="169"/>
-    <successor ref="149"/>
-    <successor ref="150"/>
-    <adjacentLeft ref="174" drivingDir="same"/>
+    <adjacentLeft ref="145" drivingDir="opposite"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
   </lanelet>
   <lanelet id="174">
     <leftBound>
       <point>
-        <x>-504516.5900</x>
-        <y>1009.8689</y>
+        <x>105.42000</x>
+        <y>27.343070</y>
       </point>
       <point>
-        <x>-504516.7200</x>
-        <y>1006.1858</y>
+        <x>105.41000</x>
+        <y>27.157910</y>
       </point>
       <point>
-        <x>-504516.6800</x>
-        <y>1007.4135</y>
-      </point>
-      <point>
-        <x>-504516.6300</x>
-        <y>1008.6412</y>
-      </point>
-      <point>
-        <x>-504516.7600</x>
-        <y>1004.9581</y>
+        <x>103.84000</x>
+        <y>5.0214800</y>
       </point>
     </leftBound>
     <rightBound>
       <point>
-        <x>-504518.8500</x>
-        <y>1044.1545</y>
+        <x>109.01000</x>
+        <y>27.187460</y>
       </point>
       <point>
-        <x>-504520.7000</x>
-        <y>1014.9264</y>
+        <x>109.0</x>
+        <y>26.968010</y>
       </point>
       <point>
-        <x>-504520.0800</x>
-        <y>1024.6691</y>
-      </point>
-      <point>
-        <x>-504519.4700</x>
-        <y>1034.4118</y>
-      </point>
-      <point>
-        <x>-504521.3200</x>
-        <y>1005.1837</y>
+        <x>107.04000</x>
+        <y>4.7494300</y>
       </point>
     </rightBound>
-    <successor ref="152"/>
-    <adjacentRight ref="173" drivingDir="same"/>
+    <adjacentLeft ref="103" drivingDir="opposite"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
   </lanelet>
-  <lanelet id="129">
+  <lanelet id="103">
     <leftBound>
       <point>
-        <x>-504564.0100</x>
-        <y>1005.7450</y>
+        <x>105.42000</x>
+        <y>27.343070</y>
       </point>
       <point>
-        <x>-504562.7300</x>
-        <y>1032.6985</y>
+        <x>105.41000</x>
+        <y>27.157910</y>
       </point>
       <point>
-        <x>-504562.9800</x>
-        <y>1027.3078</y>
-      </point>
-      <point>
-        <x>-504563.2400</x>
-        <y>1021.9171</y>
-      </point>
-      <point>
-        <x>-504563.5000</x>
-        <y>1016.5264</y>
-      </point>
-      <point>
-        <x>-504563.7500</x>
-        <y>1011.1357</y>
-      </point>
-      <point>
-        <x>-504562.4700</x>
-        <y>1038.0892</y>
+        <x>103.84000</x>
+        <y>5.0214800</y>
       </point>
     </leftBound>
     <rightBound>
       <point>
-        <x>-504560.4900</x>
-        <y>1005.3811</y>
+        <x>101.77000</x>
+        <y>27.528790</y>
       </point>
       <point>
-        <x>-504559.7300</x>
-        <y>1030.1930</y>
+        <x>101.17000</x>
+        <y>16.565160</y>
       </point>
       <point>
-        <x>-504559.4900</x>
-        <y>1037.9155</y>
-      </point>
-      <point>
-        <x>-504559.3900</x>
-        <y>1041.2490</y>
-      </point>
-      <point>
-        <x>-504559.4400</x>
-        <y>1039.5823</y>
-      </point>
-      <point>
-        <x>-504559.3400</x>
-        <y>1042.9157</y>
-      </point>
-      <point>
-        <x>-504559.2600</x>
-        <y>1045.3310</y>
+        <x>100.53000</x>
+        <y>5.1686800</y>
       </point>
     </rightBound>
-    <predecessor ref="128"/>
-    <adjacentLeft ref="145" drivingDir="opposite"/>
-  </lanelet>
-  <lanelet id="175">
-    <leftBound>
-      <point>
-        <x>-504589.9800</x>
-        <y>981.1199</y>
-      </point>
-      <point>
-        <x>-504589.9900</x>
-        <y>980.9348</y>
-      </point>
-      <point>
-        <x>-504591.5600</x>
-        <y>958.7984</y>
-      </point>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>-504593.6300</x>
-        <y>981.3057</y>
-      </point>
-      <point>
-        <x>-504594.2500</x>
-        <y>970.1256</y>
-      </point>
-      <point>
-        <x>-504594.8700</x>
-        <y>958.9456</y>
-      </point>
-    </rightBound>
-    <predecessor ref="171"/>
     <predecessor ref="100"/>
-    <adjacentLeft ref="142" drivingDir="opposite"/>
+    <predecessor ref="122"/>
+    <adjacentLeft ref="174" drivingDir="opposite"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
   </lanelet>
   <lanelet id="126">
     <leftBound>
       <point>
-        <x>-504609.8300</x>
-        <y>982.7847</y>
+        <x>85.570000</x>
+        <y>29.007830</y>
       </point>
       <point>
-        <x>-504610.7400</x>
-        <y>967.1749</y>
+        <x>84.930000</x>
+        <y>17.489410</y>
       </point>
       <point>
-        <x>-504610.2800</x>
-        <y>974.9798</y>
-      </point>
-      <point>
-        <x>-504611.1900</x>
-        <y>959.3700</y>
+        <x>84.210000</x>
+        <y>5.5930800</y>
       </point>
     </leftBound>
     <rightBound>
       <point>
-        <x>-504613.4400</x>
-        <y>983.2495</y>
+        <x>81.960000</x>
+        <y>29.472600</y>
       </point>
       <point>
-        <x>-504614.3600</x>
-        <y>967.4737</y>
+        <x>81.330000</x>
+        <y>17.825450</y>
       </point>
       <point>
-        <x>-504613.9000</x>
-        <y>975.3616</y>
-      </point>
-      <point>
-        <x>-504614.8100</x>
-        <y>959.5858</y>
+        <x>80.590000</x>
+        <y>5.8089600</y>
       </point>
     </rightBound>
-    <predecessor ref="125"/>
-    <adjacentLeft ref="117" drivingDir="opposite"/>
+    <predecessor ref="124"/>
+    <adjacentLeft ref="118" drivingDir="opposite"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
   </lanelet>
   <lanelet id="134">
     <leftBound>
       <point>
-        <x>-504635.9000</x>
-        <y>1011.8522</y>
+        <x>59.5</x>
+        <y>58.075330</y>
       </point>
       <point>
-        <x>-504635.7300</x>
-        <y>1015.2040</y>
-      </point>
-      <point>
-        <x>-504635.5600</x>
-        <y>1018.3869</y>
-      </point>
-      <point>
-        <x>-504635.3400</x>
-        <y>1022.7050</y>
-      </point>
-      <point>
-        <x>-504635.1200</x>
-        <y>1026.9979</y>
-      </point>
-      <point>
-        <x>-504634.7400</x>
-        <y>1034.2236</y>
-      </point>
-      <point>
-        <x>-504633.9400</x>
-        <y>1049.7621</y>
+        <x>61.460000</x>
+        <y>95.985230</y>
       </point>
     </leftBound>
     <rightBound>
       <point>
-        <x>-504630.6700</x>
-        <y>1010.8901</y>
+        <x>64.730000</x>
+        <y>57.113230</y>
       </point>
       <point>
-        <x>-504629.1800</x>
-        <y>1043.0116</y>
-      </point>
-      <point>
-        <x>-504629.4800</x>
-        <y>1036.5873</y>
-      </point>
-      <point>
-        <x>-504629.7800</x>
-        <y>1030.1630</y>
-      </point>
-      <point>
-        <x>-504630.0800</x>
-        <y>1023.7387</y>
-      </point>
-      <point>
-        <x>-504630.3700</x>
-        <y>1017.3144</y>
-      </point>
-      <point>
-        <x>-504628.8800</x>
-        <y>1049.4359</y>
+        <x>66.520000</x>
+        <y>95.659030</y>
       </point>
     </rightBound>
-    <predecessor ref="148"/>
-    <predecessor ref="132"/>
+    <predecessor ref="147"/>
+    <predecessor ref="131"/>
     <adjacentLeft ref="137" drivingDir="opposite"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
   </lanelet>
-  <lanelet id="170">
+  <lanelet id="175">
     <leftBound>
       <point>
-        <x>-504523.4800</x>
-        <y>979.0521</y>
+        <x>169.91000</x>
+        <y>0.0</y>
       </point>
       <point>
-        <x>-504524.9900</x>
-        <y>960.0957</y>
+        <x>170.95000</x>
+        <y>13.092010</y>
       </point>
       <point>
-        <x>-504524.4900</x>
-        <y>966.4145</y>
-      </point>
-      <point>
-        <x>-504523.9800</x>
-        <y>972.7333</y>
-      </point>
-      <point>
-        <x>-504525.4900</x>
-        <y>953.7769</y>
+        <x>171.92000</x>
+        <y>25.275210</y>
       </point>
     </leftBound>
     <rightBound>
       <point>
-        <x>-504529.6900</x>
-        <y>979.3330</y>
+        <x>164.18000</x>
+        <y>1.0284100</y>
       </point>
       <point>
-        <x>-504529.6900</x>
-        <y>978.5765</y>
+        <x>165.71000</x>
+        <y>24.799640</y>
       </point>
       <point>
-        <x>-504529.7900</x>
-        <y>977.0730</y>
-      </point>
-      <point>
-        <x>-504529.8900</x>
-        <y>975.3527</y>
-      </point>
-      <point>
-        <x>-504531.2200</x>
-        <y>954.8053</y>
+        <x>165.71000</x>
+        <y>25.556090</y>
       </point>
     </rightBound>
-    <predecessor ref="149"/>
-    <predecessor ref="151"/>
+    <laneletType>urban</laneletType>
+    <userOneWay>motorcycle</userOneWay>
+    <userOneWay>car</userOneWay>
+    <userOneWay>bicycle</userOneWay>
+    <userBidirectional>priorityVehicle</userBidirectional>
   </lanelet>
 </commonRoad>
