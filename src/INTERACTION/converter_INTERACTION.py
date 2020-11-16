@@ -3,12 +3,17 @@ __copyright__ = "TUM Cyber-Physical Systems Group"
 __email__ = "commonroad-i06@in.tum.de"
 __status__ = "Release"
 
-from src.config import get_list_info_dataset
-from src.converter import generate_scenarios
+#TODO remove dot again?
+from src.INTERACTION.src.config import get_list_info_dataset
+from src.INTERACTION.src.converter import generate_scenarios
 
-if __name__ == "__main__":
+from commonroad.scenario.scenario import Tag
+
+
+def convert(directory_maps = "./maps_lanelet/",directory_output_scenrios = "scenarios_converted/"):
+
     # get config info
-    list_info_dataset = get_list_info_dataset()
+    list_info_dataset = get_list_info_dataset(directory_maps,directory_output_scenrios)
     print(f"Number of maps to be processed: {len(list_info_dataset)}")
 
     # iterate through the config and process the scenarios
@@ -22,7 +27,7 @@ if __name__ == "__main__":
                                directory_data=info['directory_data'],
                                directory_output=info['directory_output'],
                                flag_same_direction_problems=info.get('flag_same_direction_problems', False),
-                               tags=info['tags'],
+                               tags=[Tag(tag) for tag in info['tags'].split(' ')],
                                x_offset_lanelets=info['x_offset_lanelets'],
                                y_offset_lanelets=info['y_offset_lanelets'],
                                x_offset_tracks=info['x_offset_tracks'],
