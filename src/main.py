@@ -4,6 +4,7 @@ import argparse
 
 from src.highD.highd_to_cr import create_highd_scenarios
 from src.inD.ind_to_cr import create_ind_scenarios
+from src.INTERACTION.converter_INTERACTION import convert
 
 
 def get_args() -> argparse.Namespace:
@@ -50,7 +51,7 @@ def main():
             obstacle_initial_state_invalid=args.obstacle_initial_state_invalid
         )
     elif args.dataset == "INTERACTION":
-        raise NotImplementedError("The interface to the INTERACTION conversion script is not implemented yet")
+        convert(args.input_dir, args.output_dir)
     else:
         print("Unknown dataset in command line parameter!")
 

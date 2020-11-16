@@ -1,10 +1,12 @@
 import os
 
 
-def get_list_info_dataset():
-    directory_dataset = "/data/"# "dataset/"
-    directory_maps = "maps_lanelet/"
-    directory_output_scenrios = "scenarios_converted/"
+def get_list_info_dataset(directory_maps = "./maps_lanelet/",directory_output_scenrios = "scenarios_converted/"):
+    # "data/"
+    directory_dataset = "./dataset/"
+    # directory_output_scenrios = "scenarios_converted/"
+
+    print(os.getcwd())
 
     assert os.path.exists(
         os.path.join(os.getcwd(), directory_dataset)), "<dataset> folder not found under current working directory!"

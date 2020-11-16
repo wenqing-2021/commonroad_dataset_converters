@@ -16,8 +16,8 @@ from commonroad.scenario.lanelet import LaneletNetwork
 from commonroad.common.file_writer import CommonRoadFileWriter
 from commonroad.common.file_writer import OverwriteExistingFile
 
-from src.utils import generate_planning_problems
-
+#TODO remove two dots
+from src.INTERACTION.src.utils import generate_planning_problems
 
 def create_dictionary_track(path_file, x_offset_tracks, y_offset_tracks):
     # read in from csv file
