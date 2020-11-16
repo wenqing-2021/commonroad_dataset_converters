@@ -1,17 +1,10 @@
 import os
 
 
-def get_list_info_dataset(directory_maps = "./maps_lanelet/",directory_output_scenrios = "scenarios_converted/"):
-    # "data/"
-    directory_dataset = "./dataset/"
-    # directory_output_scenrios = "scenarios_converted/"
+def get_list_info_dataset(input_dir: str, directory_maps: str, directory_output_scenrios="scenarios_converted/"):
 
-    print(os.getcwd())
-
-    assert os.path.exists(
-        os.path.join(os.getcwd(), directory_dataset)), "<dataset> folder not found under current working directory!"
-    assert os.path.exists(
-        os.path.join(os.getcwd(), directory_maps)), "<maps_lanelet> folder not found under current working directory!"
+    assert os.path.exists(input_dir), "<dataset> folder not found under current working directory!"
+    assert os.path.exists(directory_maps), "<maps_lanelet> folder not found under current working directory!"
 
     # list to hold the info of maps of scenarios
     list_info_maps = []
@@ -19,7 +12,7 @@ def get_list_info_dataset(directory_maps = "./maps_lanelet/",directory_output_sc
     list_info_maps.append({
         'prefix_name': 'CHN_Merging-1_',
         'path_map': os.path.join(os.getcwd(), directory_maps, "CHN_Merging_ZS_repaired.xml"),
-        'directory_data': os.path.join(os.getcwd(), directory_dataset,
+        'directory_data': os.path.join(input_dir,
                                        "INTERACTION-Dataset-DR-v1_0/recorded_trackfiles/DR_CHN_Merging_ZS/"),
         'directory_output': os.path.join(os.getcwd(), directory_output_scenrios, "CHN_Merging-1/"),
         'flag_same_direction_problems': True,
@@ -32,7 +25,7 @@ def get_list_info_dataset(directory_maps = "./maps_lanelet/",directory_output_sc
     list_info_maps.append({
         'prefix_name': 'CHN_Roundabout-1_',
         'path_map': os.path.join(os.getcwd(), directory_maps, "CHN_Roundabout_LN_repaired.xml"),
-        'directory_data': os.path.join(os.getcwd(), directory_dataset,
+        'directory_data': os.path.join(input_dir,
                                        "INTERACTION-Dataset-DR-v1_0/recorded_trackfiles/DR_CHN_Roundabout_LN/"),
         'directory_output': os.path.join(os.getcwd(), directory_output_scenrios, "CHN_Roundabout-1/"),
         'flag_same_direction_problems': True,
@@ -45,7 +38,7 @@ def get_list_info_dataset(directory_maps = "./maps_lanelet/",directory_output_sc
     list_info_maps.append({
         'prefix_name': 'DEU_Merging-1_',
         'path_map': os.path.join(os.getcwd(), directory_maps, "DEU_Merging_MT_repaired.xml"),
-        'directory_data': os.path.join(os.getcwd(), directory_dataset,
+        'directory_data': os.path.join(input_dir,
                                        "INTERACTION-Dataset-DR-v1_0/recorded_trackfiles/DR_DEU_Merging_MT/"),
         'directory_output': os.path.join(os.getcwd(), directory_output_scenrios, "DEU_Merging-1/"),
         'flag_same_direction_problems': True,
@@ -58,7 +51,7 @@ def get_list_info_dataset(directory_maps = "./maps_lanelet/",directory_output_sc
     list_info_maps.append({
         'prefix_name': 'DEU_Roundabout-1_',
         'path_map': os.path.join(os.getcwd(), directory_maps, "DEU_Roundabout_OF_repaired.xml"),
-        'directory_data': os.path.join(os.getcwd(), directory_dataset,
+        'directory_data': os.path.join(input_dir,
                                        "INTERACTION-Dataset-DR-v1_0/recorded_trackfiles/DR_DEU_Roundabout_OF/"),
         'directory_output': os.path.join(os.getcwd(), directory_output_scenrios, "DEU_Roundabout-1/"),
         'flag_same_direction_problems': True,
@@ -71,7 +64,7 @@ def get_list_info_dataset(directory_maps = "./maps_lanelet/",directory_output_sc
     list_info_maps.append({
         'prefix_name': 'USA_Intersection-1_',
         'path_map': os.path.join(os.getcwd(), directory_maps, "USA_Intersection_EP0_repaired.xml"),
-        'directory_data': os.path.join(os.getcwd(), directory_dataset,
+        'directory_data': os.path.join(input_dir,
                                        "INTERACTION-Dataset-DR-v1_0/recorded_trackfiles/DR_USA_Intersection_EP0/"),
         'directory_output': os.path.join(os.getcwd(), directory_output_scenrios, "USA_Intersection-1/"),
         'flag_same_direction_problems': True,
@@ -84,7 +77,7 @@ def get_list_info_dataset(directory_maps = "./maps_lanelet/",directory_output_sc
     list_info_maps.append({
         'prefix_name': 'USA_Intersection-2_',
         'path_map': os.path.join(os.getcwd(), directory_maps, "USA_Intersection_EP1_repaired.xml"),
-        'directory_data': os.path.join(os.getcwd(), directory_dataset,
+        'directory_data': os.path.join(input_dir,
                                        "INTERACTION-Dataset-DR-v1_0/recorded_trackfiles/DR_USA_Intersection_EP1/"),
         'directory_output': os.path.join(os.getcwd(), directory_output_scenrios, "USA_Intersection-2/"),
         'flag_same_direction_problems': True,
@@ -97,7 +90,7 @@ def get_list_info_dataset(directory_maps = "./maps_lanelet/",directory_output_sc
     list_info_maps.append({
         'prefix_name': 'USA_Intersection-3_',
         'path_map': os.path.join(os.getcwd(), directory_maps, "USA_Intersection_GL_repaired.xml"),
-        'directory_data': os.path.join(os.getcwd(), directory_dataset,
+        'directory_data': os.path.join(input_dir,
                                        "INTERACTION-Dataset-DR-v1_0/recorded_trackfiles/DR_USA_Intersection_GL/"),
         'directory_output': os.path.join(os.getcwd(), directory_output_scenrios, "USA_Intersection-2/"),
         'flag_same_direction_problems': True,
@@ -110,7 +103,7 @@ def get_list_info_dataset(directory_maps = "./maps_lanelet/",directory_output_sc
     list_info_maps.append({
         'prefix_name': 'USA_Intersection-4_',
         'path_map': os.path.join(os.getcwd(), directory_maps, "USA_Intersection_MA_repaired.xml"),
-        'directory_data': os.path.join(os.getcwd(), directory_dataset,
+        'directory_data': os.path.join(input_dir,
                                        "INTERACTION-Dataset-DR-v1_0/recorded_trackfiles/DR_USA_Intersection_MA/"),
         'directory_output': os.path.join(os.getcwd(), directory_output_scenrios, "USA_Intersection-4/"),
         'flag_same_direction_problems': True,
@@ -123,7 +116,7 @@ def get_list_info_dataset(directory_maps = "./maps_lanelet/",directory_output_sc
     list_info_maps.append({
         'prefix_name': 'USA_Roundabout-1_',
         'path_map': os.path.join(os.getcwd(), directory_maps, "USA_Roundabout_EP_repaired.xml"),
-        'directory_data': os.path.join(os.getcwd(), directory_dataset,
+        'directory_data': os.path.join(input_dir,
                                        "INTERACTION-Dataset-DR-v1_0/recorded_trackfiles/DR_USA_Roundabout_EP/"),
         'directory_output': os.path.join(os.getcwd(), directory_output_scenrios, "USA_Roundabout-1/"),
         'flag_same_direction_problems': True,
@@ -136,7 +129,7 @@ def get_list_info_dataset(directory_maps = "./maps_lanelet/",directory_output_sc
     list_info_maps.append({
         'prefix_name': 'USA_Roundabout-2_',
         'path_map': os.path.join(os.getcwd(), directory_maps, "USA_Roundabout_FT_repaired.xml"),
-        'directory_data': os.path.join(os.getcwd(), directory_dataset,
+        'directory_data': os.path.join(input_dir,
                                        "INTERACTION-Dataset-DR-v1_0/recorded_trackfiles/DR_USA_Roundabout_FT/"),
         'directory_output': os.path.join(os.getcwd(), directory_output_scenrios, "USA_Roundabout-2/"),
         'flag_same_direction_problems': True,
@@ -149,7 +142,7 @@ def get_list_info_dataset(directory_maps = "./maps_lanelet/",directory_output_sc
     list_info_maps.append({
         'prefix_name': 'USA_Roundabout-3_',
         'path_map': os.path.join(os.getcwd(), directory_maps, "USA_Roundabout_SR_repaired.xml"),
-        'directory_data': os.path.join(os.getcwd(), directory_dataset,
+        'directory_data': os.path.join(input_dir,
                                        "INTERACTION-Dataset-DR-v1_0/recorded_trackfiles/DR_USA_Roundabout_SR/"),
         'directory_output': os.path.join(os.getcwd(), directory_output_scenrios, "USA_Roundabout-3/"),
         'flag_same_direction_problems': True,
@@ -162,7 +155,7 @@ def get_list_info_dataset(directory_maps = "./maps_lanelet/",directory_output_sc
     list_info_maps.append({
         'prefix_name': 'BGR_Interaction-1_',
         'path_map': os.path.join(os.getcwd(), directory_maps, "BGR_Intersection_VA_repaired.xml"),
-        'directory_data': os.path.join(os.getcwd(), directory_dataset,
+        'directory_data': os.path.join(input_dir,
                                        "INTERACTION-Dataset-TC-v1_0/recorded_trackfiles/TC_BGR_Intersection_VA/"),
         'directory_output': os.path.join(os.getcwd(), directory_output_scenrios, "BGR_Interaction-1/"),
         'flag_same_direction_problems': True,

@@ -1,19 +1,22 @@
-__author__ = "Edmond Irani Liu"
+__author__ = "Edmond Irani Liu, Xiao Wang"
 __copyright__ = "TUM Cyber-Physical Systems Group"
 __email__ = "commonroad-i06@in.tum.de"
 __status__ = "Release"
 
-#TODO remove dot again?
+import os
+from typing import Union
 from src.INTERACTION.src.config import get_list_info_dataset
 from src.INTERACTION.src.converter import generate_scenarios
 
 from commonroad.scenario.scenario import Tag
 
 
-def convert(directory_maps = "./maps_lanelet/",directory_output_scenrios = "scenarios_converted/"):
+def create_interaction_scenarios(input_dir: str, output_dir: str = "scenarios_converted/", directory_maps: Union[str, None] = None):
+    if directory_maps is None:
+        directory_maps = os.path.dirname(os.path.abspath(__file__)) + "/repaired_maps"
 
     # get config info
-    list_info_dataset = get_list_info_dataset(directory_maps,directory_output_scenrios)
+    list_info_dataset = get_list_info_dataset(input_dir, directory_maps, output_dir)
     print(f"Number of maps to be processed: {len(list_info_dataset)}")
 
     # iterate through the config and process the scenarios

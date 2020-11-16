@@ -4,7 +4,7 @@ import argparse
 
 from src.highD.highd_to_cr import create_highd_scenarios
 from src.inD.ind_to_cr import create_ind_scenarios
-from src.INTERACTION.converter_INTERACTION import convert
+from src.INTERACTION.interaction_to_cr import create_interaction_scenarios
 
 
 def get_args() -> argparse.Namespace:
@@ -18,13 +18,18 @@ def get_args() -> argparse.Namespace:
     parser.add_argument('input_dir', type=str, help='Path to dataset files')
     parser.add_argument('output_dir', type=str, help='Directory to store generated CommonRoad files')
     parser.add_argument('--num_time_steps_scenario', type=int, default=150,
-                        help='Maximum number of time steps the CommonRoad scenario can be long')
+                        help='Maximum number of time steps the CommonRoad scenario can be long, default=150')
     parser.add_argument('--num_planning_problems', type=int, default=1,
-                        help='Number of planning problems per CommonRoad scenario')
+                        help='Number of planning problems per CommonRoad scenario, default=1')
     parser.add_argument('--keep_ego', default=False, action='store_true',
-                        help='Indicator if vehicles used for planning problem should be kept in scenario')
-    parser.add_argument('--obstacle_initial_state_invalid', default=False, action='store_true',
-                        help='Indicator if the initial state of an obstacle has to start at time step zero')
+                        help='Indicator if vehicles used for planning problem should be kept in scenario, '
+                             'default=False')
+    parser.add_argument('--obstacle_start_at_zero', default=False, action='store_true',
+                        help='Indicator if the initial state of an obstacle has to start at time step zero, '
+                             'default=False')
+    parser.add_argument('--num_processes', type=int, default=1,
+                        help='Number of multiple processes to convert dataset, '
+                             'default=1')
 
     return parser.parse_args()
 
@@ -36,22 +41,18 @@ def main():
     args = get_args()
 
     # make output dir
-    os.makedirs(args.output_dir, exist_ok=True)
-
+    if not os.path.exists(args.output_dir):
+        os.makedirs(args.output_dir)
     if args.dataset == "highD":
         create_highd_scenarios(args.input_dir, args.output_dir, args.num_time_steps_scenario,
-                               args.num_planning_problems, args.keep_ego, args.obstacle_initial_state_invalid)
+                               args.num_planning_problems, args.keep_ego, args.obstacle_start_at_zero,
+                               args.num_processes)
     elif args.dataset == "inD":
-        create_ind_scenarios(
-            args.input_dir,
-            args.output_dir,
-            num_time_steps_scenario=args.num_time_steps_scenario,
-            num_planning_problems=args.num_planning_problems,
-            keep_ego=args.keep_ego,
-            obstacle_initial_state_invalid=args.obstacle_initial_state_invalid
-        )
+        create_ind_scenarios(args.input_dir, args.output_dir, args.num_time_steps_scenario,
+                             args.num_planning_problems, args.keep_ego, args.obstacle_start_at_zero,
+                             num_processes=args.num_processes)
     elif args.dataset == "INTERACTION":
-        convert(args.input_dir, args.output_dir)
+        create_interaction_scenarios(args.input_dir, args.output_dir)
     else:
         print("Unknown dataset in command line parameter!")
 
