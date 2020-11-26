@@ -51,7 +51,15 @@ def main():
             obstacle_initial_state_invalid=args.obstacle_initial_state_invalid
         )
     elif args.dataset == "INTERACTION":
-        convert(args.input_dir, args.output_dir)
+        #input dir is the location of the maps
+        convert(
+            args.input_dir,
+            args.output_dir,
+            obstacle_initial_state_invalid=args.obstacle_initial_state_invalid,
+            num_planning_problems=args.num_planning_problems,
+            keep_ego=args.keep_ego,
+            num_time_steps_scenario=args.num_time_steps_scenario
+        )
     else:
         print("Unknown dataset in command line parameter!")
 

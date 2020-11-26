@@ -10,7 +10,16 @@ from src.INTERACTION.src.converter import generate_scenarios
 from commonroad.scenario.scenario import Tag
 
 
-def convert(directory_maps = "./maps_lanelet/",directory_output_scenrios = "scenarios_converted/"):
+def convert(directory_maps = "./maps_lanelet/",directory_output_scenrios = "scenarios_converted/",
+            obstacle_initial_state_invalid:bool = True, num_planning_problems:int = 1, keep_ego:bool = False,
+            num_time_steps_scenario:int =150):
+    """
+
+    converts the scenarios in lanlet2 format into commonroad format
+
+
+    :param directory_maps: path to folder with the .xml files of the maps
+    """
 
     # get config info
     list_info_dataset = get_list_info_dataset(directory_maps,directory_output_scenrios)
@@ -31,7 +40,11 @@ def convert(directory_maps = "./maps_lanelet/",directory_output_scenrios = "scen
                                x_offset_lanelets=info['x_offset_lanelets'],
                                y_offset_lanelets=info['y_offset_lanelets'],
                                x_offset_tracks=info['x_offset_tracks'],
-                               y_offset_tracks=info['y_offset_tracks'])
+                               y_offset_tracks=info['y_offset_tracks'],
+                               obstacle_initial_state_invalid=obstacle_initial_state_invalid,
+                               num_planning_problems=num_planning_problems,
+                               keep_ego=keep_ego,
+                               scenario_duration=num_time_steps_scenario)
 
         sum_scenarios_indi += num_scenarios_indi
         sum_scenarios_coop += num_scenario_coop
