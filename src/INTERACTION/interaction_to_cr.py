@@ -1,18 +1,22 @@
-__author__ = "Edmond Irani Liu"
+__author__ = "Edmond Irani Liu, Xiao Wang"
 __copyright__ = "TUM Cyber-Physical Systems Group"
 __email__ = "commonroad-i06@in.tum.de"
 __status__ = "Release"
 
-#TODO remove dot again?
+import os
+from typing import Union
 from src.INTERACTION.src.config import get_list_info_dataset
 from src.INTERACTION.src.converter import generate_scenarios
 
 from commonroad.scenario.scenario import Tag
 
 
-def convert(directory_maps = "./maps_lanelet/",directory_output_scenrios = "scenarios_converted/",
-            obstacle_initial_state_invalid:bool = True, num_planning_problems:int = 1, keep_ego:bool = False,
-            num_time_steps_scenario:int =150):
+def create_interaction_scenarios(input_dir: str, output_dir: str = "scenarios_converted/", directory_maps: Union[str, None] = None,
+                                 obstacle_start_at_zero: bool = True, num_planning_problems: int = 1,
+                                 keep_ego: bool = False,
+                                 num_time_steps_scenario: int = 150):
+    if directory_maps is None:
+        directory_maps = os.path.dirname(os.path.abspath(__file__)) + "/repaired_maps"
     """
 
     converts the scenarios in lanlet2 format into commonroad format
@@ -22,7 +26,7 @@ def convert(directory_maps = "./maps_lanelet/",directory_output_scenrios = "scen
     """
 
     # get config info
-    list_info_dataset = get_list_info_dataset(directory_maps,directory_output_scenrios)
+    list_info_dataset = get_list_info_dataset(input_dir, directory_maps, output_dir)
     print(f"Number of maps to be processed: {len(list_info_dataset)}")
 
     # iterate through the config and process the scenarios
@@ -41,7 +45,7 @@ def convert(directory_maps = "./maps_lanelet/",directory_output_scenrios = "scen
                                y_offset_lanelets=info['y_offset_lanelets'],
                                x_offset_tracks=info['x_offset_tracks'],
                                y_offset_tracks=info['y_offset_tracks'],
-                               obstacle_initial_state_invalid=obstacle_initial_state_invalid,
+                               obstacle_start_at_zero=obstacle_start_at_zero,
                                num_planning_problems=num_planning_problems,
                                keep_ego=keep_ego,
                                scenario_duration=num_time_steps_scenario)
