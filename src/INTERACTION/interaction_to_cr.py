@@ -4,6 +4,8 @@ __email__ = "commonroad-i06@in.tum.de"
 __status__ = "Release"
 
 import os
+import multiprocessing
+
 from typing import Union
 from src.INTERACTION.src.config import get_list_info_dataset
 from src.INTERACTION.src.converter import generate_scenarios
@@ -11,7 +13,8 @@ from src.INTERACTION.src.converter import generate_scenarios
 from commonroad.scenario.scenario import Tag
 
 
-def create_interaction_scenarios(input_dir: str, output_dir: str = "scenarios_converted/", directory_maps: Union[str, None] = None):
+def create_interaction_scenarios(input_dir: str, output_dir: str = "scenarios_converted/",
+                                 directory_maps: Union[str, None] = None, num_processes: int = 1):
     if directory_maps is None:
         directory_maps = os.path.dirname(os.path.abspath(__file__)) + "/repaired_maps"
 
@@ -21,26 +24,46 @@ def create_interaction_scenarios(input_dir: str, output_dir: str = "scenarios_co
 
     # iterate through the config and process the scenarios
     sum_scenarios_indi = sum_scenarios_coop = 0
-    for idx, info in enumerate(list_info_dataset):
-        print(f"\nProcessing {idx + 1} / {len(list_info_dataset)}:")
+    if num_processes < 2:
+        for idx, info in enumerate(list_info_dataset):
+            print(f"\nProcessing {idx + 1} / {len(list_info_dataset)}:")
 
-        num_scenarios_indi, num_scenario_coop = \
-            generate_scenarios(prefix_name=info['prefix_name'],
-                               path_map=info['path_map'],
-                               directory_data=info['directory_data'],
-                               directory_output=info['directory_output'],
-                               flag_same_direction_problems=info.get('flag_same_direction_problems', False),
-                               tags=[Tag(tag) for tag in info['tags'].split(' ')],
-                               x_offset_lanelets=info['x_offset_lanelets'],
-                               y_offset_lanelets=info['y_offset_lanelets'],
-                               x_offset_tracks=info['x_offset_tracks'],
-                               y_offset_tracks=info['y_offset_tracks'])
+            num_scenarios_indi, num_scenario_coop = \
+                generate_scenarios(prefix_name=info['prefix_name'],
+                                   path_map=info['path_map'],
+                                   directory_data=info['directory_data'],
+                                   directory_output=info['directory_output'],
+                                   flag_same_direction_problems=info.get('flag_same_direction_problems', False),
+                                   tags=[Tag(tag) for tag in info['tags'].split(' ')],
+                                   x_offset_lanelets=info['x_offset_lanelets'],
+                                   y_offset_lanelets=info['y_offset_lanelets'],
+                                   x_offset_tracks=info['x_offset_tracks'],
+                                   y_offset_tracks=info['y_offset_tracks'])
 
-        sum_scenarios_indi += num_scenarios_indi
-        sum_scenarios_coop += num_scenario_coop
+            sum_scenarios_indi += num_scenarios_indi
+            sum_scenarios_coop += num_scenario_coop
 
-    print(f"""\nGenerated scenarios: individual: {sum_scenarios_indi}, cooperative: {sum_scenarios_coop}, \
-        total: {sum_scenarios_indi + sum_scenarios_coop}""")
+        print(f"""\nGenerated scenarios: individual: {sum_scenarios_indi}, cooperative: {sum_scenarios_coop}, \
+            total: {sum_scenarios_indi + sum_scenarios_coop}""")
 
-    print(f"\nGenerated scenarios: individual: {sum_scenarios_indi}, cooperative: {sum_scenarios_coop}, \
-        total: {sum_scenarios_indi + sum_scenarios_coop}")
+        print(f"\nGenerated scenarios: individual: {sum_scenarios_indi}, cooperative: {sum_scenarios_coop}, \
+            total: {sum_scenarios_indi + sum_scenarios_coop}")
+    else:
+        with multiprocessing.Pool(processes=num_processes) as pool:
+            pool.starmap(
+                generate_scenarios,
+                [
+                    (
+                        info['prefix_name'],
+                        info['path_map'],
+                        info['directory_data'],
+                        info['directory_output'],
+                        info.get('flag_same_direction_problems', False),
+                        [Tag(tag) for tag in info['tags'].split(' ')],
+                        info['x_offset_lanelets'],
+                        info['y_offset_lanelets'],
+                        info['x_offset_tracks'],
+                        info['y_offset_tracks']
+                    ) for idx, info in enumerate(list_info_dataset)
+                ]
+            )
