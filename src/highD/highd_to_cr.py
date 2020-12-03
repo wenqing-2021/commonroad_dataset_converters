@@ -4,7 +4,6 @@ import copy
 import math
 import numpy as np
 import pandas as pd
-import multiprocessing
 from typing import Dict
 
 from commonroad.planning.planning_problem import PlanningProblemSet
@@ -13,13 +12,13 @@ from commonroad.scenario.scenario import Scenario, Tag
 
 from src.highD.map_utils import get_meta_scenario, get_speed_limit, get_lane_markings, get_dt, Direction
 from src.highD.obstacle_utils import generate_dynamic_obstacle
-from src.planning_problem_utils import generate_planning_problem, NoCarException
+from src.planning_problem_utils import generate_planning_problem
 from src.helper import load_yaml
 
 
 def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, tracks_fn: str,
                                   num_time_steps_scenario: int, num_planning_problems: int, keep_ego: bool,
-                                  output_dir: str, highd_config: Dict, obstacle_start_at_zero: bool):
+                                  output_dir: str, highd_config: Dict, obstacle_initial_state_invalid: bool):
     """
     Generate CommonRoad scenarios with given paths to highD for a high-D recording
 
@@ -31,7 +30,7 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
     :param keep_ego: boolean indicating if vehicles selected for planning problem should be kept in scenario
     :param output_dir: path to store generated CommonRoad scenario files
     :param highd_config: dictionary with configuration parameters for highD scenario generation
-    :param obstacle_start_at_zero: boolean indicating if the initial state of an obstacle has to start
+    :param obstacle_initial_state_invalid: boolean indicating if the initial state of an obstacle has to start
     at time step zero
     """
     # read data frames from the three files
@@ -60,27 +59,21 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
         benchmark_id = "DEU_{0}-{1}_{2}_T-1".format(
             highd_config.get("locations")[recording_meta_df.locationId.values[0]] + "Upper",
             int(recording_meta_df.id), idx_1 + 1)
-        try:
-            generate_single_scenario(highd_config, num_planning_problems, keep_ego, output_dir, tracks_df,
-                                     tracks_meta_df, meta_scenario_upper, benchmark_id, Direction.UPPER, frame_start,
-                                     frame_end, obstacle_start_at_zero)
-        except NoCarException as e:
-            print(f"No car in this scenario: {repr(e)}. Skipping this scenario.")
-
+        generate_single_scenario(highd_config, num_planning_problems, keep_ego, output_dir, tracks_df,
+                                 tracks_meta_df, meta_scenario_upper, benchmark_id, Direction.UPPER, frame_start,
+                                 frame_end, obstacle_initial_state_invalid)
         benchmark_id = "DEU_{0}-{1}_{2}_T-1".format(
             highd_config.get("locations")[recording_meta_df.locationId.values[0]] + "Lower",
             int(recording_meta_df.id), idx_1 + 1)
-        try:
-            generate_single_scenario(highd_config, num_planning_problems, keep_ego,
-                                     output_dir, tracks_df, tracks_meta_df, meta_scenario_lower, benchmark_id,
-                                     Direction.LOWER, frame_start, frame_end, obstacle_start_at_zero)
-        except NoCarException as e:
-            print(f"No car in this scenario: {repr(e)}. Skipping this scenario.")
+        generate_single_scenario(highd_config, num_planning_problems, keep_ego,
+                                 output_dir, tracks_df, tracks_meta_df, meta_scenario_lower, benchmark_id,
+                                 Direction.LOWER, frame_start, frame_end, obstacle_initial_state_invalid)
+
 
 def generate_single_scenario(highd_config: Dict, num_planning_problems: int, keep_ego: bool, output_dir: str,
                              tracks_df: pd.DataFrame, tracks_meta_df: pd.DataFrame, meta_scenario: Scenario,
                              benchmark_id: str, direction: Direction, frame_start: int, frame_end: int,
-                             obstacle_start_at_zero: bool):
+                             obstacle_initial_state_invalid: bool):
     """
     Generate a single CommonRoad scenario based on hihg-D record snippet
     :param highd_config: dictionary with configuration parameters for highD scenario generation
@@ -94,17 +87,14 @@ def generate_single_scenario(highd_config: Dict, num_planning_problems: int, kee
     :param direction: indicator for upper or lower road of interstate
     :param frame_start: start of frame in time steps of record
     :param frame_end: end of frame in time steps of record
-    :param obstacle_start_at_zero: boolean indicating if the initial state of an obstacle has to start
+    :param obstacle_initial_state_invalid: boolean indicating if the initial state of an obstacle has to start
     at time step zero
     """
 
     def enough_time_steps(veh_id):
         vehicle_meta = tracks_meta_df[tracks_meta_df.id == veh_id]
-        if not obstacle_start_at_zero and frame_end - int(vehicle_meta.initialFrame) < 2 \
+        if not obstacle_initial_state_invalid and int(vehicle_meta.initialFrame) > frame_start \
                 or int(vehicle_meta.finalFrame) - frame_start < 2:
-            return False
-        elif obstacle_start_at_zero and int(vehicle_meta.initialFrame) > frame_start \
-            or int(vehicle_meta.finalFrame) - frame_start < 2:
             return False
         return True
 
@@ -147,17 +137,16 @@ def generate_single_scenario(highd_config: Dict, num_planning_problems: int, kee
     fw = CommonRoadFileWriter(scenario, planning_problem_set, highd_config.get("author"),
                               highd_config.get("affiliation"), highd_config.get("source"), tags)
     filename = os.path.join(output_dir, "{}.xml".format(scenario.benchmark_id))
-    if obstacle_start_at_zero is True:
-        check_validity = True
-    else:
-        # Do not check validity if obstacles do not start at zero because validity will not pass
+    if obstacle_initial_state_invalid is True:
         check_validity = False
+    else:
+        check_validity = True
     fw.write_to_file(filename, OverwriteExistingFile.ALWAYS, check_validity=check_validity)
     print("Scenario file stored in {}".format(filename))
 
 
 def create_highd_scenarios(input_dir: str, output_dir: str, num_time_steps_scenario: int, num_planning_problems: int,
-                           keep_ego: bool, obstacle_start_at_zero: bool, num_processes: int = 1):
+                           keep_ego: bool, obstacle_initial_state_invalid: bool):
     """
     Iterates over all dataset files and generates CommonRoad scenarios
 
@@ -167,7 +156,7 @@ def create_highd_scenarios(input_dir: str, output_dir: str, num_time_steps_scena
     :param num_planning_problems: number of planning problems per CommonRoad scenario
     :param keep_ego: boolean indicating if vehicles selected for planning problem should be kept in scenario
     :param keep_ego: boolean indicating if vehicles selected for planning problem should be kept in scenario
-    :param obstacle_start_at_zero: boolean indicating if the initial state of an obstacle has to start
+    :param obstacle_initial_state_invalid: boolean indicating if the initial state of an obstacle has to start
     at time step zero
     """
     # generate path to highd data files
@@ -182,32 +171,10 @@ def create_highd_scenarios(input_dir: str, output_dir: str, num_time_steps_scena
 
     highd_config = load_yaml(os.path.dirname(os.path.abspath(__file__)) + "/config.yaml")
 
-    if num_processes < 2:
-        for index, (recording_meta_fn, tracks_meta_fn, tracks_fn) in \
-                enumerate(zip(listing_recording, listing_metas, listing_tracks)):
-            print("=" * 80)
-            print("Processing file {}...".format(tracks_fn), end='\n')
-            generate_scenarios_for_record(recording_meta_fn, tracks_meta_fn, tracks_fn, num_time_steps_scenario,
-                                          num_planning_problems, keep_ego, output_dir, highd_config,
-                                          obstacle_start_at_zero)
-    else:
-        with multiprocessing.Pool(processes=num_processes) as pool:
-            pool.starmap(
-                generate_scenarios_for_record,
-                [
-                    (
-                        recording_meta_fn,
-                        tracks_meta_fn,
-                        tracks_fn,
-                        num_time_steps_scenario,
-                        num_planning_problems,
-                        keep_ego,
-                        output_dir,
-                        highd_config,
-                        obstacle_start_at_zero
-                    )
-                    for recording_meta_fn, tracks_meta_fn, tracks_fn in \
-                    zip(listing_recording, listing_metas, listing_tracks)
-                ]
-            )
-
+    for index, (recording_meta_fn, tracks_meta_fn, tracks_fn) in \
+            enumerate(zip(listing_recording, listing_metas, listing_tracks)):
+        print("=" * 80)
+        print("Processing file {}...".format(tracks_fn), end='\n')
+        generate_scenarios_for_record(recording_meta_fn, tracks_meta_fn, tracks_fn, num_time_steps_scenario,
+                                      num_planning_problems, keep_ego, output_dir, highd_config,
+                                      obstacle_initial_state_invalid)

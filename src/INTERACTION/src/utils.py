@@ -12,7 +12,8 @@ def generate_planning_problems(scenario, num_problems_desired, id_segment, index
                                time_start_scenario=0, distance_travel_min=30.0, flag_add_goal_position=False,
                                orientation_half_range=0.2, velocity_half_range=5,time_step_half_range=10,
                                position_length=2.0, position_width=2.0,
-                               flag_same_direction_problems=False, thresh_distance_coop=25.0, thresh_orient_coop=1.0, flag_verbose=False):
+                               flag_same_direction_problems=False, thresh_distance_coop=25.0, thresh_orient_coop=1.0, flag_verbose=False,
+                               num_planning_problems:int =1, keep_ego:bool = False):
 
     # final list to hold planning problems
     list_planning_problems = []
@@ -96,11 +97,24 @@ def generate_planning_problems(scenario, num_problems_desired, id_segment, index
 
         for i in range(0, len(obstacles_candidate), index_offset):
             obstacles_chosen.append(obstacles_candidate[i])
-    
+
     # turn these obstacles into planning problems
-    for obs in obstacles_chosen:
+    for i,obs in enumerate(obstacles_chosen):
+        if i >= num_planning_problems:
+            break
+        # TODO maybe num_planning_problems cut off when obstacles get too much
+        if not keep_ego:
+            planning_problem_id = obs.obstacle_id
+            scenario.remove_obstacle(obs)
+        else:
+            #TODO does not work
+            # check if the change is acceptable
+            #ValueError: Id 187 is already used in PlanningProblemSet
+            # planning_problem_id = scenario.generate_object_id()
+            planning_problem_id = obs.obstacle_id
+
         state_final_obstacle = obs.prediction.trajectory.final_state
-        scenario.remove_obstacle(obs)
+        # scenario.remove_obstacle(obs)
         
         # define orientation, velocity and time step intervals as part of the goal region
         interval_orientation = AngleInterval(state_final_obstacle.orientation - orientation_half_range, 
@@ -129,7 +143,7 @@ def generate_planning_problems(scenario, num_problems_desired, id_segment, index
         obs.initial_state.slip_angle = 0
 
         # add planning problem to list
-        list_planning_problems.append(PlanningProblem(obs.obstacle_id, obs.initial_state, goal_region))
+        list_planning_problems.append(PlanningProblem(planning_problem_id, obs.initial_state, goal_region))
 
     if len(list_planning_problems) < num_problems_desired:
         if flag_verbose: print(f"\t\tDesired number of planning problems for scenario <{scenario.benchmark_id}>: {num_problems_desired}, created: {len(list_planning_problems)}")

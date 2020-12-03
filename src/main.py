@@ -52,7 +52,10 @@ def main():
                              args.num_planning_problems, args.keep_ego, args.obstacle_start_at_zero,
                              num_processes=args.num_processes)
     elif args.dataset == "INTERACTION":
-        create_interaction_scenarios(args.input_dir, args.output_dir, num_processes=args.num_processes)
+        create_interaction_scenarios(args.input_dir, args.output_dir,
+                                     obstacle_start_at_zero=args.obstacle_start_at_zero,
+                                     num_planning_problems=args.num_planning_problems, keep_ego=args.keep_ego,
+                                     num_time_steps_scenario=args.num_time_steps_scenario, num_processes=args.num_processes)
     else:
         print("Unknown dataset in command line parameter!")
 

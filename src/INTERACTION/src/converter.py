@@ -81,6 +81,7 @@ def get_type_obstacle_commonroad(type_agent):
 
 def generate_scenarios_without_problems(id_segment, scenario_duration, dt, lanelet_network, dict_tracks):
     # time of scenario
+    # TODO make function parameters
     time_start_scenario = id_segment * scenario_duration + 1
     time_end_scenario = (id_segment + 1) * (scenario_duration) + 1
 
@@ -162,11 +163,15 @@ def generate_scenarios_without_problems(id_segment, scenario_duration, dt, lanel
 
 def generate_scenario_with_individual_problems(id_segment, id_config_scenario_indi, scenario, scenario_duration,
                                                num_scenario_normal, num_scenario_survival, prefix_name,
-                                               directory_output, flag_same_direction_problems, tags):
+                                               directory_output, flag_same_direction_problems, tags,
+                                               obstacle_start_at_zero: bool = True,
+                                               num_planning_problems: int =1, keep_ego:bool = False):
     # for some scenarios, we don't add constraints on goal positions to turn them into survival scenarios.
     list_flags_add_goal_position = [True] * num_scenario_normal + [False] * num_scenario_survival
 
     for idx, flag_add_goal_position in enumerate(list_flags_add_goal_position):
+        # if idx > num_planning_problems:
+        #     break
         benchmark_id = prefix_name + str(id_config_scenario_indi) + '_T-1'
 
         scenario_new, list_planning_problems = generate_planning_problems(scenario=scenario,
@@ -175,7 +180,9 @@ def generate_scenario_with_individual_problems(id_segment, id_config_scenario_in
                                                                           index=idx,
                                                                           time_end_scenario=int(scenario_duration * 10),
                                                                           flag_add_goal_position=flag_add_goal_position,
-                                                                          flag_same_direction_problems=flag_same_direction_problems)
+                                                                          flag_same_direction_problems=flag_same_direction_problems,
+                                                                          num_planning_problems=num_planning_problems,
+                                                                          keep_ego=keep_ego)
         # if no planning problems created
         if not list_planning_problems:
             continue
@@ -198,7 +205,8 @@ def generate_scenario_with_individual_problems(id_segment, id_config_scenario_in
                                   source=source,
                                   tags=tags)
         filename = directory_output + benchmark_id + ".xml"
-        fw.write_to_file(filename, OverwriteExistingFile.ALWAYS)
+        fw.write_to_file(filename, OverwriteExistingFile.ALWAYS,check_validity=obstacle_start_at_zero)
+        # fw.write_to_file(filename, OverwriteExistingFile.ALWAYS)
         id_config_scenario_indi += 1
 
     return id_config_scenario_indi
@@ -206,7 +214,9 @@ def generate_scenario_with_individual_problems(id_segment, id_config_scenario_in
 
 def generate_scenarios_with_cooperative_problems(id_segment, id_config_scenario_coop, scenario, scenario_duration,
                                                  num_scenario_normal, num_scenario_survival,
-                                                 prefix_name, directory_output, flag_same_direction_problems, tags):
+                                                 prefix_name, directory_output, flag_same_direction_problems, tags,
+                                                 obstacle_start_at_zero:bool = True,
+                                                 num_planning_problems: int =1, keep_ego:bool = False):
     # for some scenarios, we don't add constraints on goal positions to turn them into survival scenarios.
     list_flags_add_goal_position = [True] * num_scenario_normal + [False] * num_scenario_survival
     # generate scenarios with 2, 3, 4 and 5 cooperative vehicles
@@ -221,7 +231,9 @@ def generate_scenarios_with_cooperative_problems(id_segment, id_config_scenario_
                                                                           index=idx,
                                                                           time_end_scenario=int(scenario_duration * 10),
                                                                           flag_add_goal_position=flag_add_goal_position,
-                                                                          flag_same_direction_problems=flag_same_direction_problems)
+                                                                          flag_same_direction_problems=flag_same_direction_problems,
+                                                                          num_planning_problems=num_planning_problems,
+                                                                          keep_ego=keep_ego)
         # if one or no planning problems created
         if len(list_planning_problems) <= 1:
             continue
@@ -245,7 +257,8 @@ def generate_scenarios_with_cooperative_problems(id_segment, id_config_scenario_
                                   source=source,
                                   tags=tags)
         filename = directory_output + benchmark_id + ".xml"
-        fw.write_to_file(filename, OverwriteExistingFile.ALWAYS)
+        fw.write_to_file(filename, OverwriteExistingFile.ALWAYS,check_validity=obstacle_start_at_zero)
+        # fw.write_to_file(filename, OverwriteExistingFile.ALWAYS)
         id_config_scenario_coop += 1
 
     return id_config_scenario_coop
@@ -254,7 +267,8 @@ def generate_scenarios_with_cooperative_problems(id_segment, id_config_scenario_
 def generate_scenarios(prefix_name, path_map, directory_data, directory_output, flag_same_direction_problems=False,
                        tags='urban multi_lane oncoming_traffic',
                        x_offset_lanelets=0, y_offset_lanelets=0, x_offset_tracks=0, y_offset_tracks=0,
-                       scenario_duration=10.0, dt=0.1):
+                       scenario_duration=10.0, dt=0.1, obstacle_start_at_zero:bool = True,
+                       num_planning_problems: int =1, keep_ego:bool = False):
     """
     This function creates CommonRoad scenarios out of the INTERACTION dataset.
     """
@@ -311,14 +325,20 @@ def generate_scenarios(prefix_name, path_map, directory_data, directory_output, 
                                                                                  num_scenarios_normal_indi,
                                                                                  num_scenarios_survival_indi,
                                                                                  prefix_name, directory_output,
-                                                                                 flag_same_direction_problems, tags)
+                                                                                 flag_same_direction_problems, tags,
+                                                                                 obstacle_start_at_zero,
+                                                                                 num_planning_problems,
+                                                                                 keep_ego)
             id_config_scenario_coop = generate_scenarios_with_cooperative_problems(id_segment, id_config_scenario_coop,
                                                                                    copy.copy(scenario_segment),
                                                                                    scenario_duration,
                                                                                    num_scenarios_normal_coop,
                                                                                    num_scenarios_survival_coop,
                                                                                    prefix_name, directory_output,
-                                                                                   flag_same_direction_problems, tags)
+                                                                                   flag_same_direction_problems, tags,
+                                                                                   obstacle_start_at_zero,
+                                                                                   num_planning_problems,
+                                                                                   keep_ego)
 
             if (id_segment + 1) % 10 == 0 or (id_segment + 1) == num_segments: print(
                 f"\t{id_segment + 1} / {num_segments} segments processed.")
