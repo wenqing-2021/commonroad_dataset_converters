@@ -5,7 +5,12 @@
     <gpsLatitude>999</gpsLatitude>
     <gpsLongitude>999</gpsLongitude>
   </location>
-  <scenarioTags/>
+  <scenarioTags>
+    <intersection/>
+    <speed_limit/>
+    <urban/>
+    <multi_lane/>
+  </scenarioTags>
   <lanelet id="100">
     <leftBound>
       <point>

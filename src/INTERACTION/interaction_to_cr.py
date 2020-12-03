@@ -13,10 +13,11 @@ from src.INTERACTION.src.converter import generate_scenarios
 from commonroad.scenario.scenario import Tag
 
 
-def create_interaction_scenarios(input_dir: str, output_dir: str = "scenarios_converted/", directory_maps: Union[str, None] = None,
+def create_interaction_scenarios(input_dir: str, output_dir: str = "scenarios_converted/",
+                                 directory_maps: Union[str, None] = None,
                                  obstacle_start_at_zero: bool = True, num_planning_problems: int = 1,
                                  keep_ego: bool = False,
-                                 num_time_steps_scenario: int = 150,  num_processes: int = 1):
+                                 num_time_steps_scenario: int = 150, num_processes: int = 1):
     if directory_maps is None:
         directory_maps = os.path.dirname(os.path.abspath(__file__)) + "/repaired_maps"
     """
@@ -52,15 +53,15 @@ def create_interaction_scenarios(input_dir: str, output_dir: str = "scenarios_co
                                num_planning_problems=num_planning_problems,
                                keep_ego=keep_ego,
                                scenario_duration=num_time_steps_scenario)
-
-            sum_scenarios_indi += num_scenarios_indi
-            sum_scenarios_coop += num_scenario_coop
+        sum_scenarios_indi += num_scenarios_indi
+        sum_scenarios_coop += num_scenario_coop
 
         print(f"""\nGenerated scenarios: individual: {sum_scenarios_indi}, cooperative: {sum_scenarios_coop}, \
-            total: {sum_scenarios_indi + sum_scenarios_coop}""")
+                total: {sum_scenarios_indi + sum_scenarios_coop}""")
 
         print(f"\nGenerated scenarios: individual: {sum_scenarios_indi}, cooperative: {sum_scenarios_coop}, \
-            total: {sum_scenarios_indi + sum_scenarios_coop}")
+                total: {sum_scenarios_indi + sum_scenarios_coop}")
+
     else:
         with multiprocessing.Pool(processes=num_processes) as pool:
             pool.starmap(
@@ -77,10 +78,10 @@ def create_interaction_scenarios(input_dir: str, output_dir: str = "scenarios_co
                         info['y_offset_lanelets'],
                         info['x_offset_tracks'],
                         info['y_offset_tracks'],
-                        obstacle_start_at_zero=obstacle_start_at_zero,
-                        num_planning_problems=num_planning_problems,
-                        keep_ego=keep_ego,
-                        scenario_duration=num_time_steps_scenario
+                        num_time_steps_scenario,
+                        obstacle_start_at_zero,
+                        num_planning_problems,
+                        keep_ego
                     ) for idx, info in enumerate(list_info_dataset)
                 ]
             )

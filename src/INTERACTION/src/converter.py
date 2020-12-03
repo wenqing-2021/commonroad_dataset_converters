@@ -267,8 +267,8 @@ def generate_scenarios_with_cooperative_problems(id_segment, id_config_scenario_
 def generate_scenarios(prefix_name, path_map, directory_data, directory_output, flag_same_direction_problems=False,
                        tags='urban multi_lane oncoming_traffic',
                        x_offset_lanelets=0, y_offset_lanelets=0, x_offset_tracks=0, y_offset_tracks=0,
-                       scenario_duration=10.0, dt=0.1, obstacle_start_at_zero:bool = True,
-                       num_planning_problems: int =1, keep_ego:bool = False):
+                       scenario_duration=10.0, obstacle_start_at_zero: bool = True,
+                       num_planning_problems: int = 1, keep_ego: bool = False, dt=0.1):
     """
     This function creates CommonRoad scenarios out of the INTERACTION dataset.
     """
