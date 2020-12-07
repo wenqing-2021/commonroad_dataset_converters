@@ -79,7 +79,7 @@ def get_type_obstacle_commonroad(type_agent):
     return type_obstacle_CR
 
 
-def generate_scenarios_without_problems(id_segment, scenario_duration, dt, lanelet_network, dict_tracks):
+def generate_scenarios_without_problems(id_segment, scenario_duration, dt, lanelet_network, dict_tracks, trafficSigns):
     # time of scenario
     # TODO make function parameters
     time_start_scenario = id_segment * scenario_duration + 1
@@ -91,6 +91,14 @@ def generate_scenarios_without_problems(id_segment, scenario_duration, dt, lanel
 
     # add lanelet network to scenario
     scenario.add_objects(lanelet_network)
+    traffic_sign_uses = {}
+    for traffic_sign in trafficSigns:
+        traffic_sign_uses[traffic_sign.traffic_sign_id] = set()
+    for lane in lanelet_network.lanelets:
+        for ts in lane.traffic_signs:
+            traffic_sign_uses[ts].add(lane.lanelet_id)
+    for traffic_sign in trafficSigns:
+        scenario.add_objects(traffic_sign, traffic_sign_uses[traffic_sign.traffic_sign_id])
 
     for id_vehicle in dict_tracks:
         """
@@ -305,10 +313,12 @@ def generate_scenarios(prefix_name, path_map, directory_data, directory_output, 
         lanelet_network = LaneletNetwork.create_from_lanelet_network(scenario_source.lanelet_network)
         lanelet_network.translate_rotate(np.array([-x_offset_lanelets, -y_offset_lanelets]), 0)
 
+        traffic_signs = scenario_source.lanelet_network.traffic_signs
+
         for id_segment in range(num_segments):
             # generate scenario of current segment
             scenario_segment = generate_scenarios_without_problems(id_segment, scenario_duration, dt, lanelet_network,
-                                                                   dict_tracks)
+                                                                   dict_tracks, traffic_signs)
             # skip if there is only a few obstacles in the scenario
             if len(scenario_segment.dynamic_obstacles) < 3:
                 continue
