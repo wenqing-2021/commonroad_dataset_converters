@@ -9,7 +9,7 @@ from typing import Dict
 
 from commonroad.planning.planning_problem import PlanningProblemSet
 from commonroad.common.file_writer import CommonRoadFileWriter, OverwriteExistingFile
-from commonroad.scenario.scenario import Scenario, Tag
+from commonroad.scenario.scenario import Scenario, Tag, ScenarioID
 
 from src.highD.map_utils import get_meta_scenario, get_speed_limit, get_lane_markings, get_dt, Direction
 from src.highD.obstacle_utils import generate_dynamic_obstacle
@@ -19,7 +19,7 @@ from src.helper import load_yaml
 
 def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, tracks_fn: str,
                                   num_time_steps_scenario: int, num_planning_problems: int, keep_ego: bool,
-                                  output_dir: str, highd_config: Dict, obstacle_start_at_zero: bool):
+                                  output_dir: str, highd_config: Dict, obstacle_start_at_zero: bool, downsample: int):
     """
     Generate CommonRoad scenarios with given paths to highD for a high-D recording
 
@@ -40,7 +40,7 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
     tracks_df = pd.read_csv(tracks_fn, header=0)
 
     # generate meta scenario with lanelet network
-    dt = get_dt(recording_meta_df)
+    dt = get_dt(recording_meta_df) * downsample
     speed_limit = get_speed_limit(recording_meta_df)
     upper_lane_markings, lower_lane_markings = get_lane_markings(recording_meta_df)
     meta_scenario_upper = get_meta_scenario(dt, "meta_scenario_upper", upper_lane_markings, speed_limit,
@@ -52,18 +52,19 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
 
     # separate record and generate scenario for each separated part for each direction
     # (upper interstate direction / lower interstate direction)
-    num_scenarios = math.ceil(max(tracks_meta_df.finalFrame) / num_time_steps_scenario)
+    num_time_steps_scenario_original_dt = num_time_steps_scenario * downsample
+    num_scenarios = math.ceil(max(tracks_meta_df.finalFrame) / num_time_steps_scenario_original_dt)
     for idx_1 in range(num_scenarios):
         # benchmark id format: COUNTRY_SCENE_CONFIG_PRED
-        frame_start = idx_1 * num_time_steps_scenario + (idx_1 + 1)
-        frame_end = (idx_1 + 1) * num_time_steps_scenario + (idx_1 + 1)
+        frame_start = idx_1 * num_time_steps_scenario_original_dt + (idx_1 + 1)
+        frame_end = (idx_1 + 1) * num_time_steps_scenario_original_dt + (idx_1 + 1)
         benchmark_id = "DEU_{0}-{1}_{2}_T-1".format(
             highd_config.get("locations")[recording_meta_df.locationId.values[0]] + "Upper",
             int(recording_meta_df.id), idx_1 + 1)
         try:
             generate_single_scenario(highd_config, num_planning_problems, keep_ego, output_dir, tracks_df,
                                      tracks_meta_df, meta_scenario_upper, benchmark_id, Direction.UPPER, frame_start,
-                                     frame_end, obstacle_start_at_zero)
+                                     frame_end, obstacle_start_at_zero, downsample)
         except NoCarException as e:
             print(f"No car in this scenario: {repr(e)}. Skipping this scenario.")
 
@@ -73,14 +74,14 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
         try:
             generate_single_scenario(highd_config, num_planning_problems, keep_ego,
                                      output_dir, tracks_df, tracks_meta_df, meta_scenario_lower, benchmark_id,
-                                     Direction.LOWER, frame_start, frame_end, obstacle_start_at_zero)
+                                     Direction.LOWER, frame_start, frame_end, obstacle_start_at_zero, downsample)
         except NoCarException as e:
             print(f"No car in this scenario: {repr(e)}. Skipping this scenario.")
 
 def generate_single_scenario(highd_config: Dict, num_planning_problems: int, keep_ego: bool, output_dir: str,
                              tracks_df: pd.DataFrame, tracks_meta_df: pd.DataFrame, meta_scenario: Scenario,
                              benchmark_id: str, direction: Direction, frame_start: int, frame_end: int,
-                             obstacle_start_at_zero: bool):
+                             obstacle_start_at_zero: bool, downsample: int):
     """
     Generate a single CommonRoad scenario based on hihg-D record snippet
     :param highd_config: dictionary with configuration parameters for highD scenario generation
@@ -100,17 +101,17 @@ def generate_single_scenario(highd_config: Dict, num_planning_problems: int, kee
 
     def enough_time_steps(veh_id):
         vehicle_meta = tracks_meta_df[tracks_meta_df.id == veh_id]
-        if not obstacle_start_at_zero and frame_end - int(vehicle_meta.initialFrame) < 2 \
-                or int(vehicle_meta.finalFrame) - frame_start < 2:
+        if not obstacle_start_at_zero and frame_end - int(vehicle_meta.initialFrame) < 2 * downsample \
+                or int(vehicle_meta.finalFrame) - frame_start < 2 * downsample:
             return False
         elif obstacle_start_at_zero and int(vehicle_meta.initialFrame) > frame_start \
-            or int(vehicle_meta.finalFrame) - frame_start < 2:
+            or int(vehicle_meta.finalFrame) - frame_start < 2 * downsample:
             return False
         return True
 
     # copy meta_scenario with lanelet networks
     scenario = copy.deepcopy(meta_scenario)
-    scenario.benchmark_id = benchmark_id
+    scenario.scenario_id = ScenarioID.from_benchmark_id(benchmark_id, '2020a')
 
     # read tracks appear between [frame_start, frame_end]
     scenario_tracks_df = tracks_df[(tracks_df.frame >= frame_start) & (tracks_df.frame <= frame_end)]
@@ -122,7 +123,7 @@ def generate_single_scenario(highd_config: Dict, num_planning_problems: int, kee
         if not enough_time_steps(vehicle_id):
             continue
         print("Generating scenario {}, vehicle id {}".format(benchmark_id, vehicle_id), end="\r")
-        do = generate_dynamic_obstacle(scenario, vehicle_id, tracks_meta_df, scenario_tracks_df, frame_start)
+        do = generate_dynamic_obstacle(scenario, vehicle_id, tracks_meta_df, scenario_tracks_df, frame_start, downsample)
         scenario.add_objects(do)
 
     # return if scenario contains no dynamic obstacle
@@ -157,7 +158,7 @@ def generate_single_scenario(highd_config: Dict, num_planning_problems: int, kee
 
 
 def create_highd_scenarios(input_dir: str, output_dir: str, num_time_steps_scenario: int, num_planning_problems: int,
-                           keep_ego: bool, obstacle_start_at_zero: bool, num_processes: int = 1):
+                           keep_ego: bool, obstacle_start_at_zero: bool, num_processes: int = 1, downsample: int = 1):
     """
     Iterates over all dataset files and generates CommonRoad scenarios
 
@@ -189,7 +190,7 @@ def create_highd_scenarios(input_dir: str, output_dir: str, num_time_steps_scena
             print("Processing file {}...".format(tracks_fn), end='\n')
             generate_scenarios_for_record(recording_meta_fn, tracks_meta_fn, tracks_fn, num_time_steps_scenario,
                                           num_planning_problems, keep_ego, output_dir, highd_config,
-                                          obstacle_start_at_zero)
+                                          obstacle_start_at_zero, downsample)
     else:
         with multiprocessing.Pool(processes=num_processes) as pool:
             pool.starmap(
@@ -204,7 +205,8 @@ def create_highd_scenarios(input_dir: str, output_dir: str, num_time_steps_scena
                         keep_ego,
                         output_dir,
                         highd_config,
-                        obstacle_start_at_zero
+                        obstacle_start_at_zero,
+                        downsample
                     )
                     for recording_meta_fn, tracks_meta_fn, tracks_fn in \
                     zip(listing_recording, listing_metas, listing_tracks)
