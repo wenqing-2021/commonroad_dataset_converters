@@ -57,7 +57,7 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
     for idx_1 in range(num_scenarios):
         # benchmark id format: COUNTRY_SCENE_CONFIG_PRED
         frame_start = idx_1 * num_time_steps_scenario_original_dt + (idx_1 + 1)
-        frame_end = (idx_1 + 1) * num_time_steps_scenario_original_dt + (idx_1 + 1)
+        frame_end = frame_start + num_time_steps_scenario_original_dt
         benchmark_id = "DEU_{0}-{1}_{2}_T-1".format(
             highd_config.get("locations")[recording_meta_df.locationId.values[0]] + "Upper",
             int(recording_meta_df.id), idx_1 + 1)

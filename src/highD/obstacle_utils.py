@@ -1,3 +1,5 @@
+import math
+
 import numpy as np
 from typing import Union
 from pandas import DataFrame, Series
@@ -61,9 +63,9 @@ def generate_dynamic_obstacle(scenario: Scenario, vehicle_id: int, tracks_meta_d
     length = vehicle_meta.width.values[0]
     width = vehicle_meta.height.values[0]
 
-    initial_time_step = int(vehicle_tracks.frame.values[0]) - time_step_correction
-    initial_time_step /= downsample
-    initial_time_step = int(initial_time_step)
+    initial_time_step_cr = math.ceil((int(vehicle_tracks.frame.values[0]) - time_step_correction) / downsample)
+    initial_time_step_cr = int(initial_time_step_cr)
+    initial_frame = initial_time_step_cr * downsample
     dynamic_obstacle_id = scenario.generate_object_id()
     dynamic_obstacle_type = obstacle_class_dict[vehicle_meta['class'].values[0]]
     dynamic_obstacle_shape = Rectangle(width=width, length=length)
@@ -75,15 +77,18 @@ def generate_dynamic_obstacle(scenario: Scenario, vehicle_id: int, tracks_meta_d
     accelerations = get_acceleration(vehicle_tracks)
 
     state_list = []
-    for i, (x, y, v, theta, a) in enumerate(zip(xs, ys, velocities, orientations, accelerations)):
-        if i % downsample != 0:
-            continue
+    for cr_timestep, frame_idx in enumerate(range(0, xs.shape[0], downsample)):
+        x = xs[frame_idx]
+        y = ys[frame_idx]
+        v = velocities.values[frame_idx]
+        theta = orientations.values[frame_idx]
+        a = accelerations.values[frame_idx]
         state_list.append(State(position=np.array([x, y]), velocity=v, orientation=theta,
-                                time_step=int((initial_time_step + i) / downsample)))
+                                time_step=cr_timestep + initial_time_step_cr))
 
     dynamic_obstacle_initial_state = state_list[0]
 
-    dynamic_obstacle_trajectory = Trajectory(initial_time_step + 1, state_list[1:])
+    dynamic_obstacle_trajectory = Trajectory(initial_time_step_cr + 1, state_list[1:])
     dynamic_obstacle_prediction = TrajectoryPrediction(dynamic_obstacle_trajectory, dynamic_obstacle_shape)
 
     return DynamicObstacle(dynamic_obstacle_id, dynamic_obstacle_type, dynamic_obstacle_shape,
