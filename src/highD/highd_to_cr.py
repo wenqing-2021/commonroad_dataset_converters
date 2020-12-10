@@ -43,10 +43,10 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
     dt = get_dt(recording_meta_df) * downsample
     speed_limit = get_speed_limit(recording_meta_df)
     upper_lane_markings, lower_lane_markings = get_lane_markings(recording_meta_df)
-    meta_scenario_upper = get_meta_scenario(dt, "meta_scenario_upper", upper_lane_markings, speed_limit,
+    meta_scenario_upper = get_meta_scenario(dt, "DEU_MetaScenarioUpper-0_0_T-1", upper_lane_markings, speed_limit,
                                             highd_config.get("road_length"), Direction.UPPER,
                                             highd_config.get("road_offset"))
-    meta_scenario_lower = get_meta_scenario(dt, "meta_scearnio_lower", lower_lane_markings, speed_limit,
+    meta_scenario_lower = get_meta_scenario(dt, "DEU_MetaScenarioLower-0_0_T-1", lower_lane_markings, speed_limit,
                                             highd_config.get("road_length"), Direction.LOWER,
                                             highd_config.get("road_offset"))
 
