@@ -12,7 +12,8 @@ def get_args() -> argparse.Namespace:
 
     :return: command line arguments
     """
-    parser = argparse.ArgumentParser(description="Generates CommonRoad scenarios different datasets")
+    parser = argparse.ArgumentParser(description="Generates CommonRoad scenarios different datasets",
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('dataset', type=str, choices=["inD", "highD", "INTERACTION"], help='Specification of dataset')
     parser.add_argument('input_dir', type=str, help='Path to dataset files')
     parser.add_argument('output_dir', type=str, help='Directory to store generated CommonRoad files')
