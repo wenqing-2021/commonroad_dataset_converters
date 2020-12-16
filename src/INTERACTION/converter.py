@@ -1,20 +1,17 @@
 import os
-import csv
 import copy
 import glob
 import numpy as np
 import pandas as pd
 
+from commonroad.geometry.shape import Rectangle
 from commonroad.scenario.scenario import Scenario
-from commonroad.planning.planning_problem import PlanningProblem, PlanningProblemSet
-from commonroad.planning.goal import GoalRegion
-from commonroad.scenario.obstacle import DynamicObstacle, StaticObstacle, ObstacleType
-from commonroad.scenario.trajectory import State, Trajectory
-from commonroad.prediction.prediction import TrajectoryPrediction
-from commonroad.common.util import Interval
-from commonroad.geometry.shape import Rectangle, Circle
-from commonroad.common.file_reader import CommonRoadFileReader
 from commonroad.scenario.lanelet import LaneletNetwork
+from commonroad.scenario.trajectory import State, Trajectory
+from commonroad.scenario.obstacle import DynamicObstacle, ObstacleType
+from commonroad.planning.planning_problem import PlanningProblemSet
+from commonroad.prediction.prediction import TrajectoryPrediction
+from commonroad.common.file_reader import CommonRoadFileReader
 from commonroad.common.file_writer import CommonRoadFileWriter, OverwriteExistingFile
 
 from src.INTERACTION.utils import generate_planning_problems
@@ -34,11 +31,12 @@ def get_type_obstacle_commonroad(type_agent):
     dict_conversion = {'car': ObstacleType.CAR,
                        'truck': ObstacleType.TRUCK,
                        'bus': ObstacleType.BUS,
-                       'bicycle': ObstacleType.BICYCLE}
+                       'bicycle': ObstacleType.BICYCLE,
+                       'motorcycle': ObstacleType.MOTORCYCLE}
 
     type_obstacle_CR = dict_conversion.get(type_agent, ObstacleType.UNKNOWN)
 
-    assert type_obstacle_CR != ObstacleType.UNKNOWN, "Found obstacle of type Unknown."
+    assert type_obstacle_CR != ObstacleType.UNKNOWN, f"Found obstacle of type Unknown {type_agent}."
 
     return type_obstacle_CR
 
@@ -79,19 +77,19 @@ def generate_scenarios_without_problems(id_segment, scenario_duration, dt, lanel
     time_end_scenario = (id_segment + 1) * (scenario_duration) + 1
 
     # create CommonRoad scenario object
-    scenario = Scenario(dt=dt, scenario_id='')
+    scenario = Scenario(dt=dt, scenario_id=None)
     scenario._id_set = set([0])
 
     # add lanelet network to scenario
     scenario.add_objects(lanelet_network)
-    traffic_sign_uses = {}
-    for traffic_sign in traffic_signs:
-        traffic_sign_uses[traffic_sign.traffic_sign_id] = set()
-    for lane in lanelet_network.lanelets:
-        for ts in lane.traffic_signs:
-            traffic_sign_uses[ts].add(lane.lanelet_id)
-    for traffic_sign in traffic_signs:
-        scenario.add_objects(traffic_sign, traffic_sign_uses[traffic_sign.traffic_sign_id])
+    # traffic_sign_uses = {}
+    # for traffic_sign in traffic_signs:
+    #     traffic_sign_uses[traffic_sign.traffic_sign_id] = set()
+    # for lane in lanelet_network.lanelets:
+    #     for ts in lane.traffic_signs:
+    #         traffic_sign_uses[ts].add(lane.lanelet_id)
+    # for traffic_sign in traffic_signs:
+    #     scenario.add_objects(traffic_sign, traffic_sign_uses[traffic_sign.traffic_sign_id])
 
     vehicle_ids = track_df.track_id.unique()
 
@@ -265,8 +263,8 @@ def generate_scenarios(prefix_name, path_map, directory_data, directory_output, 
         track_df["x"] -= x_offset_tracks
         track_df["y"] -= y_offset_tracks
 
-        print(f"\tProcessing: {os.path.basename(path_file)}, Start time: {time_min * dt}s, End time: {time_max * dt}s, "
-              f"Scenario duration: {scenario_time_steps * dt}S, Number of scenario segments: {num_segments}")
+        # print(f"\tProcessing: {os.path.basename(path_file)}, Start time: {time_min * dt}s, End time: {time_max * dt}s, "
+        #       f"Scenario duration: {scenario_time_steps * dt}S, Number of scenario segments: {num_segments}")
 
         # prepare lanelet network for scenarios from the given source 
         lanelet_network = LaneletNetwork.create_from_lanelet_network(scenario_source.lanelet_network)
@@ -297,8 +295,8 @@ def generate_scenarios(prefix_name, path_map, directory_data, directory_output, 
                                                                                  num_planning_problems,
                                                                                  keep_ego)
 
-            if (id_segment + 1) % 10 == 0 or (id_segment + 1) == num_segments: print(
-                f"\t{id_segment + 1} / {num_segments} segments processed.")
+            # if (id_segment + 1) % 10 == 0 or (id_segment + 1) == num_segments: print(
+            #     f"\t{id_segment + 1} / {num_segments} segments processed.")
 
     id_config_scenario_indi -= 1
 
