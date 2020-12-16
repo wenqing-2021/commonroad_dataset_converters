@@ -14,6 +14,7 @@ For the converter you need at least Python 3.6 and the following packages:
 The usage of the Anaconda Python distribution is recommended. 
 You can install the required Python packages with the provided requirements.txt file (pip install -r requirements.txt).
 
+
 ### Usage
 A conversion can be started from the *dataset_converters* directory by executing  
 `python -m src.main dataset input_dir output_dir --num_time_steps_scenario #NUMTIMESTEPSSCENARIO --num_planning_problems #NUMPLANNINGPROBLEMS --num_processes #NUMPROCESSES --keep_ego --obstacle_start_at_zero`.
