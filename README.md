@@ -6,42 +6,13 @@ This repository contains tools to convert popular datasets, which are publicly a
 ### Prerequisites
 For the converter you need at least Python 3.6 and the following packages:
 * numpy>=1.18.2
-* commonroad-io==2020.2
+* commonroad-io==2020.3
 * pandas>=0.24.2
 * scipy>=1.4.1
 * ruamel.yaml>=0.16.10
 
 The usage of the Anaconda Python distribution is recommended. 
 You can install the required Python packages with the provided requirements.txt file (pip install -r requirements.txt).
-
-### Bugfix in commonroad-io for inD converter:
-
-There are two bugs in commonroad-io==2020.2 that have to be fixed if you want to use the inD converter:
-
-1. in `$CONDA_PREFIX/lib/python3.6/site-packages/commonroad/scenario/lanelet.py`
-
-    line 65: `MOTORCYCLE = 'motorycle'` has to be changed to `MOTORCYCLE = 'motorcycle'`, otherwise the converter scenario
-    will not pass the validity check.
-
-2. in `$CONDA_PREFIX/lib/python3.6/site-packages/commonroad/scenario/scenario.py`
-
-    line 241: after
-    ```python
-        for lanelet in scenario_object.lanelets:
-            self._mark_object_id_as_used(lanelet.lanelet_id)
-    ```
-    add
-    
-    ```python
-        for traffic_sign in scenario_object.traffic_signs:
-            self._mark_object_id_as_used(traffic_sign.traffic_sign_id)
-        for traffic_light in scenario_object.traffic_lights:
-            self._mark_object_id_as_used(traffic_light.traffic_light_id)
-        for intersection in scenario_object.intersections:
-            self._mark_object_id_as_used(intersection.intersection_id)
-    ```
-
-Both bugs will be fixed in the next release of `commonroad-io`. We will update the converter accordingly after the release.
 
 ### Usage
 A conversion can be started from the *dataset_converters* directory by executing  

@@ -55,7 +55,7 @@ def meta_scenario_from_recording(ind_config: Dict, location_id: int, recording_i
     # id should not be 0 indexed, increase by one to prevent recording id = 0
     scenario = Scenario(
         dt=scenario_dt,
-        benchmark_id=f"DEU_{ind_config.get('location_benchmark_id')[location_id]}_{recording_id + 1}_T-1"
+        scenario_id=f"DEU_{ind_config.get('location_benchmark_id')[location_id]}_{recording_id + 1}_T-1"
     )
 
     lanelet_network = locationId_to_lanelet_network[location_id]

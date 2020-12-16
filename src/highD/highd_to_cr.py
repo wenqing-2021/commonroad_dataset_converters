@@ -110,7 +110,7 @@ def generate_single_scenario(highd_config: Dict, num_planning_problems: int, kee
 
     # copy meta_scenario with lanelet networks
     scenario = copy.deepcopy(meta_scenario)
-    scenario.benchmark_id = benchmark_id
+    scenario.scenario_id = benchmark_id
 
     # read tracks appear between [frame_start, frame_end]
     scenario_tracks_df = tracks_df[(tracks_df.frame >= frame_start) & (tracks_df.frame <= frame_end)]
