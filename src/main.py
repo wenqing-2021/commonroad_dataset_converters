@@ -1,6 +1,7 @@
 import os
 import time
 import argparse
+import warnings
 
 from src.highD.highd_to_cr import create_highd_scenarios
 from src.inD.ind_to_cr import create_ind_scenarios
@@ -29,6 +30,7 @@ def get_args() -> argparse.Namespace:
     parser.add_argument('--num_processes', type=int, default=1,
                         help='Number of multiple processes to convert dataset, '
                              'default=1')
+    parser.add_argument('--downsample', type=int, default=1, help='Decrease dt by n*dt')
 
     return parser.parse_args()
 
@@ -45,8 +47,10 @@ def main():
     if args.dataset == "highD":
         create_highd_scenarios(args.input_dir, args.output_dir, args.num_time_steps_scenario,
                                args.num_planning_problems, args.keep_ego, args.obstacle_start_at_zero,
-                               args.num_processes)
+                               args.num_processes, args.downsample)
     elif args.dataset == "inD":
+        if args.downsample != 1:
+            warnings.warn('Downsampling only implemented for highD. Using original temporal resolution!')
         create_ind_scenarios(args.input_dir, args.output_dir, args.num_time_steps_scenario,
                              args.num_planning_problems, args.keep_ego, args.obstacle_start_at_zero,
                              num_processes=args.num_processes)
