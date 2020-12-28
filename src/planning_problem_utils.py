@@ -10,7 +10,8 @@ from commonroad.scenario.obstacle import ObstacleType
 
 
 def generate_planning_problem(scenario: Scenario, orientation_half_range: float = 0.2, velocity_half_range: float = 10,
-                              time_step_half_range: int = 25, keep_ego: bool = False) -> PlanningProblem:
+                              time_step_half_range: int = 25, keep_ego: bool = False,
+                              dynamic_obstacle_selected = None) -> PlanningProblem:
     """
     Generates planning problem for scenario by taking obstacle trajectory
     :param scenario: CommonRoad scenario
@@ -18,11 +19,12 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
     :param velocity_half_range: parameter for goal state velocity
     :param time_step_half_range: parameter for goal state time step
     :param keep_ego: boolean indicating if vehicles selected for planning problem should be kept in scenario
+    :param dynamic_obstacle_selected: currently just for testing the interaction dataset
     :return: CommonRoad planning problem
     """
     # random choose obstacle as ego vehicle
     random.seed(0)
-    dynamic_obstacle_selected = None
+    # dynamic_obstacle_selected = None
 
     # only choose car type as ego vehicle
     while dynamic_obstacle_selected is None:

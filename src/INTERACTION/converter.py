@@ -82,14 +82,18 @@ def generate_scenarios_without_problems(id_segment, scenario_duration, dt, lanel
 
     # add lanelet network to scenario
     scenario.add_objects(lanelet_network)
-    # traffic_sign_uses = {}
-    # for traffic_sign in traffic_signs:
-    #     traffic_sign_uses[traffic_sign.traffic_sign_id] = set()
-    # for lane in lanelet_network.lanelets:
-    #     for ts in lane.traffic_signs:
-    #         traffic_sign_uses[ts].add(lane.lanelet_id)
-    # for traffic_sign in traffic_signs:
-    #     scenario.add_objects(traffic_sign, traffic_sign_uses[traffic_sign.traffic_sign_id])
+    traffic_sign_uses = {}
+    for traffic_sign in traffic_signs:
+        traffic_sign_uses[traffic_sign.traffic_sign_id] = set()
+    for lane in lanelet_network.lanelets:
+        for ts in lane.traffic_signs:
+            traffic_sign_uses[ts].add(lane.lanelet_id)
+    for traffic_sign in traffic_signs:
+        if scenario._is_object_id_used(traffic_sign.traffic_sign_id):
+            scenario._id_set.remove(traffic_sign.traffic_sign_id)
+        scenario.add_objects(traffic_sign, traffic_sign_uses[traffic_sign.traffic_sign_id])
+
+
 
     vehicle_ids = track_df.track_id.unique()
 
@@ -98,9 +102,12 @@ def generate_scenarios_without_problems(id_segment, scenario_duration, dt, lanel
         discard vehicles that (1) start after the scenario ends, or (2) end before the scenario starts.
         for one-shot planning scenarios, we don't consider vehicles that (3) start after time step 0 as well.
         """
-        track = track_df[track_df.track_id == id_vehicle]
+        track = track_df[(track_df.track_id == id_vehicle) & (track_df.timestamp_ms >= time_start_scenario)]
         time_start_track = track.timestamp_ms.min()
         time_end_track = track.timestamp_ms.max()
+
+        if len(track) == 0:
+            continue
 
         def enough_time_steps(track: pd.DataFrame):
             if not obstacle_start_at_zero and time_end_scenario - time_start_track < 2 \

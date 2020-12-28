@@ -106,47 +106,11 @@ def generate_planning_problems(scenario, num_problems_desired, id_segment, index
         if i >= num_planning_problems:
             break
         # TODO maybe num_planning_problems cut off when obstacles get too much
-        if not keep_ego:
-            planning_problem_id = obs.obstacle_id
-            scenario.remove_obstacle(obs)
-        else:
-            # TODO does not work
-            # check if the change is acceptable
-            # ValueError: Id 187 is already used in PlanningProblemSet
-            # planning_problem_id = scenario.generate_object_id()
-            planning_problem_id = obs.obstacle_id
+        from src.planning_problem_utils import generate_planning_problem
 
-        state_final_obstacle = obs.prediction.trajectory.final_state
-        # scenario.remove_obstacle(obs)
-
-        # define orientation, velocity and time step intervals as part of the goal region
-        interval_orientation = AngleInterval(state_final_obstacle.orientation - orientation_half_range,
-                                             state_final_obstacle.orientation + orientation_half_range)
-
-        interval_velocity = Interval(max(state_final_obstacle.velocity - velocity_half_range, 0),
-                                     state_final_obstacle.velocity + velocity_half_range)
-
-        interval_time_step = Interval(max(state_final_obstacle.time_step - time_step_half_range, 0),
-                                      state_final_obstacle.time_step + time_step_half_range)
-
-        dict_keywords = {'orientation': interval_orientation,
-                         'velocity': interval_velocity,
-                         'time_step': interval_time_step}
-
-        if flag_add_goal_position:
-            position_area = Rectangle(center=state_final_obstacle.position,
-                                      length=position_length, width=position_width,
-                                      orientation=state_final_obstacle.orientation)
-            dict_keywords['position'] = position_area
-
-        goal_region = GoalRegion([State(**dict_keywords)])
-
-        # add info for initial state
-        obs.initial_state.yaw_rate = 0
-        obs.initial_state.slip_angle = 0
-
-        # add planning problem to list
-        list_planning_problems.append(PlanningProblem(planning_problem_id, obs.initial_state, goal_region))
+        if len(scenario.dynamic_obstacles) > (1 if not keep_ego else 0):
+            list_planning_problems.append(generate_planning_problem(scenario, orientation_half_range, velocity_half_range,
+                                                                    time_step_half_range, keep_ego, obs))
 
     if len(list_planning_problems) < num_problems_desired:
         if flag_verbose: print(
