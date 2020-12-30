@@ -3,6 +3,10 @@ __copyright__ = "TUM Cyber-Physical Systems Group"
 __email__ = "commonroad-i06@in.tum.de"
 __status__ = "Release"
 
+__desc__ = """
+Converts INTERACTION files to Commonroad Format, creating smaller Planning Problems if required
+"""
+
 import os
 import multiprocessing
 

@@ -5,9 +5,10 @@ __version__ = "1.0"
 __maintainer__ = "Xiao Wang"
 __email__ = "xiao.wang@tum.de"
 __status__ = ""
-# TODO write des
+
 __desc__ = """
-TODO
+Extracts planning problems from a big recording by removing a dynamic vehicle and replacing its first and last state
+with ego vehicle start and goal position
 """
 
 

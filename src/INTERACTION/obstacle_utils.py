@@ -5,9 +5,9 @@ __version__ = "1.0"
 __maintainer__ = "Xiao Wang"
 __email__ = "xiao.wang@tum.de"
 __status__ = ""
-# TODO write des
+
 __desc__ = """
-TODO
+Generates dynamic obstacles for the INTERACTION conversion
 """
 
 import numpy as np
