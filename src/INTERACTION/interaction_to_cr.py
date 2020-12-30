@@ -32,7 +32,7 @@ def create_interaction_scenarios(input_dir: str, output_dir: str = "scenarios_co
     assert os.path.exists(input_dir), "<dataset> folder not found under current working directory!"
     assert os.path.exists(directory_maps), "<maps_lanelet> folder not found under current working directory!"
     interaction_config = load_yaml(os.path.dirname(os.path.abspath(__file__)) + "/config.yaml")
-    print(f"Number of maps to be processed: {len(list_info_dataset)}")
+    print(f"Number of maps to be processed: {len(interaction_config['locations'])}")
 
     # iterate through the config and process the scenarios
     sum_scenarios_indi = 0
