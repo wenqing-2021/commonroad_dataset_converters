@@ -7,8 +7,8 @@ import os
 import multiprocessing
 
 from typing import Union
-from src.INTERACTION.config import get_list_info_dataset
-from src.INTERACTION.converter import generate_scenarios
+from src.INTERACTION.map_utils import generate_scenarios
+from src.helper import load_yaml
 
 from commonroad.scenario.scenario import Tag
 
@@ -29,25 +29,35 @@ def create_interaction_scenarios(input_dir: str, output_dir: str = "scenarios_co
     """
 
     # get config info
-    list_info_dataset = get_list_info_dataset(input_dir, directory_maps, output_dir)
+    assert os.path.exists(input_dir), "<dataset> folder not found under current working directory!"
+    assert os.path.exists(directory_maps), "<maps_lanelet> folder not found under current working directory!"
+    interaction_config = load_yaml(os.path.dirname(os.path.abspath(__file__)) + "/config.yaml")
     print(f"Number of maps to be processed: {len(list_info_dataset)}")
 
     # iterate through the config and process the scenarios
     sum_scenarios_indi = 0
     if num_processes < 2:
-        for idx, info in enumerate(list_info_dataset):
-            print(f"\nProcessing {idx + 1} / {len(list_info_dataset)}:")
-            num_scenarios_indi = generate_scenarios(prefix_name=info['prefix_name'],
-                                                    path_map=info['path_map'],
-                                                    directory_data=info['directory_data'],
-                                                    directory_output=info['directory_output'],
-                                                    flag_same_direction_problems=info.get(
-                                                        'flag_same_direction_problems', False),
-                                                    tags=[Tag(tag) for tag in info['tags'].split(' ')],
-                                                    x_offset_lanelets=info['x_offset_lanelets'],
-                                                    y_offset_lanelets=info['y_offset_lanelets'],
-                                                    x_offset_tracks=info['x_offset_tracks'],
-                                                    y_offset_tracks=info['y_offset_tracks'],
+        for idx, location in enumerate(interaction_config['locations'].values()):
+
+            offsets = interaction_config['offsets'][location]
+            print(f"\nProcessing {idx + 1} / {len(interaction_config['locations'])}:")
+            num_scenarios_indi = generate_scenarios(prefix_name=location + '_',
+                                                    path_map=os.path.join(os.getcwd(), directory_maps,
+                                                                          interaction_config['maps'][location])+'.xml',
+                                                    directory_data=os.path.join(input_dir,
+                                                                                interaction_config['directory_data'][
+                                                                                    location]),
+                                                    directory_output=os.path.join(os.getcwd(), output_dir,
+                                                                                  f"{location}/"),
+                                                    flag_same_direction_problems=interaction_config[
+                                                        'flag_same_direction_problems'].get(
+                                                        location, False),
+                                                    tags=[Tag(tag) for tag in
+                                                          interaction_config['tags'][location].split(' ')],
+                                                    x_offset_lanelets=offsets['x_offset_lanelets'],
+                                                    y_offset_lanelets=offsets['y_offset_lanelets'],
+                                                    x_offset_tracks=offsets['x_offset_tracks'],
+                                                    y_offset_tracks=offsets['y_offset_tracks'],
                                                     obstacle_start_at_zero=obstacle_start_at_zero,
                                                     num_planning_problems=num_planning_problems,
                                                     keep_ego=keep_ego,
@@ -62,20 +72,20 @@ def create_interaction_scenarios(input_dir: str, output_dir: str = "scenarios_co
                 generate_scenarios,
                 [
                     (
-                        info['prefix_name'],
-                        info['path_map'],
-                        info['directory_data'],
-                        info['directory_output'],
-                        info.get('flag_same_direction_problems', False),
-                        [Tag(tag) for tag in info['tags'].split(' ')],
-                        info['x_offset_lanelets'],
-                        info['y_offset_lanelets'],
-                        info['x_offset_tracks'],
-                        info['y_offset_tracks'],
+                        location + '_',
+                        os.path.join(os.getcwd(), directory_maps, interaction_config['maps'][location]) + '.xml',
+                        os.path.join(input_dir, interaction_config['directory_data'][location]),
+                        os.path.join(os.getcwd(), output_dir, f"{location}/"),
+                        interaction_config['flag_same_direction_problems'].get(location, False),
+                        [Tag(tag) for tag in interaction_config['tags'][location].split(' ')],
+                        interaction_config['offsets'][location]['x_offset_lanelets'],
+                        interaction_config['offsets'][location]['y_offset_lanelets'],
+                        interaction_config['offsets'][location]['x_offset_tracks'],
+                        interaction_config['offsets'][location]['y_offset_tracks'],
                         num_time_steps_scenario,
                         obstacle_start_at_zero,
                         num_planning_problems,
                         keep_ego
-                    ) for idx, info in enumerate(list_info_dataset)
+                    ) for idx, location in enumerate(interaction_config['locations'].values())
                 ]
             )
