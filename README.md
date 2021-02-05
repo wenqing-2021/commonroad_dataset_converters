@@ -7,7 +7,7 @@ Currently, we only support the [highD dataset](https://www.highd-dataset.com/)).
 ### Prerequisites
 For the converter you need at least Python 3.6 and the following packages:
 * numpy>=1.18.2
-* commonroad-io>=2020.2
+* commonroad-io==2020.3
 * pandas>=0.24.2
 * scipy>=1.4.1
 * ruamel.yaml>=0.16.10
