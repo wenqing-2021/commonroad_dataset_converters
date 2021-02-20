@@ -4,7 +4,6 @@ import copy
 import math
 import numpy as np
 import pandas as pd
-import multiprocessing
 from typing import Dict
 
 from commonroad.planning.planning_problem import PlanningProblemSet
@@ -13,7 +12,7 @@ from commonroad.scenario.scenario import Scenario, Tag, ScenarioID
 
 from src.highD.map_utils import get_meta_scenario, get_speed_limit, get_lane_markings, get_dt, Direction
 from src.highD.obstacle_utils import generate_dynamic_obstacle
-from src.planning_problem_utils import generate_planning_problem, NoCarException
+from src.planning_problem_utils import generate_planning_problem
 from src.helper import load_yaml
 
 
@@ -32,7 +31,7 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
     :param keep_ego: boolean indicating if vehicles selected for planning problem should be kept in scenario
     :param output_dir: path to store generated CommonRoad scenario files
     :param highd_config: dictionary with configuration parameters for highD scenario generation
-    :param obstacle_start_at_zero: boolean indicating if the initial state of an obstacle has to start
+    :param obstacle_initial_state_invalid: boolean indicating if the initial state of an obstacle has to start
     at time step zero
     """
     # read data frames from the three files
@@ -79,6 +78,7 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
         except NoCarException as e:
             print(f"No car in this scenario: {repr(e)}. Skipping this scenario.")
 
+
 def generate_single_scenario(highd_config: Dict, num_planning_problems: int, keep_ego: bool, output_dir: str,
                              tracks_df: pd.DataFrame, tracks_meta_df: pd.DataFrame, meta_scenario: Scenario,
                              benchmark_id: str, direction: Direction, frame_start: int, frame_end: int,
@@ -96,7 +96,7 @@ def generate_single_scenario(highd_config: Dict, num_planning_problems: int, kee
     :param direction: indicator for upper or lower road of interstate
     :param frame_start: start of frame in time steps of record
     :param frame_end: end of frame in time steps of record
-    :param obstacle_start_at_zero: boolean indicating if the initial state of an obstacle has to start
+    :param obstacle_initial_state_invalid: boolean indicating if the initial state of an obstacle has to start
     at time step zero
     """
 
@@ -149,11 +149,10 @@ def generate_single_scenario(highd_config: Dict, num_planning_problems: int, kee
     fw = CommonRoadFileWriter(scenario, planning_problem_set, highd_config.get("author"),
                               highd_config.get("affiliation"), highd_config.get("source"), tags)
     filename = os.path.join(output_dir, "{}.xml".format(scenario.benchmark_id))
-    if obstacle_start_at_zero is True:
-        check_validity = True
-    else:
-        # Do not check validity if obstacles do not start at zero because validity will not pass
+    if obstacle_initial_state_invalid is True:
         check_validity = False
+    else:
+        check_validity = True
     fw.write_to_file(filename, OverwriteExistingFile.ALWAYS, check_validity=check_validity)
     print("Scenario file stored in {}".format(filename))
 
@@ -170,7 +169,7 @@ def create_highd_scenarios(input_dir: str, output_dir: str, num_time_steps_scena
     :param num_planning_problems: number of planning problems per CommonRoad scenario
     :param keep_ego: boolean indicating if vehicles selected for planning problem should be kept in scenario
     :param keep_ego: boolean indicating if vehicles selected for planning problem should be kept in scenario
-    :param obstacle_start_at_zero: boolean indicating if the initial state of an obstacle has to start
+    :param obstacle_initial_state_invalid: boolean indicating if the initial state of an obstacle has to start
     at time step zero
     """
     # generate path to highd data files
@@ -215,4 +214,3 @@ def create_highd_scenarios(input_dir: str, output_dir: str, num_time_steps_scena
                     zip(listing_recording, listing_metas, listing_tracks)
                 ]
             )
-

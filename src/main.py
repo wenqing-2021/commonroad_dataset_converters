@@ -5,6 +5,7 @@ import warnings
 
 from src.highD.highd_to_cr import create_highd_scenarios
 from src.inD.ind_to_cr import create_ind_scenarios
+from src.INTERACTION.interaction_to_cr import create_interaction_scenarios
 
 
 def get_args() -> argparse.Namespace:
@@ -57,7 +58,10 @@ def main():
                              args.num_planning_problems, args.keep_ego, args.obstacle_start_at_zero,
                              num_processes=args.num_processes)
     elif args.dataset == "INTERACTION":
-        raise NotImplementedError("The interface to the INTERACTION conversion script is not implemented yet")
+        create_interaction_scenarios(args.input_dir, args.output_dir,
+                                     obstacle_start_at_zero=args.obstacle_start_at_zero,
+                                     num_planning_problems=args.num_planning_problems, keep_ego=args.keep_ego,
+                                     num_time_steps_scenario=args.num_time_steps_scenario, num_processes=args.num_processes)
     else:
         print("Unknown dataset in command line parameter!")
 
