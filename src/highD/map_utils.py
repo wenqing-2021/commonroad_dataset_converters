@@ -7,6 +7,28 @@ from commonroad.scenario.scenario import Scenario
 from commonroad.scenario.lanelet import Lanelet, LaneletType, RoadUser, LineMarking
 from commonroad.scenario.traffic_sign import TrafficSignIDGermany, TrafficSignElement, TrafficSign
 
+def resample_polyline(polyline, step=2.0):
+    new_polyline = [polyline[0]]
+    current_position = 0 + step
+    current_length = np.linalg.norm(polyline[0] - polyline[1])
+    current_idx = 0
+    while current_idx < len(polyline) - 1:
+        if current_position >= current_length:
+            current_position = current_position - current_length
+            current_idx += 1
+            if current_idx > len(polyline) - 2:
+                break
+            current_length = np.linalg.norm(
+                polyline[current_idx + 1] - polyline[current_idx]
+            )
+        else:
+            rel = current_position / current_length
+            new_polyline.append(
+                (1 - rel) * polyline[current_idx] + rel * polyline[current_idx + 1]
+            )
+            current_position += step
+    return np.array(new_polyline)
+
 
 class Direction(Enum):
     """
@@ -16,15 +38,26 @@ class Direction(Enum):
     LOWER = 2
 
 
-def get_lane_markings(recording_df: DataFrame):
+def get_lane_markings(recording_df: DataFrame, extend_width=2.):
     """
-    Extracts upper and lower lane markings from data frame
+    Extracts upper and lower lane markings from data frame;
+    extend width of the outter lanes because otherwise some vehicles are off-road at the first time step.
 
     :param recording_df: data frame of the recording meta information
     :return: speed limit
     """
     upper_lane_markings = [-float(x) for x in recording_df.upperLaneMarkings.values[0].split(";")]
     lower_lane_markings = [-float(x) for x in recording_df.lowerLaneMarkings.values[0].split(";")]
+    len_upper = len(upper_lane_markings)
+    len_lower = len(lower_lane_markings)
+    # -8 + 1 = -7
+    upper_lane_markings[0] += extend_width
+    # -16 -1 = -17
+    upper_lane_markings[len_upper - 1] += -extend_width
+    # -22 + 1 = -21
+    lower_lane_markings[0] += extend_width
+    # -30 -1 = -31
+    lower_lane_markings[len_lower - 1] += -extend_width
     return upper_lane_markings, lower_lane_markings
 
 
@@ -53,7 +86,7 @@ def get_speed_limit(recording_df: DataFrame) -> Union[float, None]:
 
 
 def get_meta_scenario(dt: float, benchmark_id: str, lane_markings: List[float], speed_limit: float,
-                      road_length: int, direction: Direction, road_offset: int):
+                      road_length: int, direction: Direction, road_offset: int, resample_step: float = 5.):
     """
     Generates meta CommonRoad scenario containing only lanelet network
 
@@ -67,77 +100,91 @@ def get_meta_scenario(dt: float, benchmark_id: str, lane_markings: List[float], 
     :return: CommonRoad scenario
     """
     scenario = Scenario(dt, benchmark_id)
-    for i in range(len(lane_markings) - 1):
-        # get two lines of current lane
-        lane_y = lane_markings[i]
-        next_lane_y = lane_markings[i + 1]
-        x_vec = np.linspace(-road_offset, road_length + road_offset, num=road_length + 2 * road_offset)
-        lane_y_vec = np.ones(road_length + 2 * road_offset) * lane_y
-        next_lane_y_vec = np.ones(road_length + 2 * road_offset) * next_lane_y
+    if direction is Direction.UPPER:
+        for i in range(len(lane_markings) - 1):
+            # get two lines of current lane
+            lane_y = lane_markings[i]
+            next_lane_y = lane_markings[i + 1]
 
-        if direction is Direction.UPPER:
-            x_vec = np.flip(x_vec)
+            right_vertices = resample_polyline(
+                np.array([[road_length + road_offset, lane_y], [-road_offset, lane_y]]), step=resample_step
+            )
+            left_vertices = resample_polyline(
+                np.array([[road_length + road_offset, next_lane_y], [-road_offset, next_lane_y]]), step=resample_step
+            )
+            center_vertices = (left_vertices + right_vertices) / 2.0
 
-        left_vertices = np.squeeze(np.dstack((x_vec, lane_y_vec)))
-        right_vertices = np.squeeze(np.dstack((x_vec, next_lane_y_vec)))
-        center_vertices = (left_vertices + right_vertices) / 2.0
+             # assign lanelet ID and adjacent IDs and lanelet types
+            lanelet_id = i + 1
+            lanelet_type = {LaneletType.INTERSTATE, LaneletType.MAIN_CARRIAGE_WAY}
+            adjacent_left = lanelet_id + 1
+            adjacent_right = lanelet_id - 1
+            adjacent_left_same_direction = True
+            adjacent_right_same_direction = True
+            line_marking_left_vertices = LineMarking.DASHED
+            line_marking_right_vertices = LineMarking.DASHED
 
-        # assign lanelet ID and adjacent IDs and lanelet types
-        lanelet_id = i + 1
-        lanelet_type = {LaneletType.INTERSTATE, LaneletType.MAIN_CARRIAGE_WAY}
-        if direction is Direction.LOWER:
-            if lanelet_id == 0:
-                adjacent_left = lanelet_id + 1
-                adjacent_left_same_direction = True
-                adjacent_right = None
-                adjacent_right_same_direction = False
-                line_marking_left_vertices = LineMarking.DASHED
-                line_marking_right_vertices = LineMarking.SOLID
-            elif lanelet_id == len(lane_markings) - 1:
-                adjacent_right = lanelet_id - 1
-                adjacent_right_same_direction = True
+            if i == len(lane_markings) - 2:
                 adjacent_left = None
                 adjacent_left_same_direction = False
                 line_marking_left_vertices = LineMarking.SOLID
-                line_marking_right_vertices = LineMarking.DASHED
-            else:
-                adjacent_right = lanelet_id - 1
-                adjacent_right_same_direction = True
-                adjacent_left = lanelet_id + 1
-                adjacent_left_same_direction = True
-                line_marking_left_vertices = LineMarking.DASHED
-                line_marking_right_vertices = LineMarking.DASHED
-        else:
-            if lanelet_id == len(lane_markings) - 1:
-                adjacent_left = lanelet_id - 1
-                adjacent_left_same_direction = True
+            elif i == 0:
                 adjacent_right = None
                 adjacent_right_same_direction = False
-                line_marking_left_vertices = LineMarking.DASHED
                 line_marking_right_vertices = LineMarking.SOLID
-            elif lanelet_id == 0:
-                adjacent_right = lanelet_id + 1
-                adjacent_right_same_direction = True
+
+            # add lanelet to scenario
+            scenario.add_objects(
+                Lanelet(lanelet_id=lanelet_id, left_vertices=left_vertices,  right_vertices=right_vertices,
+                        center_vertices=center_vertices, adjacent_left=adjacent_left,
+                        adjacent_left_same_direction=adjacent_left_same_direction, adjacent_right=adjacent_right,
+                        adjacent_right_same_direction=adjacent_right_same_direction, user_one_way={RoadUser.VEHICLE},
+                        line_marking_left_vertices=line_marking_left_vertices,
+                        line_marking_right_vertices=line_marking_right_vertices, lanelet_type=lanelet_type))
+    else:
+        for i in range(len(lane_markings) - 1):
+
+            # get two lines of current lane
+            next_lane_y = lane_markings[i + 1]
+            lane_y = lane_markings[i]
+
+            # get vertices of three lines
+            # setting length 450 and -50 can cover all vehicle in this range
+            left_vertices = resample_polyline(
+                np.array([[-road_offset, lane_y], [road_length + road_offset, lane_y]]), step=resample_step
+            )
+            right_vertices = resample_polyline(
+                np.array([[-road_offset, next_lane_y], [road_length + road_offset, next_lane_y]]), step=resample_step
+            )
+            center_vertices = (left_vertices + right_vertices) / 2.0
+
+            # assign lane ids and adjacent ids
+            lanelet_id = i + 1
+            lanelet_type = {LaneletType.INTERSTATE, LaneletType.MAIN_CARRIAGE_WAY}
+            adjacent_left = lanelet_id - 1
+            adjacent_right = lanelet_id + 1
+            adjacent_left_same_direction = True
+            adjacent_right_same_direction = True
+            line_marking_left_vertices = LineMarking.DASHED
+            line_marking_right_vertices = LineMarking.DASHED
+
+            if i == 0:
                 adjacent_left = None
                 adjacent_left_same_direction = False
                 line_marking_left_vertices = LineMarking.SOLID
-                line_marking_right_vertices = LineMarking.DASHED
-            else:
-                adjacent_right = lanelet_id + 1
-                adjacent_right_same_direction = True
-                adjacent_left = lanelet_id - 1
-                adjacent_left_same_direction = True
-                line_marking_left_vertices = LineMarking.DASHED
-                line_marking_right_vertices = LineMarking.DASHED
+            elif i == len(lane_markings) - 2:
+                adjacent_right = None
+                adjacent_right_same_direction = False
+                line_marking_right_vertices = LineMarking.SOLID
 
-        # add lanelet to scenario
-        scenario.add_objects(
-            Lanelet(lanelet_id=lanelet_id, left_vertices=left_vertices,  right_vertices=right_vertices,
-                    center_vertices=center_vertices, adjacent_left=adjacent_left,
-                    adjacent_left_same_direction=adjacent_left_same_direction, adjacent_right=adjacent_right,
-                    adjacent_right_same_direction=adjacent_right_same_direction, user_one_way={RoadUser.VEHICLE},
-                    line_marking_left_vertices=line_marking_left_vertices,
-                    line_marking_right_vertices=line_marking_right_vertices, lanelet_type=lanelet_type))
+            # add lanelet to scenario
+            scenario.add_objects(
+                Lanelet(lanelet_id=lanelet_id, left_vertices=left_vertices,  right_vertices=right_vertices,
+                        center_vertices=center_vertices, adjacent_left=adjacent_left,
+                        adjacent_left_same_direction=adjacent_left_same_direction, adjacent_right=adjacent_right,
+                        adjacent_right_same_direction=adjacent_right_same_direction, user_one_way={RoadUser.VEHICLE},
+                        line_marking_left_vertices=line_marking_left_vertices,
+                        line_marking_right_vertices=line_marking_right_vertices, lanelet_type=lanelet_type))
 
     # store speed limit for traffic sign generation
     if speed_limit is not None:
