@@ -34,6 +34,8 @@ This is an optional flag.
 If not set, the generated CommonRoad scenarios will contain predictions start at nonzero time step.
 * **num_processes**: The number of parallel processes to run the conversion in order to speed up the conversion. 
 This is an optional parameter. The default is *1*
+* **downsample**: (highD) Downsample the trajectories every N steps, works only for highD converter.
+* **num_vertices**: (highD) The number waypoints of each lane, works only for highD converter.
 
 A help message is printed by `python -m src.main.py -h`.
 
