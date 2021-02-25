@@ -746,9 +746,9 @@
     <tag k='subtype' v='usR3-5R' />
     <tag k='type' v='traffic_sign' />
   </way>
-  <way id='10002' visible='true' version='1'>
-    <nd ref='1208' />
+  <way id='10002' action='modify' visible='true' version='1'>
     <nd ref='1207' />
+    <nd ref='1208' />
     <tag k='lane_change' v='yes' />
     <tag k='type' v='virtual' />
   </way>
@@ -821,10 +821,10 @@
     <tag k='type' v='line_thick' />
   </way>
   <way id='10012' action='modify' visible='true' version='1'>
-    <nd ref='1233' />
-    <nd ref='1607' />
-    <nd ref='1619' />
     <nd ref='1226' />
+    <nd ref='1619' />
+    <nd ref='1607' />
+    <nd ref='1233' />
     <tag k='type' v='virtual' />
   </way>
   <way id='10013' action='modify' visible='true' version='1'>
@@ -877,17 +877,17 @@
     <tag k='type' v='curbstone' />
   </way>
   <way id='10018' action='modify' visible='true' version='1'>
-    <nd ref='1281' />
-    <nd ref='1055' />
-    <nd ref='-103174' />
-    <nd ref='1053' />
-    <nd ref='1029' />
-    <nd ref='-103195' />
-    <nd ref='-103151' />
-    <nd ref='-103184' />
-    <nd ref='1028' />
-    <nd ref='1582' />
     <nd ref='1408' />
+    <nd ref='1582' />
+    <nd ref='1028' />
+    <nd ref='-103184' />
+    <nd ref='-103151' />
+    <nd ref='-103195' />
+    <nd ref='1029' />
+    <nd ref='1053' />
+    <nd ref='-103174' />
+    <nd ref='1055' />
+    <nd ref='1281' />
     <tag k='lane_change' v='yes' />
     <tag k='type' v='virtual' />
   </way>
@@ -994,8 +994,8 @@
     <tag k='type' v='virtual' />
   </way>
   <way id='10029' action='modify' visible='true' version='1'>
-    <nd ref='1141' />
     <nd ref='1138' />
+    <nd ref='1141' />
     <tag k='subtype' v='low' />
     <tag k='type' v='curbstone' />
   </way>
@@ -1043,9 +1043,9 @@
     <tag k='type' v='virtual' />
   </way>
   <way id='10033' action='modify' visible='true' version='1'>
-    <nd ref='1561' />
-    <nd ref='1623' />
     <nd ref='1564' />
+    <nd ref='1623' />
+    <nd ref='1561' />
     <tag k='subtype' v='low' />
     <tag k='type' v='curbstone' />
   </way>
@@ -1066,9 +1066,9 @@
     <tag k='lane_change' v='yes' />
     <tag k='type' v='virtual' />
   </way>
-  <way id='10036' visible='true' version='1'>
-    <nd ref='1101' />
+  <way id='10036' action='modify' visible='true' version='1'>
     <nd ref='1096' />
+    <nd ref='1101' />
     <tag k='lane_change' v='yes' />
     <tag k='type' v='virtual' />
   </way>
@@ -1280,10 +1280,10 @@
     <tag k='lane_change' v='yes' />
     <tag k='type' v='virtual' />
   </way>
-  <way id='10068' visible='true' version='1'>
-    <nd ref='1207' />
-    <nd ref='1206' />
+  <way id='10068' action='modify' visible='true' version='1'>
     <nd ref='1021' />
+    <nd ref='1206' />
+    <nd ref='1207' />
     <tag k='lane_change' v='yes' />
     <tag k='type' v='virtual' />
   </way>
@@ -1306,10 +1306,10 @@
     <tag k='lane_change' v='yes' />
     <tag k='type' v='virtual' />
   </way>
-  <way id='10071' visible='true' version='1'>
-    <nd ref='1307' />
-    <nd ref='1024' />
+  <way id='10071' action='modify' visible='true' version='1'>
     <nd ref='1237' />
+    <nd ref='1024' />
+    <nd ref='1307' />
     <tag k='type' v='virtual' />
   </way>
   <way id='10072' action='modify' visible='true' version='1'>
@@ -1361,11 +1361,11 @@
     <tag k='type' v='curbstone' />
   </way>
   <way id='10077' action='modify' visible='true' version='1'>
-    <nd ref='1487' />
-    <nd ref='-102207' />
-    <nd ref='-102321' />
-    <nd ref='-102202' />
     <nd ref='1498' />
+    <nd ref='-102202' />
+    <nd ref='-102321' />
+    <nd ref='-102207' />
+    <nd ref='1487' />
     <tag k='subtype' v='low' />
     <tag k='type' v='curbstone' />
   </way>
@@ -1405,11 +1405,11 @@
     <tag k='type' v='traffic_sign' />
   </way>
   <way id='10081' action='modify' visible='true' version='1'>
-    <nd ref='1378' />
-    <nd ref='1380' />
-    <nd ref='1150' />
-    <nd ref='1149' />
     <nd ref='1148' />
+    <nd ref='1149' />
+    <nd ref='1150' />
+    <nd ref='1380' />
+    <nd ref='1378' />
     <tag k='subtype' v='low' />
     <tag k='type' v='curbstone' />
   </way>
@@ -1551,11 +1551,11 @@
     <tag k='subtype' v='low' />
     <tag k='type' v='curbstone' />
   </way>
-  <way id='10096' visible='true' version='1'>
-    <nd ref='1213' />
-    <nd ref='1212' />
-    <nd ref='1211' />
+  <way id='10096' action='modify' visible='true' version='1'>
     <nd ref='1210' />
+    <nd ref='1211' />
+    <nd ref='1212' />
+    <nd ref='1213' />
     <tag k='lane_change' v='yes' />
     <tag k='type' v='virtual' />
   </way>
@@ -1702,11 +1702,11 @@
     <tag k='type' v='curbstone' />
   </way>
   <way id='10113' action='modify' visible='true' version='1'>
-    <nd ref='1404' />
-    <nd ref='-103368' />
-    <nd ref='-103356' />
-    <nd ref='-103376' />
     <nd ref='1240' />
+    <nd ref='-103376' />
+    <nd ref='-103356' />
+    <nd ref='-103368' />
+    <nd ref='1404' />
     <tag k='color' v='yellow' />
     <tag k='subtype' v='solid_solid' />
     <tag k='type' v='line_thick' />
@@ -1767,11 +1767,11 @@
     <tag k='type' v='curbstone' />
   </way>
   <way id='10121' action='modify' visible='true' version='1'>
-    <nd ref='1531' />
-    <nd ref='-102198' />
-    <nd ref='-102309' />
-    <nd ref='-102184' />
     <nd ref='1205' />
+    <nd ref='-102184' />
+    <nd ref='-102309' />
+    <nd ref='-102198' />
+    <nd ref='1531' />
     <tag k='lane_change' v='yes' />
     <tag k='type' v='virtual' />
   </way>
@@ -1822,18 +1822,18 @@
     <tag k='subtype' v='low' />
     <tag k='type' v='curbstone' />
   </way>
-  <way id='10128' visible='true' version='1'>
-    <nd ref='1226' />
-    <nd ref='1223' />
-    <nd ref='1363' />
-    <nd ref='1366' />
-    <nd ref='1368' />
-    <nd ref='1370' />
-    <nd ref='1372' />
-    <nd ref='1374' />
-    <nd ref='1376' />
-    <nd ref='1589' />
+  <way id='10128' action='modify' visible='true' version='1'>
     <nd ref='1378' />
+    <nd ref='1589' />
+    <nd ref='1376' />
+    <nd ref='1374' />
+    <nd ref='1372' />
+    <nd ref='1370' />
+    <nd ref='1368' />
+    <nd ref='1366' />
+    <nd ref='1363' />
+    <nd ref='1223' />
+    <nd ref='1226' />
     <tag k='subtype' v='low' />
     <tag k='type' v='curbstone' />
   </way>
@@ -1884,15 +1884,15 @@
     <tag k='lane_change' v='yes' />
     <tag k='type' v='virtual' />
   </way>
-  <way id='10134' visible='true' version='1'>
-    <nd ref='1070' />
+  <way id='10134' action='modify' visible='true' version='1'>
     <nd ref='1597' />
+    <nd ref='1070' />
     <tag k='subtype' v='dashed' />
     <tag k='type' v='line_thin' />
   </way>
-  <way id='10135' visible='true' version='1'>
-    <nd ref='1096' />
+  <way id='10135' action='modify' visible='true' version='1'>
     <nd ref='1596' />
+    <nd ref='1096' />
     <tag k='subtype' v='solid' />
     <tag k='type' v='line_thin' />
   </way>

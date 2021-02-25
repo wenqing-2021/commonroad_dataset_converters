@@ -571,15 +571,15 @@
     <nd ref='1006' />
     <tag k='type' v='stop_line' />
   </way>
-  <way id='10007' visible='true' version='1'>
+  <way id='10007' action='modify' visible='true' version='1'>
     <nd ref='1008' />
     <nd ref='1009' />
     <tag k='subtype' v='dashed' />
     <tag k='type' v='line_thin' />
   </way>
   <way id='10008' action='modify' visible='true' version='1'>
-    <nd ref='1074' />
     <nd ref='1008' />
+    <nd ref='1074' />
     <tag k='type' v='virtual' />
   </way>
   <way id='10009' visible='true' version='1'>
@@ -696,9 +696,9 @@
     <tag k='subtype' v='low' />
     <tag k='type' v='curbstone' />
   </way>
-  <way id='10025' visible='true' version='1'>
-    <nd ref='1022' />
+  <way id='10025' action='modify' visible='true' version='1'>
     <nd ref='1025' />
+    <nd ref='1022' />
     <tag k='color' v='yellow' />
     <tag k='subtype' v='solid' />
     <tag k='type' v='line_thin' />
@@ -1110,7 +1110,7 @@
     <tag k='subtype' v='low' />
     <tag k='type' v='curbstone' />
   </way>
-  <way id='10077' visible='true' version='1'>
+  <way id='10077' action='modify' visible='true' version='1'>
     <nd ref='1063' />
     <nd ref='1454' />
     <nd ref='1079' />
@@ -1531,9 +1531,9 @@
     <tag k='type' v='curbstone' />
   </way>
   <way id='10132' action='modify' visible='true' version='1'>
-    <nd ref='1210' />
-    <nd ref='1458' />
     <nd ref='1212' />
+    <nd ref='1458' />
+    <nd ref='1210' />
     <tag k='subtype' v='solid' />
     <tag k='type' v='line_thin' />
   </way>
