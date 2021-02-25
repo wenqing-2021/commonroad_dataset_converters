@@ -1,11 +1,3 @@
-__author__ = "Edmond Irani Liu, Xiao Wang"
-__copyright__ = "TUM Cyber-Physical System Group"
-__credits__ = [""]
-__version__ = "1.0"
-__maintainer__ = "Xiao Wang"
-__email__ = "xiao.wang@tum.de"
-__status__ = ""
-
 __desc__ = """
 Generates dynamic obstacles for the INTERACTION conversion
 """
@@ -29,6 +21,7 @@ def get_velocity(track_df: pd.DataFrame) -> np.array:
     """
     return np.sqrt(track_df.vx ** 2 + track_df.vy ** 2)
 
+
 def get_type_obstacle_commonroad(type_agent):
     dict_conversion = {'car': ObstacleType.CAR,
                        'truck': ObstacleType.TRUCK,
@@ -44,7 +37,6 @@ def get_type_obstacle_commonroad(type_agent):
 
 
 def generate_dynamic_obstacle(scenario: Scenario, track_df: pd.DataFrame, time_start_track: int) -> DynamicObstacle:
-
     length = track_df.length.values[0]
     width = track_df.width.values[0]
 
@@ -69,3 +61,40 @@ def generate_dynamic_obstacle(scenario: Scenario, track_df: pd.DataFrame, time_s
 
     return DynamicObstacle(dynamic_obstacle_id, dynamic_obstacle_type, dynamic_obstacle_shape,
                            dynamic_obstacle_initial_state, dynamic_obstacle_prediction)
+
+
+def generate_all_obstacles(scenario: Scenario, track_df: pd.DataFrame, obstacle_start_at_zero: bool,
+                           time_start_scenario: int, time_end_scenario: int):
+    # generate obstacles
+    vehicle_ids = track_df.track_id.unique()
+
+    for id_vehicle in vehicle_ids:
+        """
+        discard vehicles that (1) start after the scenario ends, or (2) end before the scenario starts.
+        for one-shot planning scenarios, we don't consider vehicles that (3) start after time step 0 as well.
+        """
+        track = track_df[(track_df.track_id == id_vehicle) & (track_df.timestamp_ms >= time_start_scenario)]
+        time_start_track = track.timestamp_ms.min()
+        time_end_track = track.timestamp_ms.max()
+
+        if len(track) == 0:
+            continue
+
+        def enough_time_steps():
+            if not obstacle_start_at_zero and time_end_scenario - time_start_track < 2 \
+                    or time_end_track - time_start_scenario < 2:
+                return False
+            elif obstacle_start_at_zero and time_start_track > time_start_scenario \
+                    or time_end_scenario - time_start_scenario < 2:
+                return False
+            return True
+
+        if not enough_time_steps():
+            continue
+
+        time_start_track -= time_start_scenario
+        dynamic_obstacle = generate_dynamic_obstacle(scenario, track, int(time_start_track))
+
+        scenario.add_objects(dynamic_obstacle)
+
+    return scenario

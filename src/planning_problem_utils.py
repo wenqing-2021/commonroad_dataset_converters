@@ -9,9 +9,13 @@ from commonroad.scenario.scenario import Scenario
 from commonroad.scenario.obstacle import ObstacleType
 
 
+class NoCarException(Exception):
+    pass
+
+
 def generate_planning_problem(scenario: Scenario, orientation_half_range: float = 0.2, velocity_half_range: float = 10,
                               time_step_half_range: int = 25, keep_ego: bool = False,
-                              dynamic_obstacle_selected = None) -> PlanningProblem:
+                              dynamic_obstacle_selected=None) -> PlanningProblem:
     """
     Generates planning problem for scenario by taking obstacle trajectory
     :param scenario: CommonRoad scenario
@@ -36,12 +40,6 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
     dynamic_obstacle_initial_state = dynamic_obstacle_selected.initial_state
     dynamic_obstacle_final_state = dynamic_obstacle_selected.prediction.trajectory.state_list[-1]
 
-    if not keep_ego:
-        planning_problem_id = dynamic_obstacle_selected.obstacle_id
-        scenario.remove_obstacle(dynamic_obstacle_selected)
-    else:
-        planning_problem_id = scenario.generate_object_id()
-
     # define orientation, velocity and time step intervals as goal region
     orientation_interval = AngleInterval(dynamic_obstacle_final_state.orientation - orientation_half_range,
                                          dynamic_obstacle_final_state.orientation + orientation_half_range)
@@ -61,6 +59,12 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
     dynamic_obstacle_initial_state.yaw_rate = 0.0
     dynamic_obstacle_initial_state.slip_angle = 0.0
 
+    if not keep_ego:
+        planning_problem_id = dynamic_obstacle_selected.obstacle_id
+        scenario.remove_obstacle(dynamic_obstacle_selected)
+    else:
+        planning_problem_id = scenario.generate_object_id()
+
     planning_problem = PlanningProblem(planning_problem_id, dynamic_obstacle_initial_state, goal_region)
-    
+
     return planning_problem

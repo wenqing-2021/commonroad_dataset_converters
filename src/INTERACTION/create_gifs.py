@@ -27,7 +27,7 @@ if __name__ == "__main__":
     # margin for plotting figures
     margin = 10
 
-    directory_file = "./scenarios_converted/"
+    directory_file = "/data/interaction/cr_output"
     directory_gif = "./gif/"
 
     path_scenarios = glob.glob(os.path.join(directory_file, "*/*.xml"))
