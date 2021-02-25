@@ -86,7 +86,7 @@ def get_speed_limit(recording_df: DataFrame) -> Union[float, None]:
 
 
 def get_meta_scenario(dt: float, benchmark_id: str, lane_markings: List[float], speed_limit: float,
-                      road_length: int, direction: Direction, road_offset: int, resample_step: float = 5.):
+                      road_length: int, direction: Direction, road_offset: int, num_vertices: int = 10):
     """
     Generates meta CommonRoad scenario containing only lanelet network
 
@@ -100,6 +100,7 @@ def get_meta_scenario(dt: float, benchmark_id: str, lane_markings: List[float], 
     :return: CommonRoad scenario
     """
     scenario = Scenario(dt, benchmark_id)
+    resample_step = (road_offset + 2 * road_offset) / num_vertices
     if direction is Direction.UPPER:
         for i in range(len(lane_markings) - 1):
             # get two lines of current lane
@@ -107,7 +108,7 @@ def get_meta_scenario(dt: float, benchmark_id: str, lane_markings: List[float], 
             next_lane_y = lane_markings[i + 1]
 
             right_vertices = resample_polyline(
-                np.array([[road_length + road_offset, lane_y], [-road_offset, lane_y]]), step=resample_step
+                np.array([[road_length + road_offset, lane_y], [-road_offset, lane_y]]), step= resample_step
             )
             left_vertices = resample_polyline(
                 np.array([[road_length + road_offset, next_lane_y], [-road_offset, next_lane_y]]), step=resample_step

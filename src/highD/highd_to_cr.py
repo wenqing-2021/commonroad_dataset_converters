@@ -19,7 +19,8 @@ from src.helper import load_yaml
 
 def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, tracks_fn: str,
                                   num_time_steps_scenario: int, num_planning_problems: int, keep_ego: bool,
-                                  output_dir: str, highd_config: Dict, obstacle_start_at_zero: bool):
+                                  output_dir: str, highd_config: Dict, obstacle_start_at_zero: bool, downsample: int,
+                                  num_vertices: int):
     """
     Generate CommonRoad scenarios with given paths to highD for a high-D recording
 
@@ -45,10 +46,10 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
     upper_lane_markings, lower_lane_markings = get_lane_markings(recording_meta_df)
     meta_scenario_upper = get_meta_scenario(dt, "meta_scenario_upper", upper_lane_markings, speed_limit,
                                             highd_config.get("road_length"), Direction.UPPER,
-                                            highd_config.get("road_offset"))
-    meta_scenario_lower = get_meta_scenario(dt, "meta_scearnio_lower", lower_lane_markings, speed_limit,
+                                            highd_config.get("road_offset"), num_vertices=num_vertices)
+    meta_scenario_lower = get_meta_scenario(dt, "DEU_MetaScenarioLower-0_0_T-1", lower_lane_markings, speed_limit,
                                             highd_config.get("road_length"), Direction.LOWER,
-                                            highd_config.get("road_offset"))
+                                            highd_config.get("road_offset"), num_vertices=num_vertices)
 
     # separate record and generate scenario for each separated part for each direction
     # (upper interstate direction / lower interstate direction)
@@ -157,7 +158,8 @@ def generate_single_scenario(highd_config: Dict, num_planning_problems: int, kee
 
 
 def create_highd_scenarios(input_dir: str, output_dir: str, num_time_steps_scenario: int, num_planning_problems: int,
-                           keep_ego: bool, obstacle_start_at_zero: bool, num_processes: int = 1):
+                           keep_ego: bool, obstacle_start_at_zero: bool, num_processes: int = 1, downsample: int = 1,
+                           num_vertices: int = 10):
     """
     Iterates over all dataset files and generates CommonRoad scenarios
 
@@ -189,7 +191,7 @@ def create_highd_scenarios(input_dir: str, output_dir: str, num_time_steps_scena
             print("Processing file {}...".format(tracks_fn), end='\n')
             generate_scenarios_for_record(recording_meta_fn, tracks_meta_fn, tracks_fn, num_time_steps_scenario,
                                           num_planning_problems, keep_ego, output_dir, highd_config,
-                                          obstacle_start_at_zero)
+                                          obstacle_start_at_zero, downsample, num_vertices)
     else:
         with multiprocessing.Pool(processes=num_processes) as pool:
             pool.starmap(
@@ -204,7 +206,9 @@ def create_highd_scenarios(input_dir: str, output_dir: str, num_time_steps_scena
                         keep_ego,
                         output_dir,
                         highd_config,
-                        obstacle_start_at_zero
+                        obstacle_start_at_zero,
+                        downsample,
+                        num_vertices
                     )
                     for recording_meta_fn, tracks_meta_fn, tracks_fn in \
                     zip(listing_recording, listing_metas, listing_tracks)
