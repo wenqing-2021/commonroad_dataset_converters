@@ -28,17 +28,23 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
     """
     # random choose obstacle as ego vehicle
     random.seed(0)
-    # dynamic_obstacle_selected = None
 
     # only choose car type as ego vehicle
-    while dynamic_obstacle_selected is None:
-        dynamic_obstacle_selected = random.choice(scenario.dynamic_obstacles)
-        if dynamic_obstacle_selected.obstacle_type != ObstacleType.CAR:
-            dynamic_obstacle_selected = None
+    car_obstacles = [obstacle for obstacle in scenario.dynamic_obstacles if obstacle.obstacle_type == ObstacleType.CAR]
+    if len(car_obstacles) > 0:
+        dynamic_obstacle_selected = random.choice(car_obstacles)
+    else:
+        raise NoCarException("There is no car in dynamic obstacles which can be used as planning problem.")
 
     dynamic_obstacle_shape = dynamic_obstacle_selected.obstacle_shape
     dynamic_obstacle_initial_state = dynamic_obstacle_selected.initial_state
     dynamic_obstacle_final_state = dynamic_obstacle_selected.prediction.trajectory.state_list[-1]
+
+    if not keep_ego:
+        planning_problem_id = dynamic_obstacle_selected.obstacle_id
+        scenario.remove_obstacle(dynamic_obstacle_selected)
+    else:
+        planning_problem_id = scenario.generate_object_id()
 
     # define orientation, velocity and time step intervals as goal region
     orientation_interval = AngleInterval(dynamic_obstacle_final_state.orientation - orientation_half_range,
@@ -58,12 +64,6 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
 
     dynamic_obstacle_initial_state.yaw_rate = 0.0
     dynamic_obstacle_initial_state.slip_angle = 0.0
-
-    if not keep_ego:
-        planning_problem_id = dynamic_obstacle_selected.obstacle_id
-        scenario.remove_obstacle(dynamic_obstacle_selected)
-    else:
-        planning_problem_id = scenario.generate_object_id()
 
     planning_problem = PlanningProblem(planning_problem_id, dynamic_obstacle_initial_state, goal_region)
 
