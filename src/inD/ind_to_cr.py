@@ -16,6 +16,7 @@ import copy
 import math
 import random
 import logging
+import multiprocessing
 import pandas as pd
 from typing import Dict
 
@@ -153,9 +154,9 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
 
 
 def create_ind_scenarios(input_dir: str, output_dir: str, num_time_steps_scenario: int,
-                         num_planning_problems: int, keep_ego: bool, obstacle_initial_state_invalid: bool,
+                         num_planning_problems: int, keep_ego: bool, obstacle_start_at_zero: bool,
                          map_dir: str = "./inD/repaired_maps", seed: int = 0,
-                         verbose: bool = True):
+                         verbose: bool = True, num_processes: int = 1):
 
     if verbose:
         LOGGER.setLevel(logging.INFO)
@@ -164,7 +165,8 @@ def create_ind_scenarios(input_dir: str, output_dir: str, num_time_steps_scenari
     # Create output dir if necessary
     os.makedirs(output_dir, exist_ok=True)
 
-
+    if map_dir is None:
+        map_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "repaired_maps")
 
     # set the seed for random slices
     random.seed(seed)
@@ -182,10 +184,31 @@ def create_ind_scenarios(input_dir: str, output_dir: str, num_time_steps_scenari
     ind_config = load_yaml(os.path.dirname(os.path.abspath(__file__)) + "/config.yaml")
     load_lanelet_networks(map_dir, ind_config=ind_config)
 
-    for index, (recording_meta_fn, tracks_meta_fn, tracks_fn) in \
-            enumerate(zip(listing_recording, listing_metas, listing_tracks)):
-        print("=" * 80)
-        print("Processing file {}...".format(tracks_fn), end='\n')
-        generate_scenarios_for_record(recording_meta_fn, tracks_meta_fn, tracks_fn, num_time_steps_scenario,
-                                      num_planning_problems, keep_ego, output_dir, ind_config,
-                                      obstacle_initial_state_invalid)
+    if num_processes < 2:
+        for index, (recording_meta_fn, tracks_meta_fn, tracks_fn) in \
+                enumerate(zip(listing_recording, listing_metas, listing_tracks)):
+            print("=" * 80)
+            print("Processing file {}...".format(tracks_fn), end='\n')
+            generate_scenarios_for_record(recording_meta_fn, tracks_meta_fn, tracks_fn, num_time_steps_scenario,
+                                          num_planning_problems, keep_ego, output_dir, ind_config,
+                                          obstacle_start_at_zero)
+    else:
+        with multiprocessing.Pool(processes=num_processes) as pool:
+            pool.starmap(
+                generate_scenarios_for_record,
+                [
+                    (
+                        recording_meta_fn,
+                        tracks_meta_fn,
+                        tracks_fn,
+                        num_time_steps_scenario,
+                        num_planning_problems,
+                        keep_ego,
+                        output_dir,
+                        ind_config,
+                        obstacle_start_at_zero
+                    )
+                    for recording_meta_fn, tracks_meta_fn, tracks_fn in \
+                    zip(listing_recording, listing_metas, listing_tracks)
+                ]
+            )

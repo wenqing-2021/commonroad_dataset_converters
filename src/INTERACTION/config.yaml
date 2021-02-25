@@ -1,7 +1,8 @@
-author: Matthias Hamacher, Xiao Wang, Edmond Irani Liu
+author: Matthias Hamacher, Xiao Wang
 affiliation: Technical University of Munich, Germany
 source: The INTERACTION dataset
 #tags: [intersection, multi_lane, urban, oncoming_traffic, speed_limit]
+dt: 0.1
 
 locations:
     1: CHN_Merging-1

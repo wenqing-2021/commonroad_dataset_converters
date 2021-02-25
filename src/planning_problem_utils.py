@@ -9,9 +9,13 @@ from commonroad.scenario.scenario import Scenario
 from commonroad.scenario.obstacle import ObstacleType
 
 
+class NoCarException(Exception):
+    pass
+
+
 def generate_planning_problem(scenario: Scenario, orientation_half_range: float = 0.2, velocity_half_range: float = 10,
                               time_step_half_range: int = 25, keep_ego: bool = False,
-                              dynamic_obstacle_selected = None) -> PlanningProblem:
+                              dynamic_obstacle_selected=None) -> PlanningProblem:
     """
     Generates planning problem for scenario by taking obstacle trajectory
     :param scenario: CommonRoad scenario
@@ -24,13 +28,13 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
     """
     # random choose obstacle as ego vehicle
     random.seed(0)
-    # dynamic_obstacle_selected = None
 
     # only choose car type as ego vehicle
-    while dynamic_obstacle_selected is None:
-        dynamic_obstacle_selected = random.choice(scenario.dynamic_obstacles)
-        if dynamic_obstacle_selected.obstacle_type != ObstacleType.CAR:
-            dynamic_obstacle_selected = None
+    car_obstacles = [obstacle for obstacle in scenario.dynamic_obstacles if obstacle.obstacle_type == ObstacleType.CAR]
+    if len(car_obstacles) > 0:
+        dynamic_obstacle_selected = random.choice(car_obstacles)
+    else:
+        raise NoCarException("There is no car in dynamic obstacles which can be used as planning problem.")
 
     dynamic_obstacle_shape = dynamic_obstacle_selected.obstacle_shape
     dynamic_obstacle_initial_state = dynamic_obstacle_selected.initial_state
@@ -62,5 +66,5 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
     dynamic_obstacle_initial_state.slip_angle = 0.0
 
     planning_problem = PlanningProblem(planning_problem_id, dynamic_obstacle_initial_state, goal_region)
-    
+
     return planning_problem

@@ -19,6 +19,10 @@ class_to_obstacleType:
     car: car
     truck_bus: bus
     pedestrian: pedestrian
-    bicycle: pedestrian
+    bicycle: bicycle
 
-
+offsets:
+    1: [293487.1224, 5629711.58163]
+    2: [295620.9575, 5628102.04258]
+    3: [300127.0853, 5629091.0587]
+    4: [297631.31870, 5629917.34465] 
