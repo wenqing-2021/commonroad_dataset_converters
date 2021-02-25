@@ -12,24 +12,21 @@ def get_args() -> argparse.Namespace:
 
     :return: command line arguments
     """
-    parser = argparse.ArgumentParser(description="Generates CommonRoad scenarios different datasets",
+    parser = argparse.ArgumentParser(description="Generates CommonRoad scenarios for different datasets",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('dataset', type=str, choices=["inD", "highD", "INTERACTION"], help='Specification of dataset')
     parser.add_argument('input_dir', type=str, help='Path to dataset files')
     parser.add_argument('output_dir', type=str, help='Directory to store generated CommonRoad files')
     parser.add_argument('--num_time_steps_scenario', type=int, default=150,
-                        help='Maximum number of time steps the CommonRoad scenario can be long, default=150')
+                        help='Maximum number of time steps the CommonRoad scenario can be long')
     parser.add_argument('--num_planning_problems', type=int, default=1,
-                        help='Number of planning problems per CommonRoad scenario, default=1')
+                        help='Number of planning problems per CommonRoad scenario')
     parser.add_argument('--keep_ego', default=False, action='store_true',
-                        help='Indicator if vehicles used for planning problem should be kept in scenario, '
-                             'default=False')
+                        help='Indicator if vehicles used for planning problem should be kept in scenario')
     parser.add_argument('--obstacle_start_at_zero', default=False, action='store_true',
-                        help='Indicator if the initial state of an obstacle has to start at time step zero, '
-                             'default=False')
+                        help='Indicator if the initial state of an obstacle has to start at time step zero')
     parser.add_argument('--num_processes', type=int, default=1,
-                        help='Number of multiple processes to convert dataset, '
-                             'default=1')
+                        help='Number of multiple processes to convert dataset')
     parser.add_argument('--downsample', type=int, default=1, help='Decrease dt by n*dt, works only for highD converter')
     parser.add_argument('--num_vertices', type=int, default=10,
                         help='Number of lane waypoints, works only for highD converter')
