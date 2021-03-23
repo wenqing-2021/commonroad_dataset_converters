@@ -8,8 +8,10 @@ from commonroad.planning.goal import GoalRegion
 from commonroad.scenario.scenario import Scenario
 from commonroad.scenario.obstacle import ObstacleType
 
+
 class NoCarException(Exception):
     pass
+
 
 def generate_planning_problem(scenario: Scenario, orientation_half_range: float = 0.2, velocity_half_range: float = 10,
                               time_step_half_range: int = 25, keep_ego: bool = False) -> PlanningProblem:
@@ -22,7 +24,6 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
     :param keep_ego: boolean indicating if vehicles selected for planning problem should be kept in scenario
     :return: CommonRoad planning problem
     """
-
     # random choose obstacle as ego vehicle
     random.seed(0)
 
@@ -49,8 +50,11 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
     velocity_interval = Interval(dynamic_obstacle_final_state.velocity - velocity_half_range,
                                  dynamic_obstacle_final_state.velocity + velocity_half_range)
 
-    max_time_step = max([obs.prediction.trajectory.state_list[-1].time_step for obs in scenario.dynamic_obstacles])
-    final_time_step = min(dynamic_obstacle_final_state.time_step + time_step_half_range, max_time_step)
+    if len(scenario.dynamic_obstacles) > 0:
+        max_time_step = max([obs.prediction.trajectory.state_list[-1].time_step for obs in scenario.dynamic_obstacles])
+        final_time_step = min(dynamic_obstacle_final_state.time_step + time_step_half_range, max_time_step)
+    else:
+        final_time_step = dynamic_obstacle_final_state.time_step + time_step_half_range
     time_step_interval = Interval(0, final_time_step)
 
     goal_position = Rectangle(dynamic_obstacle_shape.length, dynamic_obstacle_shape.width,
