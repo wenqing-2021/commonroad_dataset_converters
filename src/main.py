@@ -32,6 +32,10 @@ def get_args() -> argparse.Namespace:
     parser.add_argument('--num_processes', type=int, default=1,
                         help='Number of multiple processes to convert dataset, '
                              'default=1')
+    parser.add_argument('--inD_all', default=False, action='store_true',
+                        help='(Only inD) Convert one CommonRoad scenario for each valid vehicle from inD dataset,'
+                             ' since it has less recordings available, note that if enabled, num_time_steps_scenario'
+                             ' becomes the minimal number of time steps of one CommonRoad scenario')
     parser.add_argument('--downsample', type=int, default=1, help='Decrease dt by n*dt, works only for highD converter')
     parser.add_argument('--num_vertices', type=int, default=10,
                         help='Number of lane waypoints, works only for highD converter')
@@ -46,8 +50,14 @@ def main():
     args = get_args()
 
     # make output dir
-    if not os.path.exists(args.output_dir):
-        os.makedirs(args.output_dir)
+    os.makedirs(args.output_dir, exist_ok=True)
+
+    # check parameters for specific converters
+    if args.dataset != "higD" and (args.downsample != 1 or args.num_vertices != 10):
+        warnings.warn("Downsample and num_vertices are only available for highD converter! Ignored")
+    if args.dataset != "inD" and args.inD_all:
+        warnings.warn("inD_all are only available for inD converter! Ignored")
+
     if args.dataset == "highD":
         create_highd_scenarios(args.input_dir, args.output_dir, args.num_time_steps_scenario,
                                args.num_planning_problems, args.keep_ego, args.obstacle_start_at_zero,
@@ -57,7 +67,7 @@ def main():
             warnings.warn('Downsampling only implemented for highD. Using original temporal resolution!')
         create_ind_scenarios(args.input_dir, args.output_dir, args.num_time_steps_scenario,
                              args.num_planning_problems, args.keep_ego, args.obstacle_start_at_zero,
-                             num_processes=args.num_processes)
+                             num_processes=args.num_processes, inD_all=args.inD_all)
     elif args.dataset == "INTERACTION":
         if args.downsample != 1:
             warnings.warn('Downsampling only implemented for highD. Using original temporal resolution!')

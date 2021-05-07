@@ -5,7 +5,7 @@ This repository contains tools to convert popular datasets, which are publicly a
 ### Prerequisites
 For the converter you need at least Python 3.6 and the following packages:
 * numpy>=1.18.2
-* commonroad-io==2020.3
+* commonroad-io>=2020.3
 * pandas>=0.24.2
 * scipy>=1.4.1
 * ruamel.yaml>=0.16.10
@@ -15,7 +15,8 @@ You can install the required Python packages with the provided requirements.txt 
 
 ### Usage
 A conversion can be started from the *dataset_converters* directory by executing  
-`python -m src.main dataset input_dir output_dir --num_time_steps_scenario #NUMTIMESTEPSSCENARIO --num_planning_problems #NUMPLANNINGPROBLEMS --num_processes #NUMPROCESSES --keep_ego --obstacle_start_at_zero`.
+`python -m src.main dataset input_dir output_dir --num_time_steps_scenario #NUMTIMESTEPSSCENARIO 
+--num_planning_problems #NUMPLANNINGPROBLEMS --num_processes #NUMPROCESSES --keep_ego --obstacle_start_at_zero`.
 
 In the following the different parameters are explained:
 * **dataset**: The dataset which should be convertered. Currently, parameters *highD*, *inD*, or *INTERACTION* are supported. 
@@ -33,6 +34,9 @@ This is an optional flag.
 If not set, the generated CommonRoad scenarios will contain predictions start at nonzero time step.
 * **num_processes**: The number of parallel processes to run the conversion in order to speed up the conversion. 
 This is an optional parameter. The default is *1*
+* **inD_all**: (inD) Indicator if convert one CommonRoad scenario for each valid vehicle from inD dataset, 
+  since it has less recordings available, note that if enabled, num_time_steps_scenario becomes the minimal number 
+  of time steps of one CommonRoad scenario. This is an optional flag. 
 * **downsample**: (highD) Downsample the trajectories every N steps, works only for highD converter.
 * **num_vertices**: (highD) The number waypoints of each lane, works only for highD converter.
 
