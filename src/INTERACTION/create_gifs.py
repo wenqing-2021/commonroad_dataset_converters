@@ -19,7 +19,7 @@ if __name__ == "__main__":
     random.seed()
 
     # num of gifs to be created
-    num_gifs = 10
+    num_gifs = 12
     # steps in each gif, 1 second = 10 steps
     steps_plot = 40
     # size of plt.figure
@@ -27,7 +27,8 @@ if __name__ == "__main__":
     # margin for plotting figures
     margin = 10
 
-    directory_file = "/data/interaction/cr_output"
+    directory_file = "/data/interaction/cr_scenarios_tum_cps/"
+
     directory_gif = "./gif/"
 
     path_scenarios = glob.glob(os.path.join(directory_file, "*/*.xml"))

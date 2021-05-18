@@ -31,14 +31,17 @@ if __name__ == "__main__":
 
     for location in interaction_config["locations"].values():
         file_path = os.path.join(args.input, f"{interaction_config['maps'][location]}.xml")
-        scenario, planning_problem_set = CommonRoadFileReader(file_path).open()
-        x_offset_lanelets = interaction_config["offsets"][location]["x_offset_lanelets"]
-        y_offset_lanelets = interaction_config["offsets"][location]["y_offset_lanelets"]
-        tags = [Tag(tag) for tag in interaction_config['tags'][location].split(' ')]
+        try:
+            scenario, planning_problem_set = CommonRoadFileReader(file_path).open()
+            x_offset_lanelets = interaction_config["offsets"][location]["x_offset_lanelets"]
+            y_offset_lanelets = interaction_config["offsets"][location]["y_offset_lanelets"]
+            tags = [Tag(tag) for tag in interaction_config['tags'][location].split(' ')]
 
-        scenario.translate_rotate(np.array([-x_offset_lanelets, -y_offset_lanelets]), 0)
+            scenario.translate_rotate(np.array([-x_offset_lanelets, -y_offset_lanelets]), 0)
 
-        file_writer = CommonRoadFileWriter(scenario, planning_problem_set, author, affiliation, source, tags)
-        output_file = os.path.join(args.output, f"{interaction_config['maps'][location]}.xml")
-        file_writer.write_to_file(output_file, OverwriteExistingFile.ALWAYS)
+            file_writer = CommonRoadFileWriter(scenario, planning_problem_set, author, affiliation, source, tags)
+            output_file = os.path.join(args.output, f"{interaction_config['maps'][location]}.xml")
+            file_writer.write_to_file(output_file, OverwriteExistingFile.ALWAYS)
+        except:
+            continue
 

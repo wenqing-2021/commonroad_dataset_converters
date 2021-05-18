@@ -70,21 +70,21 @@ def generate_single_scenario(output_dir, id_segment, tags, interaction_config, d
     else:
         check_validity = False
     fw.write_to_file(filename, OverwriteExistingFile.ALWAYS, check_validity=check_validity)
-    print("Scenario file stored in {}".format(filename))
+    # print("Scenario file stored in {}".format(filename))
 
 
-def generate_scenarios_for_map(location, map_dir, input_dir, output_dir, interaction_config,
-                               scenario_time_steps=10, obstacle_start_at_zero: bool = True,
+def generate_scenarios_for_map(location: str, map_dir: str, input_dir: str, output_dir: str, interaction_config,
+                               scenario_time_steps=100, obstacle_start_at_zero: bool = True,
                                num_planning_problems: int = 1, keep_ego: bool = False):
     """
     Generate CommonRoad scenarios with given paths to INTERACTION for a folder of tracks for one map,
     each map has several tracks, each track can be separated into multiple scenarios
 
-    :param location:
-    :param map_dir:
-    :param input_dir:
-    :param output_dir:
-    :param interaction_config:
+    :param location: location name
+    :param map_dir: path the directory of pre-generated .xml map files
+    :param input_dir: path to raw dataset directory
+    :param output_dir: path to output directory
+    :param interaction_config: configuration dictionary
     :param scenario_time_steps: maximal number of time steps per CommonRoad scenario
     :param obstacle_start_at_zero: boolean indicating if the initial state of an obstacle has to have time step zero
     :param num_planning_problems: number of planning problems per CommonRoad scenario
@@ -99,8 +99,8 @@ def generate_scenarios_for_map(location, map_dir, input_dir, output_dir, interac
     directory_output = os.path.join(os.getcwd(), output_dir, f"{location}/")
     # flag_same_direction_problems = interaction_config['flag_same_direction_problems'].get(location, False)
 
-    x_offset_lanelets = interaction_config['offsets'][location]['x_offset_lanelets']
-    y_offset_lanelets = interaction_config['offsets'][location]['y_offset_lanelets']
+    # x_offset_lanelets = interaction_config['offsets'][location]['x_offset_lanelets']
+    # y_offset_lanelets = interaction_config['offsets'][location]['y_offset_lanelets']
     x_offset_tracks = interaction_config['offsets'][location]['x_offset_tracks']
     y_offset_tracks = interaction_config['offsets'][location]['y_offset_tracks']
     tags = [Tag(tag) for tag in interaction_config['tags'][location].split(' ')]
@@ -125,7 +125,7 @@ def generate_scenarios_for_map(location, map_dir, input_dir, output_dir, interac
     # prepare lanelet network for scenarios from the given source
     lanelet_network = copy.deepcopy(scenario_source.lanelet_network)
     # lanelet_network = LaneletNetwork.create_from_lanelet_network(scenario_source.lanelet_network)
-    lanelet_network.translate_rotate(np.array([-x_offset_lanelets, -y_offset_lanelets]), 0)
+    # lanelet_network.translate_rotate(np.array([-x_offset_lanelets, -y_offset_lanelets]), 0)
 
     # iterate through record files
     for path_file in path_files:
