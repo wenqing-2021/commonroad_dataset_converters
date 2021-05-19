@@ -171,12 +171,15 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
         # benchmark id format: COUNTRY_SCENE_CONFIG_PRED
         frame_start = idx_1 * num_time_steps_scenario + (idx_1 + 1)
         frame_end = (idx_1 + 1) * num_time_steps_scenario + (idx_1 + 1)
-        benchmark_id = "DEU_{0}-{1}_{2}_T-1".format(
+        benchmark_id = "DEU_{0}_{1}_T-1".format(
             ind_config.get("location_benchmark_id")[recording_meta_df.locationId.values[0]],
-            int(recording_meta_df.recordingId), idx_1 + 1)
-        generate_single_scenario(ind_config, num_planning_problems, keep_ego, output_dir, tracks_df,
-                                 tracks_meta_df, meta_scenario, benchmark_id, frame_start,
-                                 frame_end, obstacle_initial_state_invalid)
+            int(recording_meta_df.recordingId) * 1000 + (idx_1 + 1))
+        try:
+            generate_single_scenario(ind_config, num_planning_problems, keep_ego, output_dir, tracks_df,
+                                     tracks_meta_df, meta_scenario, benchmark_id, frame_start,
+                                     frame_end, obstacle_start_at_zero)
+        except NoCarException as e:
+            print(f"No car in this scenario: {repr(e)}. Skipping this scenario.")
 
 
 def generate_scenarios_for_record_vehicle(recording_meta_fn: str, tracks_meta_fn: str, tracks_fn: str,
