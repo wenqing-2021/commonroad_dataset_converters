@@ -147,6 +147,12 @@ def load_data(recording_meta_fn: str, tracks_meta_fn: str, tracks_fn: str, ind_c
     return recording_meta_df, tracks_meta_df, tracks_df, meta_scenario
 
 
+def construct_benchmark_id(ind_config, recording_meta_df, idx_1):
+    return "DEU_{0}-{1}_{2}_T-1".format(
+        ind_config.get("location_benchmark_id")[recording_meta_df.locationId.values[0]],
+        int(recording_meta_df.recordingId), idx_1 + 1)
+
+
 def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, tracks_fn: str,
                                   num_time_steps_scenario: int, num_planning_problems: int, keep_ego: bool,
                                   output_dir: str, ind_config: Dict, obstacle_start_at_zero: bool):
@@ -174,9 +180,7 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
         # benchmark id format: COUNTRY_SCENE_CONFIG_PRED
         frame_start = idx_1 * num_time_steps_scenario + (idx_1 + 1)
         frame_end = (idx_1 + 1) * num_time_steps_scenario + (idx_1 + 1)
-        benchmark_id = "DEU_{0}_{1}_T-1".format(
-            ind_config.get("location_benchmark_id")[recording_meta_df.locationId.values[0]],
-            int(recording_meta_df.recordingId) * 1000 + (idx_1 + 1))
+        benchmark_id = construct_benchmark_id(ind_config, recording_meta_df, idx_1)
         try:
             generate_single_scenario(ind_config, num_planning_problems, keep_ego, output_dir, tracks_df,
                                      tracks_meta_df, meta_scenario, benchmark_id, frame_start,
@@ -219,10 +223,7 @@ def generate_scenarios_for_record_vehicle(recording_meta_fn: str, tracks_meta_fn
             frame_start = min(track_df_vehicle.frame)
             frame_end = max(track_df_vehicle.frame) + time_step_half_range
 
-            benchmark_id = "DEU_{0}_{1}_T-1".format(
-                ind_config.get("location_benchmark_id")[recording_meta_df.locationId.values[0]],
-                int(recording_meta_df.recordingId) * 1000 + ego_vehicle_id
-            )
+            benchmark_id = construct_benchmark_id(ind_config, recording_meta_df, ego_vehicle_id)
             generate_single_scenario(ind_config, num_planning_problems, keep_ego, output_dir, tracks_df,
                                      tracks_meta_df, meta_scenario, benchmark_id, frame_start, frame_end,
                                      obstacle_start_at_zero, ego_vehicle_id=ego_vehicle_id)
