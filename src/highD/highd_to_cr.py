@@ -158,11 +158,7 @@ def generate_single_scenario(highd_config: Dict, num_planning_problems: int, kee
     fw = CommonRoadFileWriter(scenario, planning_problem_set, highd_config.get("author"),
                               highd_config.get("affiliation"), highd_config.get("source"), tags)
     filename = os.path.join(output_dir, "{}.xml".format(scenario.scenario_id))
-    if obstacle_start_at_zero is True:
-        check_validity = True
-    else:
-        check_validity = False
-    fw.write_to_file(filename, OverwriteExistingFile.ALWAYS, check_validity=check_validity)
+    fw.write_to_file(filename, OverwriteExistingFile.ALWAYS, check_validity=obstacle_start_at_zero)
     print("Scenario file stored in {}".format(filename))
 
 
