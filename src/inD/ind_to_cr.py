@@ -84,9 +84,12 @@ def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_
         )
         if keep_ego:
             scenario.add_objects(ego_obstacle)
+            planning_problem_id = scenario.generate_object_id()
+        else:
+            planning_problem_id = ego_obstacle.obstacle_id
 
         planning_problem = obstacle_to_planning_problem(obstacle=ego_obstacle,
-                                                        planning_problem_id=ego_obstacle.obstacle_id)
+                                                        planning_problem_id=planning_problem_id)
         planning_problem_set.add_planning_problem(planning_problem)
         num_planning_problems -= 1
 
