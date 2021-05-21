@@ -1,3 +1,4 @@
+import warnings
 from commonroad.common.file_writer import CommonRoadFileWriter, OverwriteExistingFile
 
 __author__ = "Xiao Wang"
@@ -18,14 +19,14 @@ import pandas as pd
 
 from typing import Union, List
 
-from commonroad.scenario.scenario import Tag, Scenario
+from commonroad.scenario.scenario import Tag, Scenario, ScenarioID
 from commonroad.scenario.lanelet import LaneletNetwork
 from commonroad.common.file_reader import CommonRoadFileReader
 from commonroad.planning.planning_problem import PlanningProblemSet
 
 from src.helper import load_yaml
 from src.INTERACTION.obstacle_utils import generate_all_obstacles
-from src.planning_problem_utils import generate_planning_problem
+from src.planning_problem_utils import generate_planning_problem, NoCarException
 
 
 def generate_single_scenario(output_dir, id_segment, tags, interaction_config, dt: float, scenario_time_steps: int,
@@ -41,7 +42,7 @@ def generate_single_scenario(output_dir, id_segment, tags, interaction_config, d
     time_end_scenario = (id_segment + 1) * scenario_time_steps + 1
 
     # create CommonRoad scenario object
-    scenario = Scenario(dt=dt, scenario_id=benchmark_id)
+    scenario = Scenario(dt=dt, scenario_id=ScenarioID.from_benchmark_id(benchmark_id, "2020a"))
 
     # add lanelet network to scenario
     scenario.add_objects(lanelet_network)
@@ -64,7 +65,7 @@ def generate_single_scenario(output_dir, id_segment, tags, interaction_config, d
     # write new scenario
     fw = CommonRoadFileWriter(scenario, planning_problem_set, interaction_config.get("author"),
                               interaction_config.get("affiliation"), interaction_config.get("source"), tags)
-    filename = os.path.join(output_dir, "{}.xml".format(scenario.benchmark_id))
+    filename = os.path.join(output_dir, "{}.xml".format(scenario.scenario_id))
     if obstacle_start_at_zero is True:
         check_validity = True
     else:
@@ -97,10 +98,10 @@ def generate_scenarios_for_map(location: str, map_dir: str, input_dir: str, outp
     path_map = f"{os.path.join(os.getcwd(), map_dir, interaction_config['maps'][location])}.xml"
     directory_data = os.path.join(input_dir, interaction_config['directory_data'][location])
     directory_output = os.path.join(os.getcwd(), output_dir, f"{location}/")
-    # flag_same_direction_problems = interaction_config['flag_same_direction_problems'].get(location, False)
 
-    # x_offset_lanelets = interaction_config['offsets'][location]['x_offset_lanelets']
-    # y_offset_lanelets = interaction_config['offsets'][location]['y_offset_lanelets']
+    if not os.path.exists(directory_data):
+        warnings.warn(f"Directory {directory_data} does not exist, skipping this map.")
+        return 0
     x_offset_tracks = interaction_config['offsets'][location]['x_offset_tracks']
     y_offset_tracks = interaction_config['offsets'][location]['y_offset_tracks']
     tags = [Tag(tag) for tag in interaction_config['tags'][location].split(' ')]
@@ -124,8 +125,6 @@ def generate_scenarios_for_map(location: str, map_dir: str, input_dir: str, outp
 
     # prepare lanelet network for scenarios from the given source
     lanelet_network = copy.deepcopy(scenario_source.lanelet_network)
-    # lanelet_network = LaneletNetwork.create_from_lanelet_network(scenario_source.lanelet_network)
-    # lanelet_network.translate_rotate(np.array([-x_offset_lanelets, -y_offset_lanelets]), 0)
 
     # iterate through record files
     for path_file in path_files:
@@ -139,17 +138,18 @@ def generate_scenarios_for_map(location: str, map_dir: str, input_dir: str, outp
         track_df["x"] -= x_offset_tracks
         track_df["y"] -= y_offset_tracks
 
-        # print(f"\tProcessing: {os.path.basename(path_file)}, Start time: {time_min * dt}s, End time: {time_max * dt}s, "
-        #       f"Scenario duration: {scenario_time_steps * dt}S, Number of scenario segments: {num_segments}")
         for id_segment in range(num_segments):
             benchmark_id = "{0}_{1}_T-1".format(location, id_config_scenario)
-            generate_single_scenario(
-                directory_output, id_segment, tags, interaction_config, dt,
-                scenario_time_steps, track_df, lanelet_network, benchmark_id,
-                obstacle_start_at_zero=obstacle_start_at_zero, keep_ego=keep_ego,
-                num_planning_problems=num_planning_problems
-            )
-            id_config_scenario += 1
+            try:
+                generate_single_scenario(
+                    directory_output, id_segment, tags, interaction_config, dt,
+                    scenario_time_steps, track_df, lanelet_network, benchmark_id,
+                    obstacle_start_at_zero=obstacle_start_at_zero, keep_ego=keep_ego,
+                    num_planning_problems=num_planning_problems
+                )
+                id_config_scenario += 1
+            except NoCarException as e:
+                print(f"No car in this scenario: {repr(e)}. Skipping this scenario.")
 
     id_config_scenario -= 1
 
