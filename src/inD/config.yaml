@@ -10,10 +10,10 @@ locations:
     4: aseag
 
 location_benchmark_id:
-    1: AAH-1
-    2: AAH-2
-    3: AAH-3
-    4: AAH-4
+    1: AAH1
+    2: AAH2
+    3: AAH3
+    4: AAH4
 
 class_to_obstacleType:
     car: car

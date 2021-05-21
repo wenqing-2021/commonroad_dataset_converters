@@ -8,7 +8,7 @@ import os
 import logging
 from typing import Dict
 
-from commonroad.scenario.scenario import Scenario
+from commonroad.scenario.scenario import Scenario, ScenarioID
 from commonroad.scenario.lanelet import LaneletNetwork
 from commonroad.common.file_reader import CommonRoadFileReader
 
@@ -46,9 +46,10 @@ def meta_scenario_from_recording(ind_config: Dict, location_id: int, recording_i
     scenario_dt = 1 / frame_rate
 
     # id should not be 0 indexed, increase by one to prevent recording id = 0
+    benchmark_id = f"DEU_{ind_config.get('location_benchmark_id')[location_id]}-{location_id}_{recording_id + 1}_T-1"
     scenario = Scenario(
         dt=scenario_dt,
-        scenario_id=f"DEU_{ind_config.get('location_benchmark_id')[location_id]}_{recording_id + 1}_T-1"
+        scenario_id=ScenarioID.from_benchmark_id(benchmark_id, scenario_version="2020a")
     )
 
     lanelet_network = locationId_to_lanelet_network[location_id]

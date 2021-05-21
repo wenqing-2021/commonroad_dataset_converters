@@ -48,14 +48,17 @@ def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_
     :param benchmark_id: CommonRoad benchmark ID for scenario
     :param frame_start: start of frame in time steps of record
     :param frame_end: end of frame in time steps of record
-    :param obstacle_initial_state_invalid: boolean indicating if the initial state of an obstacle has to start
+    :param obstacle_start_at_zero: boolean indicating if the initial state of an obstacle has to start
     at time step zero
     :param ego_vehicle_id: None if random select ego vehicle from all converted cars
     """
 
     def enough_time_steps(veh_id: int):
         vehicle_meta = tracks_meta_df[tracks_meta_df.trackId == veh_id]
-        if frame_end - int(vehicle_meta.initialFrame) < 2 \
+        if not obstacle_start_at_zero and frame_end - int(vehicle_meta.initialFrame) < 2 \
+                or int(vehicle_meta.finalFrame) - frame_start < 2:
+            return False
+        elif obstacle_start_at_zero and int(vehicle_meta.initialFrame) > frame_start \
                 or int(vehicle_meta.finalFrame) - frame_start < 2:
             return False
         return True
@@ -144,6 +147,12 @@ def load_data(recording_meta_fn: str, tracks_meta_fn: str, tracks_fn: str, ind_c
     return recording_meta_df, tracks_meta_df, tracks_df, meta_scenario
 
 
+def construct_benchmark_id(ind_config, recording_meta_df, idx_1):
+    return "DEU_{0}-{1}_{2}_T-1".format(
+        ind_config.get("location_benchmark_id")[recording_meta_df.locationId.values[0]],
+        int(recording_meta_df.recordingId), idx_1 + 1)
+
+
 def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, tracks_fn: str,
                                   num_time_steps_scenario: int, num_planning_problems: int, keep_ego: bool,
                                   output_dir: str, ind_config: Dict, obstacle_start_at_zero: bool):
@@ -171,9 +180,7 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
         # benchmark id format: COUNTRY_SCENE_CONFIG_PRED
         frame_start = idx_1 * num_time_steps_scenario + (idx_1 + 1)
         frame_end = (idx_1 + 1) * num_time_steps_scenario + (idx_1 + 1)
-        benchmark_id = "DEU_{0}_{1}_T-1".format(
-            ind_config.get("location_benchmark_id")[recording_meta_df.locationId.values[0]],
-            int(recording_meta_df.recordingId) * 1000 + (idx_1 + 1))
+        benchmark_id = construct_benchmark_id(ind_config, recording_meta_df, idx_1)
         try:
             generate_single_scenario(ind_config, num_planning_problems, keep_ego, output_dir, tracks_df,
                                      tracks_meta_df, meta_scenario, benchmark_id, frame_start,
@@ -216,10 +223,7 @@ def generate_scenarios_for_record_vehicle(recording_meta_fn: str, tracks_meta_fn
             frame_start = min(track_df_vehicle.frame)
             frame_end = max(track_df_vehicle.frame) + time_step_half_range
 
-            benchmark_id = "DEU_{0}_{1}_T-1".format(
-                ind_config.get("location_benchmark_id")[recording_meta_df.locationId.values[0]],
-                int(recording_meta_df.recordingId) * 1000 + ego_vehicle_id
-            )
+            benchmark_id = construct_benchmark_id(ind_config, recording_meta_df, ego_vehicle_id)
             generate_single_scenario(ind_config, num_planning_problems, keep_ego, output_dir, tracks_df,
                                      tracks_meta_df, meta_scenario, benchmark_id, frame_start, frame_end,
                                      obstacle_start_at_zero, ego_vehicle_id=ego_vehicle_id)
