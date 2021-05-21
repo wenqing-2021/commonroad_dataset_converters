@@ -62,7 +62,8 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
     random.seed(0)
 
     # only choose car type as ego vehicle
-    car_obstacles = [obstacle for obstacle in scenario.dynamic_obstacles if obstacle.obstacle_type == ObstacleType.CAR]
+    car_obstacles = [obstacle for obstacle in scenario.dynamic_obstacles if obstacle.obstacle_type == ObstacleType.CAR
+                     and obstacle.initial_state.time_step == 0]
     if len(car_obstacles) > 0:
         dynamic_obstacle_selected = random.choice(car_obstacles)
     else:
