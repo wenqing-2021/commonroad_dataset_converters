@@ -3,7 +3,7 @@ from typing import Union, List
 from pandas import DataFrame
 from enum import Enum
 
-from commonroad.scenario.scenario import Scenario
+from commonroad.scenario.scenario import Scenario, ScenarioID
 from commonroad.scenario.lanelet import Lanelet, LaneletType, RoadUser, LineMarking
 from commonroad.scenario.traffic_sign import TrafficSignIDGermany, TrafficSignElement, TrafficSign
 
@@ -99,7 +99,7 @@ def get_meta_scenario(dt: float, benchmark_id: str, lane_markings: List[float], 
     :param road_offset: length added on both sides of road
     :return: CommonRoad scenario
     """
-    scenario = Scenario(dt, benchmark_id)
+    scenario = Scenario(dt, ScenarioID.from_benchmark_id(benchmark_id, "2020a"))
     resample_step = (road_offset + 2 * road_offset) / num_vertices
     if direction is Direction.UPPER:
         for i in range(len(lane_markings) - 1):

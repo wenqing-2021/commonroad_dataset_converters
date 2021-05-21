@@ -63,6 +63,8 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
         benchmark_id = "DEU_{0}-{1}_{2}_T-1".format(
             highd_config.get("locations")[recording_meta_df.locationId.values[0]] + "Upper",
             int(recording_meta_df.id), idx_1 + 1)
+        if num_planning_problems > 1:
+            benchmark_id = "C-" + benchmark_id
         try:
             generate_single_scenario(highd_config, num_planning_problems, keep_ego, output_dir, tracks_df,
                                      tracks_meta_df, meta_scenario_upper, benchmark_id, Direction.UPPER, frame_start,
@@ -73,6 +75,8 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
         benchmark_id = "DEU_{0}-{1}_{2}_T-1".format(
             highd_config.get("locations")[recording_meta_df.locationId.values[0]] + "Lower",
             int(recording_meta_df.id), idx_1 + 1)
+        if num_planning_problems > 1:
+            benchmark_id = "C-" + benchmark_id
         try:
             generate_single_scenario(highd_config, num_planning_problems, keep_ego,
                                      output_dir, tracks_df, tracks_meta_df, meta_scenario_lower, benchmark_id,
@@ -153,7 +157,7 @@ def generate_single_scenario(highd_config: Dict, num_planning_problems: int, kee
     tags = {Tag(tag) for tag in highd_config.get("tags")}
     fw = CommonRoadFileWriter(scenario, planning_problem_set, highd_config.get("author"),
                               highd_config.get("affiliation"), highd_config.get("source"), tags)
-    filename = os.path.join(output_dir, "{}.xml".format(scenario.benchmark_id))
+    filename = os.path.join(output_dir, "{}.xml".format(scenario.scenario_id))
     if obstacle_start_at_zero is True:
         check_validity = True
     else:
