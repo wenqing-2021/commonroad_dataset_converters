@@ -18,7 +18,7 @@ import random
 import logging
 import multiprocessing
 import pandas as pd
-from typing import Dict
+from typing import Dict, Union
 
 from commonroad.scenario.scenario import Scenario
 from commonroad.planning.planning_problem import PlanningProblemSet
@@ -146,7 +146,7 @@ def load_data(recording_meta_fn: str, tracks_meta_fn: str, tracks_fn: str, ind_c
 
 def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, tracks_fn: str,
                                   num_time_steps_scenario: int, num_planning_problems: int, keep_ego: bool,
-                                  output_dir: str, ind_config: Dict, obstacle_initial_state_invalid: bool):
+                                  output_dir: str, ind_config: Dict, obstacle_start_at_zero: bool):
     """
     Generate CommonRoad scenarios with given paths to highD for a high-D recording
 
@@ -158,7 +158,7 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
     :param keep_ego: boolean indicating if vehicles selected for planning problem should be kept in scenario
     :param output_dir: path to store generated CommonRoad scenario files
     :param ind_config: dictionary with configuration parameters for inD scenario generation
-    :param obstacle_initial_state_invalid: boolean indicating if the initial state of an obstacle has to start
+    :param obstacle_start_at_zero: boolean indicating if the initial state of an obstacle has to start
     at time step zero
     """
     recording_meta_df, tracks_meta_df, tracks_df, meta_scenario = load_data(recording_meta_fn, tracks_meta_fn,
