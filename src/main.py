@@ -40,14 +40,11 @@ def get_args() -> argparse.Namespace:
     parser.add_argument('--num_vertices', type=int, default=10,
                         help='Number of lane waypoints, works only for highD converter')
 
-    return parser.parse_args()
+    return parser
 
 
-def main():
+def main(args):
     start_time = time.time()
-
-    # get arguments
-    args = get_args()
 
     # make output dir
     os.makedirs(args.output_dir, exist_ok=True)
@@ -83,4 +80,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # get arguments
+    args = get_args().parse_args()
+    main(args)
