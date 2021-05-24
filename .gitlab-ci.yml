@@ -48,3 +48,4 @@ convert_interaction:
     - python -m unittest src/tests/test_INTERACTION.py
   cache:
     key: download-cache
+  timeout: 3h
