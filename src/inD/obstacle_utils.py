@@ -176,7 +176,7 @@ def _add_indicator_lights_based_on_trajectory(obstacle_trajectory: Trajectory, b
     :param final_time_step: time step up to which the scenario is generated
     :return: a list of signal states with left and right indicators
     """
-    obs_traj, curvature = trajectory_classification.classify_trajectory(obstacle_trajectory, turn_threshold=0.15)
+    obs_traj, curvature = trajectory_classification.classify_trajectory(obstacle_trajectory, turn_threshold=0.01)
     turn_index = [np.amin(np.where(curvature == np.amax(curvature))), np.amin(np.where(curvature == np.amin(curvature)))]
     signal_states = []
     if obs_traj == trajectory_classification.TrajectoryType.LEFT or \
