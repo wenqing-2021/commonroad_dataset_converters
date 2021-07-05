@@ -140,14 +140,22 @@ def generate_obstacle(
         vehicle_track["latAcceleration"],
         vehicle_track["lonAcceleration"],
     )
+
     obstacle_initial_state = state_from_track_tuple(*next(track_tuples))
     obstacle_state_list = [state_from_track_tuple(*track_tuple) for track_tuple in track_tuples]
     if len(obstacle_state_list) == 0:
-        print("f")
+            print("f")
+
     obstacle_trajectory = Trajectory(obstacle_state_list[0].time_step, obstacle_state_list[0:])
     obstacle_trajectory_prediction = TrajectoryPrediction(obstacle_trajectory, obstacle_shape)
-    signal_states = _add_indicator_lights_based_on_trajectory(
-        obstacle_trajectory, [9, 5], obstacle_initial_state.time_step, obstacle_state_list[-1].time_step)
+
+    if obstacle_type in [ObstacleType.TAXI, ObstacleType.CAR, ObstacleType.BICYCLE, ObstacleType.PRIORITY_VEHICLE,
+                         ObstacleType.TRUCK, ObstacleType.BUS, ObstacleType.MOTORCYCLE]:
+        signal_states = _add_indicator_lights_based_on_trajectory(
+            obstacle_trajectory, [20, 10], obstacle_initial_state.time_step, obstacle_state_list[-1].time_step)
+    else:
+        signal_states = _generate_empty_signal_series(obstacle_initial_state.time_step,
+                                                      obstacle_state_list[-1].time_step)
     if signal_states[0].time_step == 0:
         signal_states = signal_states[1:]
     return DynamicObstacle(
@@ -168,7 +176,7 @@ def _add_indicator_lights_based_on_trajectory(obstacle_trajectory: Trajectory, b
     :param final_time_step: time step up to which the scenario is generated
     :return: a list of signal states with left and right indicators
     """
-    obs_traj, curvature = trajectory_classification.classify_trajectory(obstacle_trajectory)
+    obs_traj, curvature = trajectory_classification.classify_trajectory(obstacle_trajectory, turn_threshold=0.15)
     turn_index = [np.amin(np.where(curvature == np.amax(curvature))), np.amin(np.where(curvature == np.amin(curvature)))]
     signal_states = []
     if obs_traj == trajectory_classification.TrajectoryType.LEFT or \
@@ -186,10 +194,16 @@ def _add_indicator_lights_based_on_trajectory(obstacle_trajectory: Trajectory, b
         start_right = max(initial_time_step, turn_index[1] - blink_padding[1])
         end_right = min(final_time_step, turn_index[1] + blink_padding[1])
         for i in range(initial_time_step, final_time_step + 1):
-            turn_left = start_left <= i <= end_left
-            turn_right = start_right <= i <= end_right
+            turn_left = start_left <= i <= end_left and (start_right > i or i > end_left)
+            turn_right = start_right <= i <= end_right and (start_left > i or i > end_left)
             signal_states.append(SignalState(time_step=i, indicator_left=turn_left, indicator_right=turn_right))
     else:
-        for i in range(initial_time_step, final_time_step + 1):
-            signal_states.append(SignalState(time_step=i, indicator_left=False, indicator_right=False))
+        return _generate_empty_signal_series(initial_time_step,final_time_step)
+    return signal_states
+
+
+def _generate_empty_signal_series(initial_time_step: int, final_time_step: int) -> List[SignalState]:
+    signal_states = []
+    for i in range(initial_time_step, final_time_step + 1):
+        signal_states.append(SignalState(time_step=i, indicator_left=False, indicator_right=False))
     return signal_states
