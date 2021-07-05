@@ -29,18 +29,6 @@ def classify_trajectory(
 
     v = [s.velocity for s in t.state_list]
     c = np.array(_calc_curvature(t))
-    if len(c) == 0:
-        traj = t
-        z = list(map(lambda s: s.time_step, traj.state_list))
-        x = list(map(lambda s: s.position[0], traj.state_list))
-        y = list(map(lambda s: s.position[1], traj.state_list))
-
-        x1 = _calc_derivative(x, z)
-        y1 = _calc_derivative(y, z)
-        x2 = _calc_derivative(x1, z)
-        y2 = _calc_derivative(y1, z)
-        print(x)
-        print(x1)
     c[np.abs(v) < min_velocity] = 0.0
     c = _smooth(c, 2, 13)
 
@@ -110,7 +98,7 @@ def _calc_curvature(traj: Trajectory):
     y2 = _calc_derivative(y1, t)
 
     c = map(
-        lambda a: (a[0] * a[3] - a[2] * a[1]) / ((a[0] ** 2 + a[2] ** 2) ** 1.5),
+        lambda a: (a[0] * a[3] - a[2] * a[1]) / ((a[0] ** 2 + a[2] ** 2) ** 1.5) if (a[0]**2 + a[2] ** 2) ** 1.5 else 0,
         zip(x1, x2, y1, y2),
     )
     c = list(c)
