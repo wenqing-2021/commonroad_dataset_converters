@@ -98,3 +98,4 @@ def generate_all_obstacles(scenario: Scenario, track_df: pd.DataFrame, obstacle_
         scenario.add_objects(dynamic_obstacle)
 
     return scenario
+
