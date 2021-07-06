@@ -152,7 +152,7 @@ def generate_obstacle(
     if obstacle_type in [ObstacleType.TAXI, ObstacleType.CAR, ObstacleType.PRIORITY_VEHICLE, ObstacleType.TRUCK,
                          ObstacleType.BUS, ObstacleType.MOTORCYCLE]:
         signal_states = _add_indicator_lights_based_on_trajectory(
-            obstacle_trajectory, [20, 10], obstacle_initial_state.time_step, obstacle_state_list[-1].time_step)
+            obstacle_trajectory, [40, 40], obstacle_initial_state.time_step, obstacle_state_list[-1].time_step)
     else:
         signal_states = _generate_empty_signal_series(obstacle_initial_state.time_step,
                                                       obstacle_state_list[-1].time_step)
