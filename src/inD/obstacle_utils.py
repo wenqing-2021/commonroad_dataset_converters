@@ -149,8 +149,8 @@ def generate_obstacle(
     obstacle_trajectory = Trajectory(obstacle_state_list[0].time_step, obstacle_state_list[0:])
     obstacle_trajectory_prediction = TrajectoryPrediction(obstacle_trajectory, obstacle_shape)
 
-    if obstacle_type in [ObstacleType.TAXI, ObstacleType.CAR, ObstacleType.BICYCLE, ObstacleType.PRIORITY_VEHICLE,
-                         ObstacleType.TRUCK, ObstacleType.BUS, ObstacleType.MOTORCYCLE]:
+    if obstacle_type in [ObstacleType.TAXI, ObstacleType.CAR, ObstacleType.PRIORITY_VEHICLE, ObstacleType.TRUCK,
+                         ObstacleType.BUS, ObstacleType.MOTORCYCLE]:
         signal_states = _add_indicator_lights_based_on_trajectory(
             obstacle_trajectory, [20, 10], obstacle_initial_state.time_step, obstacle_state_list[-1].time_step)
     else:
@@ -165,7 +165,8 @@ def generate_obstacle(
 
 
 def _add_indicator_lights_based_on_trajectory(obstacle_trajectory: Trajectory, blink_padding: List[int],
-                                              initial_time_step: int, final_time_step: int) -> List[SignalState]:
+                                              initial_time_step: int, final_time_step: int,
+                                              turn_threshold=0.003) -> List[SignalState]:
     """
     Finds the point with the maximum curvature, adds indicator lights to a SignalState object
     according to the curvature of the trajectory.
@@ -176,7 +177,8 @@ def _add_indicator_lights_based_on_trajectory(obstacle_trajectory: Trajectory, b
     :param final_time_step: time step up to which the scenario is generated
     :return: a list of signal states with left and right indicators
     """
-    obs_traj, curvature = trajectory_classification.classify_trajectory(obstacle_trajectory, turn_threshold=0.01)
+    obs_traj, curvature = trajectory_classification.classify_trajectory(obstacle_trajectory,
+                                                                        turn_threshold=turn_threshold)
     turn_index = [np.amin(np.where(curvature == np.amax(curvature))), np.amin(np.where(curvature == np.amin(curvature)))]
     signal_states = []
     if obs_traj == trajectory_classification.TrajectoryType.LEFT or \
@@ -185,8 +187,8 @@ def _add_indicator_lights_based_on_trajectory(obstacle_trajectory: Trajectory, b
         start = max(initial_time_step, turn_index[traj_index - 1] - blink_padding[0])
         end = min(turn_index[traj_index - 1] + blink_padding[1], final_time_step)
         for i in range(initial_time_step, final_time_step + 1):
-            turn_left = obs_traj == traj_index and start <= i <= end
-            turn_right = obs_traj == traj_index and start <= i <= end
+            turn_left = 1 == traj_index and start <= i <= end
+            turn_right = 2 == traj_index and start <= i <= end
             signal_states.append(SignalState(time_step=i, indicator_left=turn_left, indicator_right=turn_right))
     elif obs_traj == trajectory_classification.TrajectoryType.BOTH:
         start_left = max(initial_time_step, turn_index[0] - blink_padding[0])
@@ -194,11 +196,14 @@ def _add_indicator_lights_based_on_trajectory(obstacle_trajectory: Trajectory, b
         start_right = max(initial_time_step, turn_index[1] - blink_padding[1])
         end_right = min(final_time_step, turn_index[1] + blink_padding[1])
         for i in range(initial_time_step, final_time_step + 1):
-            turn_left = start_left <= i <= end_left and (start_right > i or i > end_left)
-            turn_right = start_right <= i <= end_right and (start_left > i or i > end_left)
+            turn_left = start_left <= i <= end_left
+            turn_right = start_right <= i <= end_right
+            if turn_right and turn_left:
+                turn_left = curvature[i] < 0
+                turn_right = not turn_left
             signal_states.append(SignalState(time_step=i, indicator_left=turn_left, indicator_right=turn_right))
     else:
-        return _generate_empty_signal_series(initial_time_step,final_time_step)
+        return _generate_empty_signal_series(initial_time_step, final_time_step)
     return signal_states
 
 
