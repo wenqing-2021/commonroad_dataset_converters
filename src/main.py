@@ -39,7 +39,8 @@ def get_args() -> argparse.Namespace:
     parser.add_argument('--downsample', type=int, default=1, help='Decrease dt by n*dt, works only for highD converter')
     parser.add_argument('--num_vertices', type=int, default=10,
                         help='Number of lane waypoints, works only for highD converter')
-
+    parser.add_argument('--routability_check', type=int, choices=[0, 2], default=2,
+                        help='check routability of planning_problem. 0 no check, 2 strict route check, works only for inD converter')
     return parser
 
 
@@ -64,7 +65,7 @@ def main(args):
             warnings.warn('Downsampling only implemented for highD. Using original temporal resolution!')
         create_ind_scenarios(args.input_dir, args.output_dir, args.num_time_steps_scenario,
                              args.num_planning_problems, args.keep_ego, args.obstacle_start_at_zero,
-                             num_processes=args.num_processes, inD_all=args.inD_all)
+                             num_processes=args.num_processes, inD_all=args.inD_all, routability_planning_problem=args.routability_check)
     elif args.dataset == "INTERACTION":
         if args.downsample != 1:
             warnings.warn('Downsampling only implemented for highD. Using original temporal resolution!')

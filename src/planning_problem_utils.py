@@ -1,4 +1,20 @@
+__author__ = "Niels Mündler, Xiao Wang, Michael Feil"
+__copyright__ = "TUM Cyber-Physical System Group"
+__credits__ = [""]
+__version__ = "1.0"
+__maintainer__ = "Xiao Wang"
+__email__ = "xiao.wang@tum.de"
+__status__ = "Released"
+
+__desc__ = """
+    Utilities for creating planning problems in the Converters
+"""
+
 import random
+from enum import Enum
+from typing import Type
+import warnings
+import sys
 
 from commonroad.scenario.trajectory import State
 from commonroad.common.util import Interval, AngleInterval
@@ -8,9 +24,24 @@ from commonroad.planning.goal import GoalRegion
 from commonroad.scenario.scenario import Scenario
 from commonroad.scenario.obstacle import ObstacleType, DynamicObstacle
 
+try:
+    from commonroad_route_planner.route_planner import RoutePlanner
+except ModuleNotFoundError as exp:
+    RoutePlanner = None
+    warnings.warn("module commonroad_route_planner not installed, routability check will be skipped.")
 
 class NoCarException(Exception):
     pass
+
+
+class Routability(Enum):
+    ANY = 0
+    # REGULAR_ANDREVERSED = 1
+    REGULAR_STRICT = 2
+
+    @classmethod
+    def options(cls):
+        return [type(item) for item in cls]
 
 
 def obstacle_to_planning_problem(obstacle: DynamicObstacle, planning_problem_id: int, final_time_step=None,
@@ -90,3 +121,33 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
                                                     time_step_half_range=time_step_half_range)
 
     return planning_problem
+
+def check_routability_planning_problem(
+    scenario: Scenario, planning_problem: PlanningProblem, 
+    max_difficulity: Type[Routability]
+) -> bool:
+    """
+    Checks if a planning problem is routable on scenario
+    :param scenario: CommonRoad scenario
+    :param planning_problem: Planning Problem to be solved
+    :param max_difficulity: difficulty until which planing problem is considered routable. 
+        Routability.ANY: dont do any checks, always return True
+        Routability.REGULAR_STRICT: only return True if default route planner can find a route
+    
+    :return: bool, True if CommonRoad planning problem is routeable with max_difficulity
+    """
+    if max_difficulity == Routability.ANY or RoutePlanner is None:
+        return True    
+    
+    elif max_difficulity ==  Routability.REGULAR_STRICT:
+        route_planner = RoutePlanner(scenario, planning_problem, backend=RoutePlanner.Backend.NETWORKX_REVERSED)
+        candidate_holder = route_planner.plan_routes()
+        _, num_candiadates = candidate_holder.retrieve_all_routes()
+
+        if num_candiadates > 0:
+            return True  # there are some routes.
+        else:
+            return False
+    
+    else:
+        warnings.warn(f"option not defined: {max_difficulity}")
