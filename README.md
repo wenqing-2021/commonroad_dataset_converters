@@ -10,6 +10,7 @@ For the converter you need at least Python 3.6 and the following packages:
 * pandas>=0.24.2
 * scipy>=1.4.1
 * ruamel.yaml>=0.16.10
+* commonroad-route-planner [optional](https://gitlab.lrz.de/tum-cps/commonroad-route-planner/)
 
 The usage of the Anaconda Python distribution is recommended. 
 You can install the required Python packages with the provided requirements.txt file (pip install -r requirements.txt).
@@ -38,10 +39,9 @@ This is an optional parameter. The default is *1*
   of time steps of one CommonRoad scenario. This is an optional flag. 
 * **downsample**: (highD) Downsample the trajectories every N steps, works only for highD converter.
 * **num_vertices**: (highD) The number waypoints of each lane, works only for highD converter.
-
-Additonal parameters for the highD Dataset only:
-* **downsample**: Decrease dt by n * dt. (int) This is an optional flag, default is *1* (no downsampling). 
-* **num_vertices**: Number of lane waypoints. (int).This is an optional parameter. The default is *10* lane waypoints.
+* **downsample**: (highD) Decrease dt by n * dt. (int) This is an optional flag, default is *1* (no downsampling). 
+* **num_vertices**: (highD) Number of lane waypoints. (int).This is an optional parameter. The default is *10* lane waypoints.
+* **routability_check**: (inD) Validity check 'Routability' (int) of the scenario+planning problem from start to goal. 2: strict enforcement of at least one route 0: no checks, default is **2**, strict. requires **commonroad-route-planner** to be installed.
 
 A help message is printed by `python -m src.main.py -h`.
 
