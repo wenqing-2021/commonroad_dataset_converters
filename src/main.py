@@ -51,7 +51,7 @@ def main(args):
     os.makedirs(args.output_dir, exist_ok=True)
 
     # check parameters for specific converters
-    if args.dataset != "higD" and (args.downsample != 1 or args.num_vertices != 10):
+    if args.dataset != "highD" and (args.downsample != 1 or args.num_vertices != 10):
         warnings.warn("Downsample and num_vertices are only available for highD converter! Ignored")
     if args.dataset != "inD" and args.inD_all:
         warnings.warn("inD_all are only available for inD converter! Ignored")
