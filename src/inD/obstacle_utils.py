@@ -166,7 +166,7 @@ def generate_obstacle(
 
 def _add_indicator_lights_based_on_trajectory(obstacle_trajectory: Trajectory, blink_padding: List[int],
                                               initial_time_step: int, final_time_step: int,
-                                              turn_threshold=0.003) -> List[SignalState]:
+                                              turn_threshold=0.02) -> List[SignalState]:
     """
     Finds the point with the maximum curvature, adds indicator lights to a SignalState object
     according to the curvature of the trajectory.
