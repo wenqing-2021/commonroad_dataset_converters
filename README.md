@@ -41,7 +41,7 @@ This is an optional parameter. The default is *1*
 * **num_vertices**: (highD) The number waypoints of each lane, works only for highD converter.
 
 
-A help message is printed by `python -m src.main.py -h`.
+A help message is printed by `python src.main.py -h`.
 
 If you want to exit/logout from command line, but still want to continue the process execute   
 `nohup command-with-options &`.
