@@ -92,9 +92,12 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
     # random choose obstacle as ego vehicle
     random.seed(0)
 
+    max_time_step = max([obstacle.prediction.final_time_step for obstacle in scenario.dynamic_obstacles])
     # only choose car type as ego vehicle
-    car_obstacles = [obstacle for obstacle in scenario.dynamic_obstacles if obstacle.obstacle_type == ObstacleType.CAR
-                     and obstacle.initial_state.time_step == 0]
+    car_obstacles = [obstacle for obstacle in scenario.dynamic_obstacles if (obstacle.obstacle_type == ObstacleType.CAR
+                                                                             and obstacle.initial_state.time_step == 0
+                                                                             and obstacle.prediction.final_time_step >
+                                                                             int(0.8 * max_time_step))]
     if len(car_obstacles) > 0:
         dynamic_obstacle_selected = random.choice(car_obstacles)
     else:
