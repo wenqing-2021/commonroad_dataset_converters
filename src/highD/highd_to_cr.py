@@ -143,7 +143,7 @@ def generate_single_scenario(highd_config: Dict, num_planning_problems: int, kee
     # generate planning problems
     planning_problem_set = PlanningProblemSet()
     for idx_2 in range(num_planning_problems):
-        planning_problem = generate_planning_problem(scenario, keep_ego=keep_ego)
+        planning_problem = generate_planning_problem(scenario, keep_ego=keep_ego, highD=True)
         planning_problem_set.add_planning_problem(planning_problem)
 
     # rotate scenario if it is upper scenario

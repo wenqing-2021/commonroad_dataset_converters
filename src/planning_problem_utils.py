@@ -78,7 +78,7 @@ def obstacle_to_planning_problem(obstacle: DynamicObstacle, planning_problem_id:
 
 def generate_planning_problem(scenario: Scenario, orientation_half_range: float = 0.2, velocity_half_range: float = 10,
                               time_step_half_range: int = 25, keep_ego: bool = False,
-                              dynamic_obstacle_selected=None) -> PlanningProblem:
+                              dynamic_obstacle_selected=None, highD: bool = False) -> PlanningProblem:
     """
     Generates planning problem for scenario by taking obstacle trajectory
     :param scenario: CommonRoad scenario
@@ -96,8 +96,12 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
     # only choose car type as ego vehicle
     car_obstacles = [obstacle for obstacle in scenario.dynamic_obstacles if (obstacle.obstacle_type == ObstacleType.CAR
                                                                              and obstacle.initial_state.time_step == 0
-                                                                             and obstacle.prediction.final_time_step >
-                                                                             int(0.8 * max_time_step))]
+                                                                             )]
+    # select only vehicles that drive to the end of the road
+    if highD:
+        car_obstacles_highD = [obs for obs in car_obstacles
+                               if abs(obs.initial_state.position[0] - obs.state_at_time(obs.prediction.final_time_step).position[0]) > 350.]
+        car_obstacles = car_obstacles_highD
     if len(car_obstacles) > 0:
         dynamic_obstacle_selected = random.choice(car_obstacles)
     else:
