@@ -16,6 +16,7 @@ from typing import Type
 import warnings
 import sys
 
+from commonroad.scenario.lanelet import LaneletNetwork
 from commonroad.scenario.trajectory import State
 from commonroad.common.util import Interval, AngleInterval
 from commonroad.geometry.shape import Rectangle
@@ -46,7 +47,8 @@ class Routability(Enum):
 
 def obstacle_to_planning_problem(obstacle: DynamicObstacle, planning_problem_id: int, final_time_step=None,
                                  orientation_half_range: float = 0.2,
-                                 velocity_half_range: float = 10, time_step_half_range: int = 25):
+                                 velocity_half_range: float = 10, time_step_half_range: int = 25,
+                                 lanelet_network: LaneletNetwork = None):
     """
     Generates planning problem using initial and final states of a DynamicObstacle
     """
@@ -64,9 +66,18 @@ def obstacle_to_planning_problem(obstacle: DynamicObstacle, planning_problem_id:
 
     time_step_interval = Interval(0, final_time_step)
 
-    goal_position = Rectangle(dynamic_obstacle_shape.length, dynamic_obstacle_shape.width,
+    goal_shape = Rectangle(length=dynamic_obstacle_shape.length + 2.0,
+                              width=max(dynamic_obstacle_shape.width + 1.0, 3.5),
                               center=dynamic_obstacle_final_state.position,
                               orientation=dynamic_obstacle_final_state.orientation)
+    # find goal lanelet
+    goal_lanelet_id = lanelet_network.find_lanelet_by_position([dynamic_obstacle_final_state.position])[0][0]
+    goal_lanelet_polygon = lanelet_network.find_lanelet_by_id(goal_lanelet_id).convert_to_polygon()
+    if goal_lanelet_polygon.shapely_object.area > goal_shape.shapely_object.area:
+        goal_position = goal_lanelet_polygon
+    else:
+        goal_position = goal_shape
+
     goal_region = GoalRegion([State(position=goal_position, orientation=orientation_interval,
                                     velocity=velocity_interval, time_step=time_step_interval)])
 
@@ -100,7 +111,7 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
     # select only vehicles that drive to the end of the road
     if highD:
         car_obstacles_highD = [obs for obs in car_obstacles
-                               if abs(obs.initial_state.position[0] - obs.state_at_time(obs.prediction.final_time_step).position[0]) > 350.]
+                               if abs(obs.initial_state.position[0] - obs.state_at_time(obs.prediction.final_time_step).position[0]) > 100.]
         car_obstacles = car_obstacles_highD
     if len(car_obstacles) > 0:
         dynamic_obstacle_selected = random.choice(car_obstacles)
@@ -125,7 +136,8 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
                                                     final_time_step=final_time_step,
                                                     orientation_half_range=orientation_half_range,
                                                     velocity_half_range=velocity_half_range,
-                                                    time_step_half_range=time_step_half_range)
+                                                    time_step_half_range=time_step_half_range,
+                                                    lanelet_network=scenario.lanelet_network)
 
     return planning_problem
 

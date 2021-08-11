@@ -27,7 +27,8 @@ from commonroad.common.file_writer import CommonRoadFileWriter, Tag, OverwriteEx
 from src.helper import load_yaml
 from src.inD.map_utils import load_lanelet_networks, meta_scenario_from_recording
 from src.inD.obstacle_utils import generate_obstacle
-from src.planning_problem_utils import generate_planning_problem, NoCarException, obstacle_to_planning_problem, check_routability_planning_problem, Routability
+from src.planning_problem_utils import generate_planning_problem, NoCarException, obstacle_to_planning_problem, \
+    check_routability_planning_problem, Routability
 
 LOGGER = logging.getLogger(__name__)
 
@@ -35,7 +36,7 @@ LOGGER = logging.getLogger(__name__)
 def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_ego: bool, output_dir: str,
                              tracks_df: pd.DataFrame, tracks_meta_df: pd.DataFrame, meta_scenario: Scenario,
                              benchmark_id: str, frame_start: int, frame_end: int,
-                             obstacle_start_at_zero: bool, ego_vehicle_id: int = None, 
+                             obstacle_start_at_zero: bool, ego_vehicle_id: int = None,
                              routability_planning_problem: Type[Routability] = Routability.ANY):
     """
     Generate a single CommonRoad scenario based on inD record snippet
@@ -90,11 +91,12 @@ def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_
             planning_problem_id = ego_obstacle.obstacle_id
 
         planning_problem = obstacle_to_planning_problem(obstacle=ego_obstacle,
-                                                        planning_problem_id=planning_problem_id)
+                                                        planning_problem_id=planning_problem_id,
+                                                        lanelet_network=scenario.lanelet_network)
         if routability_planning_problem and check_routability_planning_problem(
                 scenario, planning_problem, max_difficulity=routability_planning_problem
-            ):
-                pass # skip this planning problem, it is not routeable.                          
+        ):
+            pass  # skip this planning problem, it is not routeable.
         else:
 
             planning_problem_set.add_planning_problem(planning_problem)
@@ -105,16 +107,16 @@ def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_
         planning_problem = generate_planning_problem(scenario, keep_ego=keep_ego)
         if routability_planning_problem:
             if not check_routability_planning_problem(
-                scenario, planning_problem, max_difficulity=routability_planning_problem
+                    scenario, planning_problem, max_difficulity=routability_planning_problem
             ):
-                continue # skip this planning problem, it is not routeable.
+                continue  # skip this planning problem, it is not routeable.
         planning_problem_set.add_planning_problem(planning_problem)
 
     # check that there is at least one planning problem
     if len(planning_problem_set.planning_problem_dict.keys()) == 0:
         print(f"no planning problem possible for {scenario.scenario_id}")
         return
-    
+
     # generate CR obstacles
     for vehicle_id in [vehicle_id for vehicle_id in scenario_tracks_df.trackId.unique()
                        if vehicle_id in tracks_meta_df.trackId.unique()]:
@@ -138,8 +140,6 @@ def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_
     # return if scenario contains no dynamic obstacle
     if len(scenario.dynamic_obstacles) == 0:
         return
-
-    
 
     # write new scenario
     tags = {Tag(tag) for tag in ind_config.get("tags")}
@@ -208,20 +208,21 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
         benchmark_id = construct_benchmark_id(ind_config, recording_meta_df, idx_1)
         try:
             generate_single_scenario(
-                ind_config = ind_config, num_planning_problems = num_planning_problems, keep_ego= keep_ego, output_dir=output_dir,
+                ind_config=ind_config, num_planning_problems=num_planning_problems, keep_ego=keep_ego,
+                output_dir=output_dir,
                 tracks_df=tracks_df, tracks_meta_df=tracks_meta_df, meta_scenario=meta_scenario,
                 benchmark_id=benchmark_id, frame_start=frame_start, frame_end=frame_end,
-                obstacle_start_at_zero=obstacle_start_at_zero, ego_vehicle_id= None, 
-                routability_planning_problem = routability_planning_problem
+                obstacle_start_at_zero=obstacle_start_at_zero, ego_vehicle_id=None,
+                routability_planning_problem=routability_planning_problem
             )
-        
+
         except NoCarException as e:
             print(f"No car in this scenario: {repr(e)}. Skipping this scenario.")
 
 
 def generate_scenarios_for_record_vehicle(recording_meta_fn: str, tracks_meta_fn: str, tracks_fn: str,
                                           num_time_steps_scenario: int, num_planning_problems: int, keep_ego: bool,
-                                          output_dir: str, ind_config: Dict, obstacle_start_at_zero: bool, 
+                                          output_dir: str, ind_config: Dict, obstacle_start_at_zero: bool,
                                           routability_planning_problem: Type[Routability]):
     """
     Generate CommonRoad scenarios with given paths to inD for an inD recording
@@ -257,11 +258,11 @@ def generate_scenarios_for_record_vehicle(recording_meta_fn: str, tracks_meta_fn
 
             benchmark_id = construct_benchmark_id(ind_config, recording_meta_df, ego_vehicle_id)
             generate_single_scenario(
-                ind_config = ind_config, num_planning_problems = num_planning_problems, keep_ego= keep_ego, output_dir=output_dir,
-                tracks_df=tracks_df, tracks_meta_df=tracks_meta_df, meta_scenario=meta_scenario,
+                ind_config=ind_config, num_planning_problems=num_planning_problems, keep_ego=keep_ego,
+                output_dir=output_dir, tracks_df=tracks_df, tracks_meta_df=tracks_meta_df, meta_scenario=meta_scenario,
                 benchmark_id=benchmark_id, frame_start=frame_start, frame_end=frame_end,
-                obstacle_start_at_zero=obstacle_start_at_zero, ego_vehicle_id= ego_vehicle_id, 
-                routability_planning_problem = routability_planning_problem
+                obstacle_start_at_zero=obstacle_start_at_zero, ego_vehicle_id=ego_vehicle_id,
+                routability_planning_problem=routability_planning_problem
             )
 
 
@@ -269,7 +270,7 @@ def create_ind_scenarios(input_dir: str, output_dir: str, num_time_steps_scenari
                          num_planning_problems: int, keep_ego: bool, obstacle_start_at_zero: bool,
                          map_dir: Union[str, None] = None, seed: int = 0,
                          verbose: bool = True, num_processes: int = 1, inD_all: bool = False,
-                         routability_planning_problem = Routability.ANY):
+                         routability_planning_problem=Routability.ANY):
     if verbose:
         LOGGER.setLevel(logging.INFO)
         logging.basicConfig(level=logging.INFO)
