@@ -48,7 +48,7 @@ class Routability(Enum):
 def obstacle_to_planning_problem(obstacle: DynamicObstacle, planning_problem_id: int, final_time_step=None,
                                  orientation_half_range: float = 0.2,
                                  velocity_half_range: float = 10, time_step_half_range: int = 25,
-                                 lanelet_network: LaneletNetwork = None):
+                                 lanelet_network: LaneletNetwork = None, highD: bool = False):
     """
     Generates planning problem using initial and final states of a DynamicObstacle
     """
@@ -67,16 +67,25 @@ def obstacle_to_planning_problem(obstacle: DynamicObstacle, planning_problem_id:
     time_step_interval = Interval(0, final_time_step)
 
     goal_shape = Rectangle(length=dynamic_obstacle_shape.length + 2.0,
-                              width=max(dynamic_obstacle_shape.width + 1.0, 3.5),
-                              center=dynamic_obstacle_final_state.position,
-                              orientation=dynamic_obstacle_final_state.orientation)
-    # find goal lanelet
+                           width=max(dynamic_obstacle_shape.width + 1.0, 3.5),
+                           center=dynamic_obstacle_final_state.position,
+                           orientation=dynamic_obstacle_final_state.orientation)
+    # find goal lanelet # TODO: goal lanelet is too large for highD
     goal_lanelet_id = lanelet_network.find_lanelet_by_position([dynamic_obstacle_final_state.position])[0][0]
-    goal_lanelet_polygon = lanelet_network.find_lanelet_by_id(goal_lanelet_id).convert_to_polygon()
-    if goal_lanelet_polygon.shapely_object.area > goal_shape.shapely_object.area:
-        goal_position = goal_lanelet_polygon
+    goal_lanelet = lanelet_network.find_lanelet_by_id(goal_lanelet_id)
+    if not highD:
+        goal_lanelet_polygon = goal_lanelet.convert_to_polygon()
+        if goal_lanelet_polygon.shapely_object.area > goal_shape.shapely_object.area:
+            goal_position = goal_lanelet_polygon
+        else:
+            goal_position = goal_shape
     else:
-        goal_position = goal_shape
+        # works only for highD because of constant lane width
+        lanelet_width = abs(goal_lanelet.left_vertices[-1][1] - goal_lanelet.right_vertices[-1][1])
+        goal_position = Rectangle(length=20,
+                                  width=lanelet_width,
+                                  center=dynamic_obstacle_final_state.position,
+                                  orientation=0.)
 
     goal_region = GoalRegion([State(position=goal_position, orientation=orientation_interval,
                                     velocity=velocity_interval, time_step=time_step_interval)])
@@ -137,7 +146,8 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
                                                     orientation_half_range=orientation_half_range,
                                                     velocity_half_range=velocity_half_range,
                                                     time_step_half_range=time_step_half_range,
-                                                    lanelet_network=scenario.lanelet_network)
+                                                    lanelet_network=scenario.lanelet_network,
+                                                    highD=highD)
 
     return planning_problem
 
