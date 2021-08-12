@@ -83,7 +83,7 @@ def generate_dynamic_obstacle(scenario: Scenario, vehicle_id: int, tracks_meta_d
         v = velocities.values[frame_idx]
         theta = orientations.values[frame_idx]
         a = accelerations.values[frame_idx]
-        state_list.append(State(position=np.array([x, y]), velocity=v, orientation=theta,
+        state_list.append(State(position=np.array([x, y]), velocity=v, orientation=theta, acceleration=a,
                                 time_step=cr_timestep + initial_time_step_cr))
 
     dynamic_obstacle_initial_state = state_list[0]
