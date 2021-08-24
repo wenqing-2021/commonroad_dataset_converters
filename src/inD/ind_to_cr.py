@@ -96,12 +96,13 @@ def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_
         if routability_planning_problem and check_routability_planning_problem(
                 scenario, planning_problem, max_difficulity=routability_planning_problem
         ):
-            pass  # skip this planning problem, it is not routeable.
-        else:
-
             planning_problem_set.add_planning_problem(planning_problem)
-            num_planning_problems -= 1
-
+            
+        else:
+            pass #skip this planning problem, it is not possible.
+    
+        num_planning_problems -= 1
+    
     # generate planning problems
     for _ in range(num_planning_problems):
         planning_problem = generate_planning_problem(scenario, keep_ego=keep_ego)
