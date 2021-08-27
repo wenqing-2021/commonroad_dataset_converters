@@ -20,7 +20,7 @@ from src.helper import load_yaml
 def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, tracks_fn: str,
                                   num_time_steps_scenario: int, num_planning_problems: int, keep_ego: bool,
                                   output_dir: str, highd_config: Dict, obstacle_start_at_zero: bool, downsample: int,
-                                  num_vertices: int):
+                                  num_vertices: int, lane_change: bool):
     """
     Generate CommonRoad scenarios with given paths to highD for a high-D recording
 
@@ -35,6 +35,7 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
     :param obstacle_start_at_zero: boolean indicating if the initial state of an obstacle has to have time step zero
     :param downsample: resample states of trajectories of dynamic obstacles every downsample steps
     :param num_vertices: number of waypoints of lanes
+    :param lane_change: whether only using lane changing vehicles as planning problem
     """
     # read data frames from the three files
     recording_meta_df = pd.read_csv(recording_meta_fn, header=0)
@@ -68,7 +69,7 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
         try:
             generate_single_scenario(highd_config, num_planning_problems, keep_ego, output_dir, tracks_df,
                                      tracks_meta_df, meta_scenario_upper, benchmark_id, Direction.UPPER, frame_start,
-                                     frame_end, obstacle_start_at_zero, downsample)
+                                     frame_end, obstacle_start_at_zero, downsample, lane_change)
         except NoCarException as e:
             print(f"No car in this scenario: {repr(e)}. Skipping this scenario.")
 
@@ -80,7 +81,8 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
         try:
             generate_single_scenario(highd_config, num_planning_problems, keep_ego,
                                      output_dir, tracks_df, tracks_meta_df, meta_scenario_lower, benchmark_id,
-                                     Direction.LOWER, frame_start, frame_end, obstacle_start_at_zero, downsample)
+                                     Direction.LOWER, frame_start, frame_end, obstacle_start_at_zero, downsample,
+                                     lane_change)
         except NoCarException as e:
             print(f"No car in this scenario: {repr(e)}. Skipping this scenario.")
 
@@ -88,7 +90,7 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
 def generate_single_scenario(highd_config: Dict, num_planning_problems: int, keep_ego: bool, output_dir: str,
                              tracks_df: pd.DataFrame, tracks_meta_df: pd.DataFrame, meta_scenario: Scenario,
                              benchmark_id: str, direction: Direction, frame_start: int, frame_end: int,
-                             obstacle_start_at_zero: bool, downsample: int):
+                             obstacle_start_at_zero: bool, downsample: int, lane_change: bool):
     """
     Generate a single CommonRoad scenario based on hihg-D record snippet
 
@@ -106,6 +108,7 @@ def generate_single_scenario(highd_config: Dict, num_planning_problems: int, kee
     :param obstacle_start_at_zero: boolean indicating if the initial state of an obstacle has to start
     at time step zero
     :param downsample: resample states of trajectories of dynamic obstacles every downsample steps
+    :param lane_change: whether only using lane changing vehicles as planning problem
     :return: None
     """
 
@@ -143,7 +146,7 @@ def generate_single_scenario(highd_config: Dict, num_planning_problems: int, kee
     # generate planning problems
     planning_problem_set = PlanningProblemSet()
     for idx_2 in range(num_planning_problems):
-        planning_problem = generate_planning_problem(scenario, keep_ego=keep_ego, highD=True)
+        planning_problem = generate_planning_problem(scenario, keep_ego=keep_ego, highD=True, lane_change=lane_change)
         planning_problem_set.add_planning_problem(planning_problem)
 
     # rotate scenario if it is upper scenario
@@ -164,7 +167,7 @@ def generate_single_scenario(highd_config: Dict, num_planning_problems: int, kee
 
 def create_highd_scenarios(input_dir: str, output_dir: str, num_time_steps_scenario: int, num_planning_problems: int,
                            keep_ego: bool, obstacle_start_at_zero: bool, num_processes: int = 1, downsample: int = 1,
-                           num_vertices: int = 10):
+                           num_vertices: int = 10, lane_change: bool = False):
     """
     Iterates over all dataset files and generates CommonRoad scenarios
 
@@ -197,7 +200,7 @@ def create_highd_scenarios(input_dir: str, output_dir: str, num_time_steps_scena
             print("Processing file {}...".format(tracks_fn), end='\n')
             generate_scenarios_for_record(recording_meta_fn, tracks_meta_fn, tracks_fn, num_time_steps_scenario,
                                           num_planning_problems, keep_ego, output_dir, highd_config,
-                                          obstacle_start_at_zero, downsample, num_vertices)
+                                          obstacle_start_at_zero, downsample, num_vertices, lane_change)
     else:
         with multiprocessing.Pool(processes=num_processes) as pool:
             pool.starmap(
@@ -214,7 +217,8 @@ def create_highd_scenarios(input_dir: str, output_dir: str, num_time_steps_scena
                         highd_config,
                         obstacle_start_at_zero,
                         downsample,
-                        num_vertices
+                        num_vertices,
+                        lane_change
                     )
                     for recording_meta_fn, tracks_meta_fn, tracks_fn in \
                     zip(listing_recording, listing_metas, listing_tracks)

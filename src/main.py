@@ -39,6 +39,8 @@ def get_args() -> argparse.Namespace:
     parser.add_argument('--downsample', type=int, default=1, help='Decrease dt by n*dt, works only for highD converter')
     parser.add_argument('--num_vertices', type=int, default=10,
                         help='Number of lane waypoints, works only for highD converter')
+    parser.add_argument('--lane_change', default=False, action='store_true',
+                        help='Whether only use lane changing vehicles as planning problem')
     parser.add_argument('--routability_check', type=int, choices=[0, 2], default=2,
                         help='check routability of planning_problem. 0 no check, 2 strict route check, works only for inD converter')
     return parser

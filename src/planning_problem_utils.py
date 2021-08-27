@@ -96,9 +96,9 @@ def obstacle_to_planning_problem(obstacle: DynamicObstacle, planning_problem_id:
     return PlanningProblem(planning_problem_id, dynamic_obstacle_initial_state, goal_region)
 
 
-def generate_planning_problem(scenario: Scenario, orientation_half_range: float = 0.2, velocity_half_range: float = 10,
+def generate_planning_problem(scenario: Scenario, orientation_half_range: float = 0.2, velocity_half_range: float = 10.,
                               time_step_half_range: int = 25, keep_ego: bool = False,
-                              dynamic_obstacle_selected=None, highD: bool = False) -> PlanningProblem:
+                              highD: bool = False, lane_change: bool = False) -> PlanningProblem:
     """
     Generates planning problem for scenario by taking obstacle trajectory
     :param scenario: CommonRoad scenario
@@ -106,7 +106,7 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
     :param velocity_half_range: parameter for goal state velocity
     :param time_step_half_range: parameter for goal state time step
     :param keep_ego: boolean indicating if vehicles selected for planning problem should be kept in scenario
-    :param dynamic_obstacle_selected: currently just for testing the interaction dataset
+    :param highD: indicator for highD dataset; select only vehicles that drive to the end of the road
     :return: CommonRoad planning problem
     """
     # random choose obstacle as ego vehicle
@@ -120,8 +120,24 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
     # select only vehicles that drive to the end of the road
     if highD:
         car_obstacles_highD = [obs for obs in car_obstacles
-                               if abs(obs.initial_state.position[0] - obs.state_at_time(obs.prediction.final_time_step).position[0]) > 100.]
+                               if abs(obs.initial_state.position[0] -
+                                      obs.state_at_time(obs.prediction.final_time_step).position[0]) > 100.]
+        if lane_change:
+            car_lane_changing = []
+            lanelet_network = scenario.lanelet_network
+            for obs in car_obstacles_highD:
+                initial_lanelet = lanelet_network.find_lanelet_by_position([obs.initial_state.position])[0][0]
+                final_lanelet = lanelet_network.find_lanelet_by_position([
+                    obs.state_at_time(obs.prediction.final_time_step).position])[0][0]
+                if initial_lanelet != final_lanelet:
+                    car_lane_changing.append(obs)
+            if len(car_lane_changing) == 0:
+                warnings.warn("No lane changing vehicle available, using lane keeping vehicle as planning problem")
+            else:
+                car_obstacles_highD = car_lane_changing
+
         car_obstacles = car_obstacles_highD
+
     if len(car_obstacles) > 0:
         dynamic_obstacle_selected = random.choice(car_obstacles)
     else:
@@ -150,6 +166,7 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
                                                     highD=highD)
 
     return planning_problem
+
 
 def check_routability_planning_problem(
     scenario: Scenario, planning_problem: PlanningProblem, 

@@ -28,7 +28,8 @@ class TestHighDConversion(unittest.TestCase):
         args_str = (
             "highD "
             f"{self.input_path_single} "
-            f"{self.output_path}"
+            f"{self.output_path} "
+            f"--lane_change"
         )
 
         args = get_args().parse_args(args_str.split(sep=" "))
