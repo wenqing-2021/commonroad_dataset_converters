@@ -89,7 +89,7 @@ def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_
             planning_problem_id = scenario.generate_object_id()
         else:
             planning_problem_id = ego_obstacle.obstacle_id
-
+        
         planning_problem = obstacle_to_planning_problem(obstacle=ego_obstacle,
                                                         planning_problem_id=planning_problem_id,
                                                         lanelet_network=scenario.lanelet_network)
@@ -258,14 +258,16 @@ def generate_scenarios_for_record_vehicle(recording_meta_fn: str, tracks_meta_fn
             frame_end = max(track_df_vehicle.frame) + time_step_half_range
 
             benchmark_id = construct_benchmark_id(ind_config, recording_meta_df, ego_vehicle_id)
-            generate_single_scenario(
-                ind_config=ind_config, num_planning_problems=num_planning_problems, keep_ego=keep_ego,
-                output_dir=output_dir, tracks_df=tracks_df, tracks_meta_df=tracks_meta_df, meta_scenario=meta_scenario,
-                benchmark_id=benchmark_id, frame_start=frame_start, frame_end=frame_end,
-                obstacle_start_at_zero=obstacle_start_at_zero, ego_vehicle_id=ego_vehicle_id,
-                routability_planning_problem=routability_planning_problem
-            )
-
+            try:
+                generate_single_scenario(
+                    ind_config=ind_config, num_planning_problems=num_planning_problems, keep_ego=keep_ego,
+                    output_dir=output_dir, tracks_df=tracks_df, tracks_meta_df=tracks_meta_df, meta_scenario=meta_scenario,
+                    benchmark_id=benchmark_id, frame_start=frame_start, frame_end=frame_end,
+                    obstacle_start_at_zero=obstacle_start_at_zero, ego_vehicle_id=ego_vehicle_id,
+                    routability_planning_problem=routability_planning_problem
+                )
+            except IndexError as e:
+                print(f"Cannot find lanelet by position: {repr(e)}. Skipping this scenario.")
 
 def create_ind_scenarios(input_dir: str, output_dir: str, num_time_steps_scenario: int,
                          num_planning_problems: int, keep_ego: bool, obstacle_start_at_zero: bool,
