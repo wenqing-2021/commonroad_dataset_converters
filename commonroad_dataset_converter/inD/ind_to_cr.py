@@ -24,10 +24,10 @@ from commonroad.scenario.scenario import Scenario
 from commonroad.planning.planning_problem import PlanningProblemSet
 from commonroad.common.file_writer import CommonRoadFileWriter, Tag, OverwriteExistingFile
 
-from src.helper import load_yaml
-from src.inD.map_utils import load_lanelet_networks, meta_scenario_from_recording
-from src.inD.obstacle_utils import generate_obstacle
-from src.planning_problem_utils import generate_planning_problem, NoCarException, obstacle_to_planning_problem, \
+from commonroad_dataset_converter.helper import load_yaml
+from commonroad_dataset_converter.inD.map_utils import load_lanelet_networks, meta_scenario_from_recording
+from commonroad_dataset_converter.inD.obstacle_utils import generate_obstacle
+from commonroad_dataset_converter.planning_problem_utils import generate_planning_problem, NoCarException, obstacle_to_planning_problem, \
     check_routability_planning_problem, Routability
 
 LOGGER = logging.getLogger(__name__)
@@ -89,7 +89,7 @@ def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_
             planning_problem_id = scenario.generate_object_id()
         else:
             planning_problem_id = ego_obstacle.obstacle_id
-        
+
         planning_problem = obstacle_to_planning_problem(obstacle=ego_obstacle,
                                                         planning_problem_id=planning_problem_id,
                                                         lanelet_network=scenario.lanelet_network)
@@ -97,12 +97,12 @@ def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_
                 scenario, planning_problem, max_difficulity=routability_planning_problem
         ):
             planning_problem_set.add_planning_problem(planning_problem)
-            
+
         else:
             pass #skip this planning problem, it is not possible.
-    
+
         num_planning_problems -= 1
-    
+
     # generate planning problems
     for _ in range(num_planning_problems):
         planning_problem = generate_planning_problem(scenario, keep_ego=keep_ego)

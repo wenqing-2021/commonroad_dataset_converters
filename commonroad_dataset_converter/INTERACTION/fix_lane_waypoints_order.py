@@ -8,7 +8,7 @@ from commonroad.common.file_reader import CommonRoadFileReader
 from commonroad.common.file_writer import CommonRoadFileWriter, OverwriteExistingFile, Tag
 from commonroad.scenario.lanelet import Lanelet, LaneletNetwork
 from commonroad.scenario.scenario import Scenario
-from src.helper import load_yaml
+from commonroad_dataset_converter.helper import load_yaml
 
 
 def get_parser():

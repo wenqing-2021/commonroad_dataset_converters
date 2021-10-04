@@ -16,7 +16,7 @@ import logging
 import numpy as np
 import pandas as pd
 from typing import Dict, Union, List
-from src.inD import trajectory_classification
+from commonroad_dataset_converter.inD import trajectory_classification
 
 from commonroad.scenario.obstacle import (
     ObstacleType,
@@ -28,7 +28,7 @@ from commonroad.geometry.shape import Rectangle, Circle
 from commonroad.scenario.trajectory import Trajectory, State
 from commonroad.prediction.prediction import TrajectoryPrediction
 
-from src.helper import make_valid_orientation_pruned
+from commonroad_dataset_converter.helper import make_valid_orientation_pruned
 
 LOGGER = logging.getLogger(__name__)
 

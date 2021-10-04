@@ -11,10 +11,10 @@ from commonroad.planning.planning_problem import PlanningProblemSet
 from commonroad.common.file_writer import CommonRoadFileWriter, OverwriteExistingFile
 from commonroad.scenario.scenario import Scenario, Tag, ScenarioID
 
-from src.highD.map_utils import get_meta_scenario, get_speed_limit, get_lane_markings, get_dt, Direction
-from src.highD.obstacle_utils import generate_dynamic_obstacle
-from src.planning_problem_utils import generate_planning_problem, NoCarException
-from src.helper import load_yaml
+from commonroad_dataset_converter.highD.map_utils import get_meta_scenario, get_speed_limit, get_lane_markings, get_dt, Direction
+from commonroad_dataset_converter.highD.obstacle_utils import generate_dynamic_obstacle
+from commonroad_dataset_converter.planning_problem_utils import generate_planning_problem, NoCarException
+from commonroad_dataset_converter.helper import load_yaml
 
 
 def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, tracks_fn: str,

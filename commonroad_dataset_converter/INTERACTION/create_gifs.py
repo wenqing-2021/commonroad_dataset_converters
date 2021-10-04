@@ -42,11 +42,11 @@ if __name__ == "__main__":
         idx_rnd = random.randint(1, num_scenarios) - 1
         path_scenrio = path_scenarios[idx_rnd]
         name_scenrio = path_scenrio.split('/')[-1].split('.')[0]
-        
+
         directory_scenario = os.path.join(directory_gif, name_scenrio + '/')
         if not os.path.exists(directory_scenario):
             os.makedirs(directory_scenario)
-        
+
         # read the scenario
         scenario, planning_problem_set = CommonRoadFileReader(path_scenrio).open()
 
@@ -55,25 +55,25 @@ if __name__ == "__main__":
 
         for lanelet in scenario.lanelet_network.lanelets:
             vertice_center = lanelet.center_vertices
-            list_vertice_x.extend(list(vertice_center[:, 0])) 
+            list_vertice_x.extend(list(vertice_center[:, 0]))
             list_vertice_y.extend(list(vertice_center[:, 1]))
 
         x_min, x_max = min(list_vertice_x), max(list_vertice_x)
-        y_min, y_max = min(list_vertice_y), max(list_vertice_y)  
-        
+        y_min, y_max = min(list_vertice_y), max(list_vertice_y)
+
         plt.figure(figsize=size_figure)
-        
+
         # draw the scenario for each time step and save
         for i in range(0, steps_plot):
             plt.clf()
-            draw_object(scenario, plot_limits = [x_min - margin, x_max + margin, y_min - margin, y_max + margin], 
+            draw_object(scenario, plot_limits = [x_min - margin, x_max + margin, y_min - margin, y_max + margin],
                         draw_params={'time_begin': i})
             draw_object(planning_problem_set)
             plt.gca().set_aspect('equal')
 
             path_save = os.path.join(directory_scenario, name_scenrio + f"_{i}.png")
             plt.savefig(path_save, format='png', bbox_inches='tight', transparent=False)
-        
+
         path_imgs = glob.glob(os.path.join(directory_scenario, "*.png"))
         list_names_imgs = [path_img.split("/")[-1] for path_img in path_imgs]
         list_names_imgs.sort(key=lambda name: int(name.split('_')[-1].split('.')[0]))

@@ -6,7 +6,7 @@ stages:
 - build
 
 before_script:
-  - conda create -n cr37 python=3.7  
+  - conda create -n cr37 python=3.7
   - source activate cr37
   - pip install -r requirements.txt
   - which python
@@ -23,7 +23,7 @@ convert_highd:
       allow_failure: true
       when: manual
   script:
-    - python -m unittest src/tests/test_highD.py
+    - python -m unittest commonroad_dataset_converter/tests/test_highD.py
   cache:
     key: download-cache
 
@@ -34,7 +34,7 @@ convert_ind:
       allow_failure: true
       when: manual
   script:
-    - python -m unittest src/tests/test_inD.py
+    - python -m unittest commonroad_dataset_converter/tests/test_inD.py
   cache:
     key: download-cache
 
@@ -45,7 +45,7 @@ convert_interaction:
       allow_failure: true
       when: manual
   script:
-    - python -m unittest src/tests/test_INTERACTION.py
+    - python -m unittest commonroad_dataset_converter/tests/test_INTERACTION.py
   cache:
     key: download-cache
   timeout: 3h
