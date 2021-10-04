@@ -38,12 +38,14 @@ class Direction(Enum):
     LOWER = 2
 
 
-def get_lane_markings(recording_df: DataFrame, extend_width=2.):
+def get_lane_markings(recording_df: DataFrame, extend_width=0.):
     """
     Extracts upper and lower lane markings from data frame;
-    extend width of the outter lanes because otherwise some vehicles are off-road at the first time step.
 
     :param recording_df: data frame of the recording meta information
+    :param extend_width: extend width of the outter lanes, 
+                         set to a positiv value when some vehicles are 
+                         off-road at the first time step.
     :return: speed limit
     """
     upper_lane_markings = [-float(x) for x in recording_df.upperLaneMarkings.values[0].split(";")]
