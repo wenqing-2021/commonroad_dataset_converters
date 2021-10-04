@@ -169,22 +169,22 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
 
 
 def check_routability_planning_problem(
-    scenario: Scenario, planning_problem: PlanningProblem, 
+    scenario: Scenario, planning_problem: PlanningProblem,
     max_difficulity: Type[Routability]
 ) -> bool:
     """
     Checks if a planning problem is routable on scenario
     :param scenario: CommonRoad scenario
     :param planning_problem: Planning Problem to be solved
-    :param max_difficulity: difficulty until which planing problem is considered routable. 
+    :param max_difficulity: difficulty until which planing problem is considered routable.
         Routability.ANY: dont do any checks, always return True
         Routability.REGULAR_STRICT: only return True if default route planner can find a route
-    
+
     :return: bool, True if CommonRoad planning problem is routeable with max_difficulity
     """
     if max_difficulity == Routability.ANY or RoutePlanner is None:
-        return True    
-    
+        return True
+
     elif max_difficulity ==  Routability.REGULAR_STRICT:
         route_planner = RoutePlanner(scenario, planning_problem, backend=RoutePlanner.Backend.NETWORKX_REVERSED)
         candidate_holder = route_planner.plan_routes()
@@ -194,6 +194,6 @@ def check_routability_planning_problem(
             return True  # there are some routes.
         else:
             return False
-    
+
     else:
         warnings.warn(f"option not defined: {max_difficulity}")

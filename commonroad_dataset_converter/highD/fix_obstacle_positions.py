@@ -9,7 +9,7 @@ from commonroad.common.file_reader import CommonRoadFileReader
 from commonroad.common.file_writer import CommonRoadFileWriter, OverwriteExistingFile
 from commonroad.scenario.scenario import Scenario, Tag
 
-from src.helper import load_yaml
+from commonroad_dataset_converter.helper import load_yaml
 
 
 def get_args() -> argparse.Namespace:

@@ -6,7 +6,7 @@ from argparse import ArgumentParser
 
 from commonroad.common.file_reader import CommonRoadFileReader
 from commonroad.common.file_writer import CommonRoadFileWriter, OverwriteExistingFile, Tag
-from src.helper import load_yaml
+from commonroad_dataset_converter.helper import load_yaml
 
 
 def get_parser():
@@ -44,4 +44,3 @@ if __name__ == "__main__":
             file_writer.write_to_file(output_file, OverwriteExistingFile.ALWAYS)
         except:
             continue
-
