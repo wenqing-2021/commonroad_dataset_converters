@@ -70,8 +70,8 @@ def generate_dynamic_obstacle(scenario: Scenario, vehicle_id: int, tracks_meta_d
     dynamic_obstacle_type = obstacle_class_dict[vehicle_meta['class'].values[0]]
     dynamic_obstacle_shape = Rectangle(width=width, length=length)
 
-    xs = np.array(vehicle_tracks.x)
-    ys = np.array(-vehicle_tracks.y)
+    xs = np.array(vehicle_tracks.x + length / 2)
+    ys = np.array(-(vehicle_tracks.y + width / 2))
     velocities = get_velocity(vehicle_tracks)
     orientations = get_orientation(vehicle_tracks)
     accelerations = get_acceleration(vehicle_tracks)
