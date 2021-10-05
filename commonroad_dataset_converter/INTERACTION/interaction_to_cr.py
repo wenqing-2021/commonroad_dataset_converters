@@ -24,9 +24,9 @@ from commonroad.scenario.lanelet import LaneletNetwork
 from commonroad.common.file_reader import CommonRoadFileReader
 from commonroad.planning.planning_problem import PlanningProblemSet
 
-from src.helper import load_yaml
-from src.INTERACTION.obstacle_utils import generate_all_obstacles
-from src.planning_problem_utils import generate_planning_problem, NoCarException
+from commonroad_dataset_converter.helper import load_yaml
+from commonroad_dataset_converter.INTERACTION.obstacle_utils import generate_all_obstacles
+from commonroad_dataset_converter.planning_problem_utils import generate_planning_problem, NoCarException
 
 
 def generate_single_scenario(output_dir, id_segment, tags, interaction_config, dt: float, scenario_time_steps: int,

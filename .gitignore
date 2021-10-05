@@ -1,7 +1,12 @@
 # python
 __pycache__/
 .idea/
-
+.ipynb_checkpoints
 src/tests/outputs
 .history
 .vscode
+env/
+**/**/__init__.pyc
+commonroad_dataset_converter.egg-info/
+build/
+dist/
