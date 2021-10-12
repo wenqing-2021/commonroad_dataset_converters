@@ -193,4 +193,4 @@ def interaction(
 
 
 if __name__ == "__main__":
-    typer.run(cli)
+    cli()
