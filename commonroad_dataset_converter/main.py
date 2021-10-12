@@ -29,7 +29,7 @@ class RoutabilityCheck(str, Enum):
 def highD(
         input_dir: Path = typer.Argument(
             ...,
-            help="Path to dataset files"
+            help="Path to highD-dataset's data folder"
         ),
         output_dir: Path = typer.Argument(
             ...,
@@ -83,14 +83,14 @@ def highD(
         num_vertices
     )
     elapsed_time = time.time() - start_time
-    print(f"Elapsed time: {elapsed_time} s", end="\r")
+    print(f"Elapsed time: {elapsed_time} s")
 
 
 @cli.command()
 def inD(
         input_dir: Path = typer.Argument(
             ...,
-            help="Path to dataset files"
+            help="Path to inD-dataset's data folder"
         ),
         output_dir: Path = typer.Argument(
             ...,
