@@ -24,7 +24,7 @@ setup(
         "pandas>=0.24.2",
         "ruamel.yaml>=0.16.10",
         "commonroad-io>=2020.3",
-        "typer==0.3.2",
+        "typer>=0.4.0",
     ],
     entry_points={
         "console_scripts": [

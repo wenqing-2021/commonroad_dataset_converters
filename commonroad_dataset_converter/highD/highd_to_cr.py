@@ -181,6 +181,10 @@ def create_highd_scenarios(input_dir: str, output_dir: str, num_time_steps_scena
     :param downsample: resample states of trajectories of dynamic obstacles every downsample steps
     :param num_vertices: number of waypoints of lanes
     """
+    # assert
+    assert os.path.exists(input_dir), f"<create_highd_scenarios> input directory <{input_dir}> do not exist!\n" \
+                                      f"Current directory: <{os.getcwd()}>"
+
     # generate path to highd data files
     path_tracks = os.path.join(input_dir, "data/*_tracks.csv")
     path_metas = os.path.join(input_dir, "data/*_tracksMeta.csv")
@@ -190,6 +194,9 @@ def create_highd_scenarios(input_dir: str, output_dir: str, num_time_steps_scena
     listing_tracks = sorted(glob.glob(path_tracks))
     listing_metas = sorted(glob.glob(path_metas))
     listing_recording = sorted(glob.glob(path_recording))
+
+    assert len(listing_tracks) > 0, f"<create_highd_scenarios> input directory <{input_dir}> " \
+                                    f"does not contain any track record!"
 
     highd_config = load_yaml(os.path.dirname(os.path.abspath(__file__)) + "/config.yaml")
 
