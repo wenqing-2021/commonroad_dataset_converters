@@ -62,7 +62,7 @@ def highD(
         ),
         num_vertices: int = typer.Option(
             10,
-            help="Number of lane waypoints"
+            help="Number of straight lane waypoints"
         ),
         lane_change: bool = typer.Option(
             False,
@@ -114,11 +114,7 @@ def inD(
         ),
         num_processes: int = typer.Option(
             1,
-            help="Decrease dt by n*dt"
-        ),
-        lane_change: bool = typer.Option(
-            False,
-            help="Whether only use lane changing vehicles as planning problem"
+            help="Number of multiple processes to convert dataset"
         ),
         all_vehicles: bool = typer.Option(
             False,
@@ -150,7 +146,7 @@ def inD(
 def interaction(
         input_dir: Path = typer.Argument(
             ...,
-            help="Path to dataset files"
+            help="Path to INTERACTION dataset files"
         ),
         output_dir: Path = typer.Argument(
             ...,
@@ -174,7 +170,7 @@ def interaction(
         ),
         num_processes: int = typer.Option(
             1,
-            help="Decrease dt by n*dt"
+            help="Number of multiple processes to convert dataset"
         ),
 ):
     os.makedirs(output_dir, exist_ok=True)

@@ -71,7 +71,11 @@ def obstacle_to_planning_problem(obstacle: DynamicObstacle, planning_problem_id:
                            center=dynamic_obstacle_final_state.position,
                            orientation=dynamic_obstacle_final_state.orientation)
     # find goal lanelet # TODO: goal lanelet is too large for highD
-    goal_lanelet_id = lanelet_network.find_lanelet_by_position([dynamic_obstacle_final_state.position])[0][0]
+    goal_lanelets = lanelet_network.find_lanelet_by_position([dynamic_obstacle_final_state.position])
+    if len(goal_lanelets[0]) == 0:
+        raise NoCarException("Selected final state for planning problem is out of road. Skipping this scenario")
+
+    goal_lanelet_id = goal_lanelets[0][0]
     goal_lanelet = lanelet_network.find_lanelet_by_id(goal_lanelet_id)
     if not highD:
         goal_lanelet_polygon = goal_lanelet.convert_to_polygon()
@@ -111,6 +115,9 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
     """
     # random choose obstacle as ego vehicle
     random.seed(0)
+
+    if len(scenario.dynamic_obstacles) == 0:
+        raise NoCarException("There is no car in dynamic obstacles which can be used as planning problem.")
 
     max_time_step = max([obstacle.prediction.final_time_step for obstacle in scenario.dynamic_obstacles])
     # only choose car type as ego vehicle

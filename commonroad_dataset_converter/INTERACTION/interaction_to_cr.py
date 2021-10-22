@@ -100,6 +100,7 @@ def generate_scenarios_for_map(location: str, map_dir: str, input_dir: str, outp
     directory_output = os.path.join(os.getcwd(), output_dir, f"{location}/")
 
     if not os.path.exists(directory_data):
+        print(directory_data)
         warnings.warn(f"Directory {directory_data} does not exist, skipping this map.")
         return 0
     x_offset_tracks = interaction_config['offsets'][location]['x_offset_tracks']
@@ -148,6 +149,7 @@ def generate_scenarios_for_map(location: str, map_dir: str, input_dir: str, outp
                     num_planning_problems=num_planning_problems
                 )
                 id_config_scenario += 1
+                print("Generating scenario {}, vehicle id {}".format(benchmark_id, id_segment), end="\r")
             except NoCarException as e:
                 print(f"No car in this scenario: {repr(e)}. Skipping this scenario.")
 

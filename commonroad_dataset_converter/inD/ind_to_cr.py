@@ -103,21 +103,6 @@ def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_
 
         num_planning_problems -= 1
 
-    # generate planning problems
-    for _ in range(num_planning_problems):
-        planning_problem = generate_planning_problem(scenario, keep_ego=keep_ego)
-        if routability_planning_problem:
-            if not check_routability_planning_problem(
-                    scenario, planning_problem, max_difficulity=routability_planning_problem
-            ):
-                continue  # skip this planning problem, it is not routeable.
-        planning_problem_set.add_planning_problem(planning_problem)
-
-    # check that there is at least one planning problem
-    if len(planning_problem_set.planning_problem_dict.keys()) == 0:
-        print(f"no planning problem possible for {scenario.scenario_id}")
-        return
-
     # generate CR obstacles
     for vehicle_id in [vehicle_id for vehicle_id in scenario_tracks_df.trackId.unique()
                        if vehicle_id in tracks_meta_df.trackId.unique()]:
@@ -138,8 +123,19 @@ def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_
         )
         scenario.add_objects(obstacle)
 
-    # return if scenario contains no dynamic obstacle
-    if len(scenario.dynamic_obstacles) == 0:
+    # generate planning problems
+    for _ in range(num_planning_problems):
+        planning_problem = generate_planning_problem(scenario, keep_ego=keep_ego)
+        if routability_planning_problem:
+            if not check_routability_planning_problem(
+                    scenario, planning_problem, max_difficulity=routability_planning_problem
+            ):
+                continue  # skip this planning problem, it is not routeable.
+        planning_problem_set.add_planning_problem(planning_problem)
+
+    # check that there is at least one planning problem
+    if len(planning_problem_set.planning_problem_dict.keys()) == 0:
+        print(f"no planning problem possible for {scenario.scenario_id}")
         return
 
     # write new scenario
