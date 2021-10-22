@@ -5,89 +5,74 @@ import unittest
 import warnings
 
 
+def remove_output_dir(output_path):
+    if os.path.exists(output_path):
+        warnings.warn("Output path already exists, deleted")
+        shutil.rmtree(output_path)
+
+
 class TestINTERACTIONConversion(unittest.TestCase):
     def setUp(self) -> None:
         super().setUp()
         test_path = os.path.dirname(os.path.realpath(__file__))
-        self.dataset = "INTERACTION"
+        self.dataset = "interaction"
         self.input_path = os.path.join(test_path, f"resources/{self.dataset}")
         self.input_path_single = os.path.join(test_path, f"resources/{self.dataset}/single_process")
         self.output_path = os.path.join(test_path, f"outputs/{self.dataset}")
         self.xsd_path = os.path.join(test_path, "tools/XML_commonRoad_XSD_2020a.xsd")
-        if os.path.exists(self.output_path):
-            warnings.warn("Output path already exists, deleted")
-            shutil.rmtree(self.output_path)
 
         sys.path.append(test_path)
         sys.path.append(os.path.join(test_path, ".."))
 
     def test_vanilla(self):
-        # from main import get_args
-        # from main import main as conversion
         from tools.validate_cr import validate_all
 
-        # args_str = (
-        #     f"{self.dataset} "
-        #     f"{self.input_path_single} "
-        #     f"{self.output_path}"
-        # )
+        remove_output_dir(self.output_path)
 
-        # args = get_args().parse_args(args_str.split(sep=" "))
-        # conversion(args)
+        if os.system(f"crconvert {self.dataset} "
+                     f"{self.input_path_single} "
+                     f"{self.output_path}") != 0:
+            raise Exception
 
         # validate
         validate_all(self.output_path, self.xsd_path)
 
     def test_multiprocessing(self):
-        # from main import get_args
-        # from main import main as conversion
         from tools.validate_cr import validate_all
 
-        # args_str = (
-        #     f"{self.dataset} "
-        #     f"{self.input_path} "
-        #     f"{self.output_path} "
-        #     f"--num_processes 2"
-        # )
-        # args = get_args().parse_args(args_str.split(sep=" "))
-        # conversion(args)
+        remove_output_dir(self.output_path)
+        if os.system(f"crconvert {self.dataset} "
+                     f"{self.input_path} "
+                     f"{self.output_path} "
+                     f"--num-processes 2") != 0:
+            raise Exception
 
         # validate
         validate_all(self.output_path, self.xsd_path)
 
     def test_cooperative(self):
-        # from main import get_args
-        # from main import main as conversion
         from tools.validate_cr import validate_all
 
-        # args_str = (
-        #     f"{self.dataset} "
-        #     f"{self.input_path_single} "
-        #     f"{self.output_path} "
-        #     f"--num_planning_problem 12"
-        # )
-
-        # args = get_args().parse_args(args_str.split(sep=" "))
-        # conversion(args)
+        remove_output_dir(self.output_path)
+        if os.system(f"crconvert {self.dataset} "
+                     f"{self.input_path_single} "
+                     f"{self.output_path} "
+                     f"--num-planning-problems 12") != 0:
+            raise Exception
 
         # validate
         validate_all(self.output_path, self.xsd_path)
 
     def test_others(self):
-        # from main import get_args
-        # from main import main as conversion
         from tools.validate_cr import validate_all
 
-        # args_str = (
-        #     f"{self.dataset} "
-        #     f"{self.input_path_single} "
-        #     f"{self.output_path} "
-        #     f"--keep_ego "
-        #     f"--obstacle_start_at_zero"
-        # )
-
-        # args = get_args().parse_args(args_str.split(sep=" "))
-        # conversion(args)
+        remove_output_dir(self.output_path)
+        if os.system(f"crconvert {self.dataset} "
+                     f"{self.input_path_single} "
+                     f"{self.output_path} "
+                     f"--keep-ego "
+                     f"--obstacle-start-at-zero") != 0:
+            raise Exception
 
         # validate
         validate_all(self.output_path, self.xsd_path)
