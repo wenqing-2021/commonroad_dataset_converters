@@ -38,12 +38,11 @@ This is an optional parameter. The default is *1*
   since it has less recordings available, note that if enabled, num_time_steps_scenario becomes the minimal number 
   of time steps of one CommonRoad scenario. This is an optional flag. 
 * **downsample**: (highD) Downsample the trajectories every N steps, works only for highD converter.
-* **num_vertices**: (highD) The number waypoints of each lane, works only for highD converter.
 * **downsample**: (highD) Decrease dt by n * dt. (int) This is an optional flag, default is *1* (no downsampling). 
 * **num_vertices**: (highD) Number of lane waypoints. (int).This is an optional parameter. The default is *10* lane waypoints.
 * **routability_check**: (inD) Validity check 'Routability' (int) of the scenario+planning problem from start to goal. 2: strict enforcement of at least one route 0: no checks, default is **2**, strict. requires **commonroad-route-planner** to be installed.
 
-A help message is printed by `python -m src.main.py -h`.
+A help message is printed by `crconvert $DATASET --help`.
 
 If you want to exit/logout from command line, but still want to continue the process execute   
 `nohup command-with-options &`.
