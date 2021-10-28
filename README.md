@@ -12,8 +12,17 @@ For the converter you need at least Python 3.6 and the following packages:
 * ruamel.yaml>=0.16.10
 * commonroad-route-planner [optional](https://gitlab.lrz.de/tum-cps/commonroad-route-planner/)
 
+
+### Install
+
 The usage of the Anaconda Python distribution is recommended. 
-You can install the required Python packages with the provided requirements.txt file (pip install -r requirements.txt).
+```bash
+pip install -r requirements.txt
+pip install -e .
+make install
+make build
+make clean
+```
 
 ### Usage
 A conversion can be started from the *dataset_converters* directory by executing  
