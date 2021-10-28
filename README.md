@@ -21,12 +21,17 @@ pip install -r requirements.txt
 pip install -e .
 make install
 make build
-make clean
 ```
 
 ### Usage
+Type following command for help
+```bash
+crconvert --help
+crconvert #dataset --help
+```
+
 A conversion can be started from the *dataset_converters* directory by executing  
-`python -m src.main dataset input_dir output_dir --num_time_steps_scenario #NUMTIMESTEPSSCENARIO 
+`crconvert dataset input_dir output_dir --num_time_steps_scenario #NUMTIMESTEPSSCENARIO 
 --num_planning_problems #NUMPLANNINGPROBLEMS --num_processes #NUMPROCESSES --keep_ego --obstacle_start_at_zero`.
 
 In the following the different parameters are explained:
@@ -51,7 +56,6 @@ This is an optional parameter. The default is *1*
 * **num_vertices**: (highD) Number of lane waypoints. (int).This is an optional parameter. The default is *10* lane waypoints.
 * **routability_check**: (inD) Validity check 'Routability' (int) of the scenario+planning problem from start to goal. 2: strict enforcement of at least one route 0: no checks, default is **2**, strict. requires **commonroad-route-planner** to be installed.
 
-A help message is printed by `crconvert $DATASET --help`.
 
 If you want to exit/logout from command line, but still want to continue the process execute   
 `nohup command-with-options &`.
