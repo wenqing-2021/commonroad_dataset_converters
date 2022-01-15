@@ -238,7 +238,9 @@ def create_highd_scenarios(input_dir: Path, output_dir: Path, num_time_steps_sce
                         obstacle_start_at_zero,
                         downsample,
                         num_vertices,
-                        lane_change
+                        lane_change,
+                        shoulder,
+                        keep_direction
                     )
                     for recording_meta_fn, tracks_meta_fn, tracks_fn
                     in zip(listing_recording, listing_metas, listing_tracks)
