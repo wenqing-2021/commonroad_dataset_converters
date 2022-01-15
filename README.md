@@ -54,6 +54,8 @@ This is an optional parameter. The default is *1*
 * **downsample**: (highD) Downsample the trajectories every N steps, works only for highD converter.
 * **downsample**: (highD) Decrease dt by n * dt. (int) This is an optional flag, default is *1* (no downsampling). 
 * **num_vertices**: (highD) Number of lane waypoints. (int).This is an optional parameter. The default is *10* lane waypoints.
+* **shoulder**: (highD) Adds shoulder lane to map. (bool).This is an optional parameter. The default is *False*.
+* **keep_direction**: (highD) Prevents rotating the upper driving direction (right to left) by PI. (bool). This is an optional parameter. The default is *False* so that scenario direction corresponds for all scenarios.
 * **routability_check**: (inD) Validity check 'Routability' (int) of the scenario+planning problem from start to goal. 2: strict enforcement of at least one route 0: no checks, default is **2**, strict. requires **commonroad-route-planner** to be installed.
 
 

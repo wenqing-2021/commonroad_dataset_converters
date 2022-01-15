@@ -64,6 +64,14 @@ def highD(
             10,
             help="Number of straight lane waypoints"
         ),
+        shoulder: bool = typer.Option(
+            False,
+            help="Adds shoulder lane to map"
+        ),
+        keep_direction: bool = typer.Option(
+            False,
+            help="Prevents rotating the upper driving direction (right to left) by PI"
+        ),
         lane_change: bool = typer.Option(
             False,
             help="Whether only use lane changing vehicles as planning problem"
@@ -80,7 +88,10 @@ def highD(
         obstacle_start_at_zero,
         num_processes,
         downsample,
-        num_vertices
+        num_vertices,
+        shoulder,
+        keep_direction,
+        lane_change
     )
     elapsed_time = time.time() - start_time
     print(f"Elapsed time: {elapsed_time} s")
