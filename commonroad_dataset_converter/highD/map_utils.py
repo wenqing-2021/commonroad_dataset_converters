@@ -6,28 +6,7 @@ from enum import Enum
 from commonroad.scenario.scenario import Scenario, ScenarioID
 from commonroad.scenario.lanelet import Lanelet, LaneletType, RoadUser, LineMarking
 from commonroad.scenario.traffic_sign import TrafficSignIDGermany, TrafficSignElement, TrafficSign
-
-def resample_polyline(polyline, step=2.0):
-    new_polyline = [polyline[0]]
-    current_position = 0 + step
-    current_length = np.linalg.norm(polyline[0] - polyline[1])
-    current_idx = 0
-    while current_idx < len(polyline) - 1:
-        if current_position >= current_length:
-            current_position = current_position - current_length
-            current_idx += 1
-            if current_idx > len(polyline) - 2:
-                break
-            current_length = np.linalg.norm(
-                polyline[current_idx + 1] - polyline[current_idx]
-            )
-        else:
-            rel = current_position / current_length
-            new_polyline.append(
-                (1 - rel) * polyline[current_idx] + rel * polyline[current_idx + 1]
-            )
-            current_position += step
-    return np.array(new_polyline)
+from commonroad.geometry.polyline_util import resample_polyline_with_distance
 
 
 class Direction(Enum):
@@ -43,8 +22,8 @@ def get_lane_markings(recording_df: DataFrame, extend_width=0.):
     Extracts upper and lower lane markings from data frame;
 
     :param recording_df: data frame of the recording meta information
-    :param extend_width: extend width of the outter lanes, 
-                         set to a positiv value when some vehicles are 
+    :param extend_width: extend width of the outer lanes,
+                         set to a positive value when some vehicles are
                          off-road at the first time step.
     :return: speed limit
     """
@@ -88,7 +67,8 @@ def get_speed_limit(recording_df: DataFrame) -> Union[float, None]:
 
 
 def get_meta_scenario(dt: float, benchmark_id: str, lane_markings: List[float], speed_limit: float,
-                      road_length: int, direction: Direction, road_offset: int, num_vertices: int = 10):
+                      road_length: int, direction: Direction, road_offset: int, shoulder: bool, shoulder_width: float,
+                      num_vertices: int = 10):
     """
     Generates meta CommonRoad scenario containing only lanelet network
 
@@ -99,26 +79,62 @@ def get_meta_scenario(dt: float, benchmark_id: str, lane_markings: List[float], 
     :param road_length: length of road
     :param direction: indicator for upper or lower interstate road
     :param road_offset: length added on both sides of road
+    :param shoulder: indicates whether shoulder lane should be added to scenario
+    :param shoulder_width: width of shoulder lane
+    :param num_vertices: number of waypoints of lanes
     :return: CommonRoad scenario
     """
     scenario = Scenario(dt, ScenarioID.from_benchmark_id(benchmark_id, "2020a"))
     resample_step = (road_offset + 2 * road_offset) / num_vertices
+    lanelet_id = 0
     if direction is Direction.UPPER:
+        if shoulder:
+            lane_y = lane_markings[0] + shoulder_width
+            next_lane_y = lane_markings[0]
+
+            right_vertices = resample_polyline_with_distance(
+                np.array([[road_length + road_offset, lane_y], [-road_offset, lane_y]]), distance=resample_step
+            )
+            left_vertices = resample_polyline_with_distance(
+                np.array([[road_length + road_offset, next_lane_y], [-road_offset, next_lane_y]]),
+                distance=resample_step
+            )
+            center_vertices = (left_vertices + right_vertices) / 2.0
+
+            # assign lanelet ID and adjacent IDs and lanelet types
+            lanelet_id = lanelet_id + 1
+            lanelet_type = {LaneletType.INTERSTATE, LaneletType.SHOULDER}
+            adjacent_left = lanelet_id + 1
+            adjacent_right = None
+            adjacent_left_same_direction = True
+            adjacent_right_same_direction = False
+            line_marking_left_vertices = LineMarking.SOLID
+            line_marking_right_vertices = LineMarking.SOLID
+
+            # add lanelet to scenario
+            scenario.add_objects(
+                Lanelet(lanelet_id=lanelet_id, left_vertices=left_vertices,  right_vertices=right_vertices,
+                        center_vertices=center_vertices, adjacent_left=adjacent_left,
+                        adjacent_left_same_direction=adjacent_left_same_direction, adjacent_right=adjacent_right,
+                        adjacent_right_same_direction=adjacent_right_same_direction, user_one_way={RoadUser.VEHICLE},
+                        line_marking_left_vertices=line_marking_left_vertices,
+                        line_marking_right_vertices=line_marking_right_vertices, lanelet_type=lanelet_type))
         for i in range(len(lane_markings) - 1):
             # get two lines of current lane
             lane_y = lane_markings[i]
             next_lane_y = lane_markings[i + 1]
 
-            right_vertices = resample_polyline(
-                np.array([[road_length + road_offset, lane_y], [-road_offset, lane_y]]), step= resample_step
+            right_vertices = resample_polyline_with_distance(
+                np.array([[road_length + road_offset, lane_y], [-road_offset, lane_y]]), distance=resample_step
             )
-            left_vertices = resample_polyline(
-                np.array([[road_length + road_offset, next_lane_y], [-road_offset, next_lane_y]]), step=resample_step
+            left_vertices = resample_polyline_with_distance(
+                np.array([[road_length + road_offset, next_lane_y], [-road_offset, next_lane_y]]),
+                distance=resample_step
             )
             center_vertices = (left_vertices + right_vertices) / 2.0
 
-             # assign lanelet ID and adjacent IDs and lanelet types
-            lanelet_id = i + 1
+            # assign lanelet ID and adjacent IDs and lanelet types
+            lanelet_id = lanelet_id + 1
             lanelet_type = {LaneletType.INTERSTATE, LaneletType.MAIN_CARRIAGE_WAY}
             adjacent_left = lanelet_id + 1
             adjacent_right = lanelet_id - 1
@@ -132,8 +148,9 @@ def get_meta_scenario(dt: float, benchmark_id: str, lane_markings: List[float], 
                 adjacent_left_same_direction = False
                 line_marking_left_vertices = LineMarking.SOLID
             elif i == 0:
-                adjacent_right = None
-                adjacent_right_same_direction = False
+                if not shoulder:
+                    adjacent_right = None
+                    adjacent_right_same_direction = False
                 line_marking_right_vertices = LineMarking.SOLID
 
             # add lanelet to scenario
@@ -153,16 +170,17 @@ def get_meta_scenario(dt: float, benchmark_id: str, lane_markings: List[float], 
 
             # get vertices of three lines
             # setting length 450 and -50 can cover all vehicle in this range
-            left_vertices = resample_polyline(
-                np.array([[-road_offset, lane_y], [road_length + road_offset, lane_y]]), step=resample_step
+            left_vertices = resample_polyline_with_distance(
+                np.array([[-road_offset, lane_y], [road_length + road_offset, lane_y]]), distance=resample_step
             )
-            right_vertices = resample_polyline(
-                np.array([[-road_offset, next_lane_y], [road_length + road_offset, next_lane_y]]), step=resample_step
+            right_vertices = resample_polyline_with_distance(
+                np.array([[-road_offset, next_lane_y], [road_length + road_offset, next_lane_y]]),
+                distance=resample_step
             )
             center_vertices = (left_vertices + right_vertices) / 2.0
 
             # assign lane ids and adjacent ids
-            lanelet_id = i + 1
+            lanelet_id = lanelet_id + 1
             lanelet_type = {LaneletType.INTERSTATE, LaneletType.MAIN_CARRIAGE_WAY}
             adjacent_left = lanelet_id - 1
             adjacent_right = lanelet_id + 1
@@ -176,8 +194,9 @@ def get_meta_scenario(dt: float, benchmark_id: str, lane_markings: List[float], 
                 adjacent_left_same_direction = False
                 line_marking_left_vertices = LineMarking.SOLID
             elif i == len(lane_markings) - 2:
-                adjacent_right = None
-                adjacent_right_same_direction = False
+                if not shoulder:
+                    adjacent_right = None
+                    adjacent_right_same_direction = False
                 line_marking_right_vertices = LineMarking.SOLID
 
             # add lanelet to scenario
@@ -188,7 +207,39 @@ def get_meta_scenario(dt: float, benchmark_id: str, lane_markings: List[float], 
                         adjacent_right_same_direction=adjacent_right_same_direction, user_one_way={RoadUser.VEHICLE},
                         line_marking_left_vertices=line_marking_left_vertices,
                         line_marking_right_vertices=line_marking_right_vertices, lanelet_type=lanelet_type))
+        if shoulder:
+            # get two lines of current lane
+            next_lane_y = lane_markings[-1] - shoulder_width
+            lane_y = lane_markings[-1]
 
+            # get vertices of three lines
+            # setting length 450 and -50 can cover all vehicle in this range
+            left_vertices = resample_polyline_with_distance(
+                np.array([[-road_offset, lane_y], [road_length + road_offset, lane_y]]), distance=resample_step
+            )
+            right_vertices = resample_polyline_with_distance(
+                np.array([[-road_offset, next_lane_y], [road_length + road_offset, next_lane_y]]),
+                distance=resample_step)
+            center_vertices = (left_vertices + right_vertices) / 2.0
+
+            # assign lane ids and adjacent ids
+            lanelet_id = lanelet_id + 1
+            lanelet_type = {LaneletType.INTERSTATE, LaneletType.SHOULDER}
+            adjacent_left = lanelet_id - 1
+            adjacent_right = None
+            adjacent_left_same_direction = False
+            adjacent_right_same_direction = True
+            line_marking_left_vertices = LineMarking.SOLID
+            line_marking_right_vertices = LineMarking.SOLID
+
+            # add lanelet to scenario
+            scenario.add_objects(
+                Lanelet(lanelet_id=lanelet_id, left_vertices=left_vertices, right_vertices=right_vertices,
+                        center_vertices=center_vertices, adjacent_left=adjacent_left,
+                        adjacent_left_same_direction=adjacent_left_same_direction, adjacent_right=adjacent_right,
+                        adjacent_right_same_direction=adjacent_right_same_direction, user_one_way={RoadUser.VEHICLE},
+                        line_marking_left_vertices=line_marking_left_vertices,
+                        line_marking_right_vertices=line_marking_right_vertices, lanelet_type=lanelet_type))
     # store speed limit for traffic sign generation
     if speed_limit is not None:
         traffic_sign_element = TrafficSignElement(TrafficSignIDGermany.MAX_SPEED, [str(speed_limit)])
