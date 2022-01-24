@@ -6,6 +6,7 @@ stages:
 - build
 
 before_script:
+  - apt-get install make
   - conda create -n cr37 python=3.7
   - source activate cr37
   - pip install -r requirements.txt
