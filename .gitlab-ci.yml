@@ -5,10 +5,9 @@ stages:
 - test
 - build
 
-before_install:
-  - sudo apt-get -y install build-essential
-
 before_script:
+  - apt-get update -y > /dev/null
+  - apt-get install -y --no-install-recommends apt-utils dialog build-essential > /dev/null
   - conda create -n cr37 python=3.7
   - source activate cr37
   - pip install -r requirements.txt
