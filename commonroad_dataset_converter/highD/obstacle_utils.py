@@ -36,15 +36,15 @@ def get_orientation(track_df: DataFrame) -> np.array:
     return np.arctan2(-track_df.yVelocity, track_df.xVelocity)
 
 
-def get_acceleration(track_df: DataFrame) -> np.array:
+def get_acceleration(track_df: DataFrame, orientation: np.array) -> np.array:
     """
     Calculates acceleration given x-acceleration and y-acceleration
 
     :param track_df: track data frame of a vehicle
     :return: array of accelerations for vehicle
     """
-    return = np.cos(orientation) * df.xAcceleration + np.sin(orientation) * (
-        -df.yAcceleration
+    return np.cos(orientation) * track_df.xAcceleration + np.sin(orientation) * (
+        -track_df.yAcceleration
     )
 
 
@@ -76,7 +76,7 @@ def generate_dynamic_obstacle(scenario: Scenario, vehicle_id: int, tracks_meta_d
     ys = np.array(-(vehicle_tracks.y + width / 2))
     velocities = get_velocity(vehicle_tracks)
     orientations = get_orientation(vehicle_tracks)
-    accelerations = get_acceleration(vehicle_tracks)
+    accelerations = get_acceleration(vehicle_tracks, orientations)
 
     state_list = []
     for cr_timestep, frame_idx in enumerate(range(0, xs.shape[0], downsample)):
