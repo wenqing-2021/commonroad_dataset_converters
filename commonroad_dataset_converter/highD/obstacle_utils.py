@@ -43,7 +43,9 @@ def get_acceleration(track_df: DataFrame) -> np.array:
     :param track_df: track data frame of a vehicle
     :return: array of accelerations for vehicle
     """
-    return np.sqrt(track_df.xAcceleration ** 2 + track_df.yAcceleration ** 2)
+    return = np.cos(orientation) * df.xAcceleration + np.sin(orientation) * (
+        -df.yAcceleration
+    )
 
 
 def generate_dynamic_obstacle(scenario: Scenario, vehicle_id: int, tracks_meta_df: DataFrame,
