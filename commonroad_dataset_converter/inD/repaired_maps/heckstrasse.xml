@@ -1192,7 +1192,6 @@
       <lineMarking>unknown</lineMarking>
     </rightBound>
     <predecessor ref="142"/>
-    <predecessor ref="149"/>
     <successor ref="116"/>
     <successor ref="150"/>
     <laneletType>urban</laneletType>
@@ -1776,76 +1775,6 @@
     </rightBound>
     <predecessor ref="135"/>
     <successor ref="112"/>
-    <laneletType>urban</laneletType>
-    <userOneWay>bicycle</userOneWay>
-    <userOneWay>motorcycle</userOneWay>
-    <userOneWay>car</userOneWay>
-    <userBidirectional>priorityVehicle</userBidirectional>
-  </lanelet>
-  <lanelet id="149">
-    <leftBound>
-      <point>
-        <x>60.324700</x>
-        <y>-50.958700</y>
-      </point>
-      <point>
-        <x>60.114700</x>
-        <y>-47.458700</y>
-      </point>
-      <point>
-        <x>60.534700</x>
-        <y>-42.758700</y>
-      </point>
-      <point>
-        <x>60.964700</x>
-        <y>-42.458700</y>
-      </point>
-      <point>
-        <x>61.344700</x>
-        <y>-41.258700</y>
-      </point>
-      <point>
-        <x>61.254700</x>
-        <y>-40.458700</y>
-      </point>
-      <point>
-        <x>60.554700</x>
-        <y>-39.458700</y>
-      </point>
-      <lineMarking>unknown</lineMarking>
-    </leftBound>
-    <rightBound>
-      <point>
-        <x>64.814700</x>
-        <y>-51.758700</y>
-      </point>
-      <point>
-        <x>64.964700</x>
-        <y>-49.858700</y>
-      </point>
-      <point>
-        <x>66.414700</x>
-        <y>-47.358700</y>
-      </point>
-      <point>
-        <x>67.774700</x>
-        <y>-45.558700</y>
-      </point>
-      <point>
-        <x>67.964700</x>
-        <y>-43.358700</y>
-      </point>
-      <point>
-        <x>65.444700</x>
-        <y>-39.958700</y>
-      </point>
-      <point>
-        <x>62.264700</x>
-        <y>-37.258700</y>
-      </point>
-      <lineMarking>unknown</lineMarking>
-    </rightBound>
-    <successor ref="117"/>
     <laneletType>urban</laneletType>
     <userOneWay>bicycle</userOneWay>
     <userOneWay>motorcycle</userOneWay>
