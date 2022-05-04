@@ -2093,6 +2093,36 @@
     <userOneWay>car</userOneWay>
     <userBidirectional>priorityVehicle</userBidirectional>
   </lanelet>
+  <intersection id="1000">
+    <incoming id="1001">
+      <incomingLanelet ref="106"/>
+      <outgoingRight ref="110"/>
+      <outgoignStraight ref="108"/>
+      <outgoingLeft ref="109"/>
+      <isLeftOf ref="1002"/>
+    </incoming>
+    <incoming id="1002">
+      <incomingLanelet ref="119"/>
+      <outgoingRight ref="122"/>
+      <outgoignStraight ref="118"/>
+      <outgoingLeft ref="146"/>
+      <isLeftOf ref="1003"/>
+    </incoming>
+    <incoming id="1003">
+      <incomingLanelet ref="115"/>
+      <outgoingRight ref="125"/>
+      <outgoignStraight ref="114"/>
+      <outgoingLeft ref="126"/>
+      <isLeftOf ref="1004"/>
+    </incoming>
+    <incoming id="1004">
+      <incomingLanelet ref="113"/>
+      <outgoingRight ref="112"/>
+      <outgoignStraight ref="120"/>
+      <outgoingLeft ref="121"/>
+      <isLeftOf ref="1001"/>
+    </incoming>
+  </intersection>
   <trafficSign id="151">
     <trafficSignElement>
       <trafficSignID>301</trafficSignID>
