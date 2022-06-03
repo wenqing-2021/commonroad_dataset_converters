@@ -1,102 +1,203 @@
 import os
 import time
-import argparse
-import warnings
+import typer
+from enum import Enum
+from pathlib import Path
+from commonroad_dataset_converter.highD.highd_to_cr import create_highd_scenarios
+from commonroad_dataset_converter.inD.ind_to_cr import create_ind_scenarios
+from commonroad_dataset_converter.INTERACTION.interaction_to_cr import create_interaction_scenarios
 
-from src.highD.highd_to_cr import create_highd_scenarios
-from src.inD.ind_to_cr import create_ind_scenarios
-from src.INTERACTION.interaction_to_cr import create_interaction_scenarios
-from src.rounD.round_to_cr import create_round_scenarios
-from src.exiD.exiD_to_cr import create_exiD_scenarios
-
-
-def get_args() -> argparse.Namespace:
-    """
-    Specifies and reads command line arguments
-
-    :return: command line arguments
-    """
-    parser = argparse.ArgumentParser(description="Generates CommonRoad scenarios different datasets",
-                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('dataset', type=str, choices=["inD", "highD", "INTERACTION", "rounD", "exiD"], help='Specification of dataset')
-    parser.add_argument('input_dir', type=str, help='Path to dataset files')
-    parser.add_argument('output_dir', type=str, help='Directory to store generated CommonRoad files')
-    parser.add_argument('--num_time_steps_scenario', type=int, default=150,
-                        help='Maximum number of time steps the CommonRoad scenario can be long, default=150')
-    parser.add_argument('--num_planning_problems', type=int, default=1,
-                        help='Number of planning problems per CommonRoad scenario, default=1')
-    parser.add_argument('--keep_ego', default=False, action='store_true',
-                        help='Indicator if vehicles used for planning problem should be kept in scenario, '
-                             'default=False')
-    parser.add_argument('--obstacle_start_at_zero', default=False, action='store_true',
-                        help='Indicator if the initial state of an obstacle has to start at time step zero, '
-                             'default=False')
-    parser.add_argument('--num_processes', type=int, default=1,
-                        help='Number of multiple processes to convert dataset, '
-                             'default=1')
-    parser.add_argument('--inD_all', default=False, action='store_true',
-                        help='(Only inD) Convert one CommonRoad scenario for each valid vehicle from inD dataset,'
-                             ' since it has less recordings available, note that if enabled, num_time_steps_scenario'
-                             ' becomes the minimal number of time steps of one CommonRoad scenario')
-    parser.add_argument('--downsample', type=int, default=1, help='Decrease dt by n*dt, works only for highD converter')
-    parser.add_argument('--num_vertices', type=int, default=10,
-                        help='Number of lane waypoints, works only for highD converter')
-
-    return parser
+cli = typer.Typer(
+    help="Generates CommonRoad scenarios from different datasets"
+)
 
 
-def main(args):
+class RoutabilityCheck(str, Enum):
+    Nocheck = "nocheck"
+    Normal = "normal"
+    Strict = "strict"
+
+    def as_int(self) -> int:
+        if self == self.Nocheck:
+            return 0
+        if self == self.Normal:
+            return 1
+        return 2
+
+
+@cli.command()
+def highD(
+        input_dir: Path = typer.Argument(
+            ...,
+            help="Path to highD-dataset's data folder"
+        ),
+        output_dir: Path = typer.Argument(
+            ...,
+            help="Directory to store generated CommonRoad files"
+        ),
+        num_time_steps: int = typer.Option(
+            150,
+            help="Maximum number of time steps the CommonRoad scenario can be long"
+        ),
+        num_planning_problems: int = typer.Option(
+            1,
+            help="Number of planning problems per CommonRoad scenario"
+        ),
+        keep_ego: bool = typer.Option(
+            False,
+            help="Indicator if vehicles used for planning problem should be kept in scenario"
+        ),
+        obstacle_start_at_zero: bool = typer.Option(
+            False,
+            help="Indicator if the initial state of an obstacle has to start at time step zero"
+        ),
+        downsample: int = typer.Option(
+            1,
+            help="Decrease dt by n*dt"
+
+        ),
+        num_processes: int = typer.Option(
+            1,
+            help="Number of multiple processes to convert dataset"
+        ),
+        num_vertices: int = typer.Option(
+            10,
+            help="Number of straight lane waypoints"
+        ),
+        shoulder: bool = typer.Option(
+            False,
+            help="Adds shoulder lane to map"
+        ),
+        keep_direction: bool = typer.Option(
+            False,
+            help="Prevents rotating the upper driving direction (right to left) by PI"
+        ),
+        lane_change: bool = typer.Option(
+            False,
+            help="Whether only use lane changing vehicles as planning problem"
+        ),
+):
+    os.makedirs(output_dir, exist_ok=True)
     start_time = time.time()
+    create_highd_scenarios(
+        input_dir,
+        output_dir,
+        num_time_steps,
+        num_planning_problems,
+        keep_ego,
+        obstacle_start_at_zero,
+        num_processes,
+        downsample,
+        num_vertices,
+        shoulder,
+        keep_direction,
+        lane_change
+    )
+    elapsed_time = time.time() - start_time
+    print(f"Elapsed time: {elapsed_time} s")
 
-    # make output dir
-    os.makedirs(args.output_dir, exist_ok=True)
 
-    # check parameters for specific converters
-    if args.dataset != "higD" and (args.downsample != 1 or args.num_vertices != 10):
-        warnings.warn("Downsample and num_vertices are only available for highD converter! Ignored")
-    if args.dataset != "inD" and args.inD_all:
-        warnings.warn("inD_all are only available for inD converter! Ignored")
+@cli.command()
+def inD(
+        input_dir: Path = typer.Argument(
+            ...,
+            help="Path to inD-dataset's data folder"
+        ),
+        output_dir: Path = typer.Argument(
+            ...,
+            help="Directory to store generated CommonRoad files"
+        ),
+        num_time_steps: int = typer.Option(
+            150,
+            help="Maximum number of time steps the CommonRoad scenario can be long"
+        ),
+        num_planning_problems: int = typer.Option(
+            1,
+            help="Number of planning problems per CommonRoad scenario"
+        ),
+        keep_ego: bool = typer.Option(
+            False,
+            help="Indicator if vehicles used for planning problem should be kept in scenario"
+        ),
+        obstacle_start_at_zero: bool = typer.Option(
+            False,
+            help="Indicator if the initial state of an obstacle has to start at time step zero"
+        ),
+        num_processes: int = typer.Option(
+            1,
+            help="Number of multiple processes to convert dataset"
+        ),
+        all_vehicles: bool = typer.Option(
+            False,
+            help="Convert one CommonRoad scenario for each valid vehicle from inD dataset, since it has less recordings available. Note that if enabled, num_time_steps_scenario becomes the minimal number of time steps of one CommonRoad scenario"
+        ),
+        routability_check: RoutabilityCheck = typer.Option(
+            RoutabilityCheck.Nocheck,
+            help='Check routability of planning_problem'
+        )
+):
+    os.makedirs(output_dir, exist_ok=True)
+    start_time = time.time()
+    create_ind_scenarios(
+        input_dir,
+        output_dir,
+        num_time_steps,
+        num_planning_problems,
+        keep_ego,
+        obstacle_start_at_zero,
+        num_processes=num_processes,
+        inD_all=all_vehicles,
+        routability_planning_problem=routability_check.as_int()
+    )
+    elapsed_time = time.time() - start_time
+    print(f"Elapsed time: {elapsed_time} s", end="\r")
 
-    if args.dataset == "highD":
-        create_highd_scenarios(args.input_dir, args.output_dir, args.num_time_steps_scenario,
-                               args.num_planning_problems, args.keep_ego, args.obstacle_start_at_zero,
-                               args.num_processes, args.downsample, args.num_vertices)
-    elif args.dataset == "inD":
-        if args.downsample != 1:
-            warnings.warn('Downsampling only implemented for highD. Using original temporal resolution!')
-        create_ind_scenarios(args.input_dir, args.output_dir, args.num_time_steps_scenario,
-                             args.num_planning_problems, args.keep_ego, args.obstacle_start_at_zero,
-                             num_processes=args.num_processes, inD_all=args.inD_all)
-    elif args.dataset == "INTERACTION":
-        if args.downsample != 1:
-            warnings.warn('Downsampling only implemented for highD. Using original temporal resolution!')
-        create_interaction_scenarios(args.input_dir, args.output_dir,
-                                     obstacle_start_at_zero=args.obstacle_start_at_zero,
-                                     num_planning_problems=args.num_planning_problems, keep_ego=args.keep_ego,
-                                     num_time_steps_scenario=args.num_time_steps_scenario,
-                                     num_processes=args.num_processes)
 
-    elif args.dataset == "rounD":
-        if args.downsample != 1:
-            warnings.warn('Downsampling only implemented for highD. Using original temporal resolution!')
-        create_round_scenarios(args.input_dir, args.output_dir, args.num_time_steps_scenario,
-                             args.num_planning_problems, args.keep_ego, args.obstacle_start_at_zero,
-                             num_processes=args.num_processes)
-
-    elif args.dataset == "exiD":
-        if args.downsample != 1:
-            warnings.warn('Downsampling only implemented for highD. Using original temporal resolution!')
-        create_exiD_scenarios(args.input_dir, args.output_dir, args.num_time_steps_scenario,
-                             args.num_planning_problems, args.keep_ego, args.obstacle_start_at_zero,
-                             num_processes=args.num_processes)
-
-    else:
-        print("Unknown dataset in command line parameter!")
-
-    print("Elapsed time: {} s".format(time.time() - start_time), end="\r")
+@cli.command()
+def interaction(
+        input_dir: Path = typer.Argument(
+            ...,
+            help="Path to INTERACTION dataset files"
+        ),
+        output_dir: Path = typer.Argument(
+            ...,
+            help="Directory to store generated CommonRoad files"
+        ),
+        num_time_steps: int = typer.Option(
+            150,
+            help="Maximum number of time steps the CommonRoad scenario can be long"
+        ),
+        num_planning_problems: int = typer.Option(
+            1,
+            help="Number of planning problems per CommonRoad scenario"
+        ),
+        keep_ego: bool = typer.Option(
+            False,
+            help="Indicator if vehicles used for planning problem should be kept in scenario"
+        ),
+        obstacle_start_at_zero: bool = typer.Option(
+            False,
+            help="Indicator if the initial state of an obstacle has to start at time step zero"
+        ),
+        num_processes: int = typer.Option(
+            1,
+            help="Number of multiple processes to convert dataset"
+        ),
+):
+    os.makedirs(output_dir, exist_ok=True)
+    start_time = time.time()
+    create_interaction_scenarios(
+        input_dir,
+        output_dir,
+        obstacle_start_at_zero=obstacle_start_at_zero,
+        num_planning_problems=num_planning_problems,
+        keep_ego=keep_ego,
+        num_time_steps_scenario=num_time_steps,
+        num_processes=num_processes
+    )
+    elapsed_time = time.time() - start_time
+    print(f"Elapsed time: {elapsed_time} s", end="\r")
 
 
 if __name__ == "__main__":
-    # get arguments
-    args = get_args().parse_args()
-    main(args)
+    cli()
