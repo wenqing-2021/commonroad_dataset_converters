@@ -12,7 +12,8 @@ from PIL import Image
 from IPython import display
 
 from commonroad.common.file_reader import CommonRoadFileReader
-from commonroad.visualization.draw_dispatch_cr import draw_object
+from commonroad.visualization.mp_renderer import MPRenderer
+# from commonroad.visualization.draw_dispatch_cr import draw_object
 
 
 if __name__ == "__main__":
@@ -39,6 +40,7 @@ if __name__ == "__main__":
     cnt_processed = 0
     for _ in range(num_gifs):
         # get random idx
+        
         idx_rnd = random.randint(1, num_scenarios) - 1
         path_scenrio = path_scenarios[idx_rnd]
         name_scenrio = path_scenrio.split('/')[-1].split('.')[0]
@@ -66,9 +68,12 @@ if __name__ == "__main__":
         # draw the scenario for each time step and save
         for i in range(0, steps_plot):
             plt.clf()
-            draw_object(scenario, plot_limits = [x_min - margin, x_max + margin, y_min - margin, y_max + margin],
-                        draw_params={'time_begin': i})
-            draw_object(planning_problem_set)
+            rnd= MPRenderer()
+            scenario.draw(rnd, draw_params={'time_begin': i})
+            planning_problem_set.draw(rnd)
+            # draw_object(scenario, plot_limits = [x_min - margin, x_max + margin, y_min - margin, y_max + margin],
+            #             draw_params={'time_begin': i})
+            # draw_object(planning_problem_set)
             plt.gca().set_aspect('equal')
 
             path_save = os.path.join(directory_scenario, name_scenrio + f"_{i}.png")
