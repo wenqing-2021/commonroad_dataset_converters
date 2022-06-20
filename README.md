@@ -32,7 +32,7 @@ crconvert #dataset --help
 
 A conversion can be started from the *dataset_converters* directory by executing  
 `crconvert dataset input_dir output_dir --num-time-steps #NUMTIMESTEPSSCENARIO 
---num-planning-problems #NUMPLANNINGPROBLEMS --num_processes #NUMPROCESSES --keep-ego --obstacle-start-at-zero`.
+--num-planning-problems #NUMPLANNINGPROBLEMS --num-processes #NUMPROCESSES --keep-ego --obstacle-start-at-zero`.
 
 In the following the different parameters are explained:
 * **dataset**: The dataset which should be convertered. Currently, parameters *highd*, *ind*, or *INTERACTION* are supported. 
