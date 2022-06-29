@@ -132,9 +132,9 @@ def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_
     for _ in range(num_planning_problems):
         for i in range(len(scenario.dynamic_obstacles)):
 
-            # If num_planning_problems is greater than 1, ensure that an actual new planning_problem is potentially
+            # If num_planning_problems is greater than 1, ensure that an actual new planning_problem is
             # added by skipping all already used (and checked) dynamic obstacles
-            if duplicate_prevent_counter != -1 and i <= duplicate_prevent_counter:
+            if i <= duplicate_prevent_counter:
                 continue
             planning_problem = generate_inD_planning_problem(scenario, keep_ego=keep_ego, count=i)
             if routability_planning_problem:
