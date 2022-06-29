@@ -20,14 +20,16 @@ import multiprocessing
 import pandas as pd
 from typing import Dict, Union, Type
 
+from commonroad.scenario.obstacle import ObstacleType
 from commonroad.scenario.scenario import Scenario
-from commonroad.planning.planning_problem import PlanningProblemSet
+from commonroad.planning.planning_problem import PlanningProblemSet, PlanningProblem
 from commonroad.common.file_writer import CommonRoadFileWriter, Tag, OverwriteExistingFile
 
 from commonroad_dataset_converter.helper import load_yaml
 from commonroad_dataset_converter.inD.map_utils import load_lanelet_networks, meta_scenario_from_recording
 from commonroad_dataset_converter.inD.obstacle_utils import generate_obstacle
-from commonroad_dataset_converter.planning_problem_utils import generate_planning_problem, NoCarException, obstacle_to_planning_problem, \
+from commonroad_dataset_converter.planning_problem_utils import generate_planning_problem, NoCarException, \
+    obstacle_to_planning_problem, \
     check_routability_planning_problem, Routability
 
 LOGGER = logging.getLogger(__name__)
@@ -99,7 +101,7 @@ def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_
             planning_problem_set.add_planning_problem(planning_problem)
 
         else:
-            pass #skip this planning problem, it is not possible.
+            pass  # skip this planning problem, it is not possible.
 
         num_planning_problems -= 1
 
@@ -124,14 +126,25 @@ def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_
         scenario.add_objects(obstacle)
 
     # generate planning problems
+
+    duplicate_prevent_counter = -1
+
     for _ in range(num_planning_problems):
-        planning_problem = generate_planning_problem(scenario, keep_ego=keep_ego)
-        if routability_planning_problem:
-            if not check_routability_planning_problem(
-                    scenario, planning_problem, max_difficulity=routability_planning_problem
-            ):
-                continue  # skip this planning problem, it is not routeable.
-        planning_problem_set.add_planning_problem(planning_problem)
+        for i in range(len(scenario.dynamic_obstacles)):
+
+            # If num_planning_problems is greater than 1, ensure that an actual new planning_problem is potentially
+            # added by skipping all already used (and checked) dynamic obstacles
+            if duplicate_prevent_counter != -1 and i <= duplicate_prevent_counter:
+                continue
+            planning_problem = generate_inD_planning_problem(scenario, keep_ego=keep_ego, count=i)
+            if routability_planning_problem:
+                if not check_routability_planning_problem(
+                        scenario, planning_problem, max_difficulity=routability_planning_problem
+                ):
+                    continue  # skip this planning problem, it is not routeable.
+            planning_problem_set.add_planning_problem(planning_problem)
+            duplicate_prevent_counter = i
+            break
 
     # check that there is at least one planning problem
     if len(planning_problem_set.planning_problem_dict.keys()) == 0:
@@ -234,7 +247,7 @@ def generate_scenarios_for_record_vehicle(recording_meta_fn: str, tracks_meta_fn
     :param ind_config: dictionary with configuration parameters for inD scenario generation
     :param obstacle_start_at_zero: boolean indicating if the initial state of an obstacle has to start
     at time step zero
-    :param:  routability_planning_problem: type Routability, kind of routing check to perform on planning_problem
+    :param  routability_planning_problem: type Routability, kind of routing check to perform on planning_problem
     """
     recording_meta_df, tracks_meta_df, tracks_df, meta_scenario = load_data(recording_meta_fn, tracks_meta_fn,
                                                                             tracks_fn, ind_config)
@@ -257,13 +270,15 @@ def generate_scenarios_for_record_vehicle(recording_meta_fn: str, tracks_meta_fn
             try:
                 generate_single_scenario(
                     ind_config=ind_config, num_planning_problems=num_planning_problems, keep_ego=keep_ego,
-                    output_dir=output_dir, tracks_df=tracks_df, tracks_meta_df=tracks_meta_df, meta_scenario=meta_scenario,
+                    output_dir=output_dir, tracks_df=tracks_df, tracks_meta_df=tracks_meta_df,
+                    meta_scenario=meta_scenario,
                     benchmark_id=benchmark_id, frame_start=frame_start, frame_end=frame_end,
                     obstacle_start_at_zero=obstacle_start_at_zero, ego_vehicle_id=ego_vehicle_id,
                     routability_planning_problem=routability_planning_problem
                 )
             except IndexError as e:
                 print(f"Cannot find lanelet by position: {repr(e)}. Skipping this scenario.")
+
 
 def create_ind_scenarios(input_dir: str, output_dir: str, num_time_steps_scenario: int,
                          num_planning_problems: int, keep_ego: bool, obstacle_start_at_zero: bool,
@@ -330,3 +345,60 @@ def create_ind_scenarios(input_dir: str, output_dir: str, num_time_steps_scenari
                     zip(listing_recording, listing_metas, listing_tracks)
                 ]
             )
+
+
+def generate_inD_planning_problem(scenario: Scenario, orientation_half_range: float = 0.2,
+                                  velocity_half_range: float = 10.,
+                                  time_step_half_range: int = 25, keep_ego: bool = False,
+                                  lane_change: bool = False, count: int = 0) -> PlanningProblem:
+    """
+    Generates planning problem for scenario by taking obstacle trajectory
+    :param scenario: CommonRoad scenario
+    :param orientation_half_range: parameter for goal state orientation
+    :param velocity_half_range: parameter for goal state velocity
+    :param time_step_half_range: parameter for goal state time step
+    :param keep_ego: boolean indicating if vehicles selected for planning problem should be kept in scenario
+    :param count: indicator for which dynamic obstacle to use as ego vehicle
+    :return: CommonRoad planning problem
+    """
+
+    if len(scenario.dynamic_obstacles) == 0:
+        raise NoCarException("There is no car in dynamic obstacles which can be used as planning problem.")
+
+    max_time_step = max([obstacle.prediction.final_time_step for obstacle in scenario.dynamic_obstacles])
+    # only choose car type as ego vehicle
+    car_obstacles = [obstacle for obstacle in scenario.dynamic_obstacles if
+                     (obstacle.obstacle_type == ObstacleType.CAR
+                      and obstacle.initial_state.time_step == 0
+                      )]
+
+    if len(car_obstacles) > 0:
+        dynamic_obstacle_selected = scenario.dynamic_obstacles[count]
+    else:
+        raise NoCarException("There is no car in dynamic obstacles which can be used as planning problem.")
+
+    if not keep_ego:
+        planning_problem_id = dynamic_obstacle_selected.obstacle_id
+        scenario.remove_obstacle(dynamic_obstacle_selected)
+    else:
+        planning_problem_id = scenario.generate_object_id()
+
+    if len(scenario.dynamic_obstacles) > 0:
+        max_time_step = max(
+            [obs.prediction.trajectory.state_list[-1].time_step for obs in scenario.dynamic_obstacles])
+        final_time_step = min(
+            dynamic_obstacle_selected.prediction.trajectory.final_state.time_step + time_step_half_range,
+            max_time_step)
+    else:
+        final_time_step = dynamic_obstacle_selected.prediction.trajectory.final_state.time_step + time_step_half_range
+
+    planning_problem = obstacle_to_planning_problem(dynamic_obstacle_selected,
+                                                    planning_problem_id,
+                                                    final_time_step=final_time_step,
+                                                    orientation_half_range=orientation_half_range,
+                                                    velocity_half_range=velocity_half_range,
+                                                    time_step_half_range=time_step_half_range,
+                                                    lanelet_network=scenario.lanelet_network,
+                                                    highD=False)
+
+    return planning_problem
