@@ -409,8 +409,9 @@ def generate_ind_planning_problem(scenario: Scenario, orientation_half_range: fl
 def find_valid_ego(scenario, car_obstacles):
     random.seed(0)
 
+    num_cars = len(car_obstacles)
     # search for valid_ego_candidate
-    for _ in car_obstacles:
+    for _ in range(num_cars):
 
         # all candidates exhausted
         if len(car_obstacles) == 0:
