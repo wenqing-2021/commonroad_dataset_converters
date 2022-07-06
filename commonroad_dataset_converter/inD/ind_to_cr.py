@@ -137,7 +137,7 @@ def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_
             for _ in range(num_planning_problems):
 
                 # try every car_obstacle
-                for _ in range(len(scenario.car_obstacles)):
+                for _ in range(len(car_obstacles)):
 
                     try:
                         planning_problem = generate_ind_planning_problem(scenario, keep_ego=keep_ego,
