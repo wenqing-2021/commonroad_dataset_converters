@@ -22,7 +22,8 @@ from commonroad_dataset_converter.helper import load_yaml
 def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, tracks_fn: str,
                                   num_time_steps_scenario: int, num_planning_problems: int, keep_ego: bool,
                                   output_dir: Path, highd_config: Dict, obstacle_start_at_zero: bool, downsample: int,
-                                  num_vertices: int, lane_change: bool, shoulder: bool, keep_direction: bool = True):
+                                  num_vertices: int, lane_change: bool, shoulder: bool, keep_direction: bool,
+                                  extend_width: float):
     """
     Generate CommonRoad scenarios with given paths to highD for a high-D recording
 
@@ -40,6 +41,8 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
     :param lane_change: whether only using lane changing vehicles as planning problem
     :param shoulder: indicates whether shoulder lane should be added to scenario
     :param keep_direction: prevents rotating the upper driving direction (right to left) by PI
+    :param extend_width: extend width of the outer lanes, set to a positive value to avoid off-road vehicles are
+                         off-road at the initial time step.
     """
     # read data frames from the three files
     recording_meta_df = pd.read_csv(recording_meta_fn, header=0)
@@ -49,7 +52,7 @@ def generate_scenarios_for_record(recording_meta_fn: str, tracks_meta_fn: str, t
     # generate meta scenario with lanelet network
     dt = get_dt(recording_meta_df) * downsample
     speed_limit = get_speed_limit(recording_meta_df)
-    upper_lane_markings, lower_lane_markings = get_lane_markings(recording_meta_df)
+    upper_lane_markings, lower_lane_markings = get_lane_markings(recording_meta_df, extend_width=extend_width)
     meta_scenario_upper = get_meta_scenario(dt, "DEU_MetaScenarioUpper-0_0_T-1", upper_lane_markings, speed_limit,
                                             highd_config.get("road_length"), Direction.UPPER,
                                             highd_config.get("road_offset"), shoulder,
@@ -176,7 +179,7 @@ def generate_single_scenario(highd_config: Dict, num_planning_problems: int, kee
 def create_highd_scenarios(input_dir: Path, output_dir: Path, num_time_steps_scenario: int, num_planning_problems: int,
                            keep_ego: bool, obstacle_start_at_zero: bool, num_processes: int = 1, downsample: int = 1,
                            num_vertices: int = 10, shoulder: bool = False, keep_direction: bool = True,
-                           lane_change: bool = False):
+                           lane_change: bool = False, extend_width: float = 0.):
     """
     Iterates over all dataset files and generates CommonRoad scenarios
 
@@ -192,6 +195,8 @@ def create_highd_scenarios(input_dir: Path, output_dir: Path, num_time_steps_sce
     :param shoulder: indicates whether shoulder lane should be added to scenario
     :param keep_direction: prevents rotating the upper driving direction (right to left) by PI
     :param lane_change: whether only using lane changing vehicles as planning problem
+    :param extend_width: extend width of the outer lanes, set to a positive value to avoid off-road vehicles are
+                         off-road at the initial time step.
     """
     # assert
     assert os.path.exists(input_dir), f"<create_highd_scenarios> input directory <{input_dir}> do not exist!\n" \
@@ -220,7 +225,7 @@ def create_highd_scenarios(input_dir: Path, output_dir: Path, num_time_steps_sce
             generate_scenarios_for_record(recording_meta_fn, tracks_meta_fn, tracks_fn, num_time_steps_scenario,
                                           num_planning_problems, keep_ego, output_dir, highd_config,
                                           obstacle_start_at_zero, downsample, num_vertices, lane_change, shoulder,
-                                          keep_direction)
+                                          keep_direction, extend_width)
     else:
         with multiprocessing.Pool(processes=num_processes) as pool:
             pool.starmap(
@@ -240,7 +245,8 @@ def create_highd_scenarios(input_dir: Path, output_dir: Path, num_time_steps_sce
                         num_vertices,
                         lane_change,
                         shoulder,
-                        keep_direction
+                        keep_direction,
+                        extend_width
                     )
                     for recording_meta_fn, tracks_meta_fn, tracks_fn
                     in zip(listing_recording, listing_metas, listing_tracks)

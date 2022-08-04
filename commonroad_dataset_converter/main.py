@@ -76,7 +76,12 @@ def highD(
             False,
             help="Whether only use lane changing vehicles as planning problem"
         ),
+        extend_width: float = typer.Option(
+            0.,
+            help="Extend width of the outer lanes [m]"
+        )
 ):
+    assert extend_width >= 0.
     os.makedirs(output_dir, exist_ok=True)
     start_time = time.time()
     create_highd_scenarios(
@@ -91,7 +96,8 @@ def highD(
         num_vertices,
         shoulder,
         keep_direction,
-        lane_change
+        lane_change,
+        extend_width
     )
     elapsed_time = time.time() - start_time
     print(f"Elapsed time: {elapsed_time} s")
