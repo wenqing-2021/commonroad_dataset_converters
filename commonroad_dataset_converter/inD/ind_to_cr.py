@@ -1,9 +1,9 @@
-__author__ = "Niels Mündler, Xiao Wang"
+__author__ = "Haokun Zheng, Niels Mündler, Xiao Wang"
 __copyright__ = "TUM Cyber-Physical System Group"
 __credits__ = [""]
 __version__ = "1.0"
 __maintainer__ = "Xiao Wang"
-__email__ = "xiao.wang@tum.de"
+__email__ = "commonroad@lists.lrz.de"
 __status__ = "Released"
 
 __desc__ = """
@@ -18,16 +18,19 @@ import random
 import logging
 import multiprocessing
 import pandas as pd
+import numpy as np
 from typing import Dict, Union, Type
 
+from commonroad.scenario.obstacle import ObstacleType
 from commonroad.scenario.scenario import Scenario
-from commonroad.planning.planning_problem import PlanningProblemSet
+from commonroad.planning.planning_problem import PlanningProblemSet, PlanningProblem
 from commonroad.common.file_writer import CommonRoadFileWriter, Tag, OverwriteExistingFile
 
 from commonroad_dataset_converter.helper import load_yaml
 from commonroad_dataset_converter.inD.map_utils import load_lanelet_networks, meta_scenario_from_recording
 from commonroad_dataset_converter.inD.obstacle_utils import generate_obstacle
-from commonroad_dataset_converter.planning_problem_utils import generate_planning_problem, NoCarException, obstacle_to_planning_problem, \
+from commonroad_dataset_converter.planning_problem_utils import generate_planning_problem, NoCarException, \
+    obstacle_to_planning_problem, \
     check_routability_planning_problem, Routability
 
 LOGGER = logging.getLogger(__name__)
@@ -37,7 +40,7 @@ def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_
                              tracks_df: pd.DataFrame, tracks_meta_df: pd.DataFrame, meta_scenario: Scenario,
                              benchmark_id: str, frame_start: int, frame_end: int,
                              obstacle_start_at_zero: bool, ego_vehicle_id: int = None,
-                             routability_planning_problem: Type[Routability] = Routability.ANY):
+                             routability_planning_problem: Routability = Routability.ANY):
     """
     Generate a single CommonRoad scenario based on inD record snippet
     :param ind_config: dictionary with configuration parameters for highD scenario generation
@@ -52,7 +55,8 @@ def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_
     :param frame_end: end of frame in time steps of record
     :param obstacle_start_at_zero: boolean indicating if the initial state of an obstacle has to start
     at time step zero
-    :param ego_vehicle_id: None if random select ego vehicle from all converted cars
+    :param ego_vehicle_id: If none, randomly select ego vehicle from all converted cars
+    :param routability_planning_problem: whether to check if the selected planning problem is routable
     """
 
     def enough_time_steps(veh_id: int):
@@ -72,6 +76,26 @@ def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_
     # read tracks appear between [frame_start, frame_end]
     scenario_tracks_df = tracks_df[(tracks_df.frame >= frame_start) & (tracks_df.frame <= frame_end)]
     planning_problem_set = PlanningProblemSet()
+
+    # generate CR obstacles
+    for vehicle_id in [vehicle_id for vehicle_id in scenario_tracks_df.trackId.unique()
+                       if vehicle_id in tracks_meta_df.trackId.unique()]:
+        # if appearing time steps < min_time_steps, skip vehicle
+        if not enough_time_steps(vehicle_id):
+            continue
+        if ego_vehicle_id is not None and vehicle_id == ego_vehicle_id:
+            continue
+        print("Generating scenario {}, vehicle id {}".format(benchmark_id, vehicle_id), end="\r")
+        obstacle = generate_obstacle(
+            scenario_tracks_df,
+            tracks_meta_df,
+            vehicle_id=vehicle_id,
+            obstacle_id=scenario.generate_object_id(),
+            frame_start=frame_start,
+            class_to_type=ind_config.get("class_to_obstacleType"),
+            detect_static_vehicles=False
+        )
+        scenario.add_objects(obstacle)
 
     if ego_vehicle_id is not None:
         # create obstacle and planning problem from this track of ego car
@@ -99,43 +123,18 @@ def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_
             planning_problem_set.add_planning_problem(planning_problem)
 
         else:
-            pass #skip this planning problem, it is not possible.
+            pass  # skip this planning problem, it is not possible.
 
         num_planning_problems -= 1
 
-    # generate CR obstacles
-    for vehicle_id in [vehicle_id for vehicle_id in scenario_tracks_df.trackId.unique()
-                       if vehicle_id in tracks_meta_df.trackId.unique()]:
-        # if appearing time steps < min_time_steps, skip vehicle
-        if not enough_time_steps(vehicle_id):
-            continue
-        if ego_vehicle_id is not None and vehicle_id == ego_vehicle_id:
-            continue
-        print("Generating scenario {}, vehicle id {}".format(benchmark_id, vehicle_id), end="\r")
-        obstacle = generate_obstacle(
-            scenario_tracks_df,
-            tracks_meta_df,
-            vehicle_id=vehicle_id,
-            obstacle_id=scenario.generate_object_id(),
-            frame_start=frame_start,
-            class_to_type=ind_config.get("class_to_obstacleType"),
-            detect_static_vehicles=False
-        )
-        scenario.add_objects(obstacle)
-
-    # generate planning problems
     for _ in range(num_planning_problems):
-        planning_problem = generate_planning_problem(scenario, keep_ego=keep_ego)
-        if routability_planning_problem:
-            if not check_routability_planning_problem(
-                    scenario, planning_problem, max_difficulity=routability_planning_problem
-            ):
-                continue  # skip this planning problem, it is not routeable.
-        planning_problem_set.add_planning_problem(planning_problem)
+        planning_problem_set.add_planning_problem(
+            generate_planning_problem(scenario, keep_ego=keep_ego, routability=routability_planning_problem)
+        )
 
     # check that there is at least one planning problem
     if len(planning_problem_set.planning_problem_dict.keys()) == 0:
-        print(f"no planning problem possible for {scenario.scenario_id}")
+        print(f"No valid planning problem possible for {scenario.scenario_id}")
         return
 
     # write new scenario
@@ -234,7 +233,7 @@ def generate_scenarios_for_record_vehicle(recording_meta_fn: str, tracks_meta_fn
     :param ind_config: dictionary with configuration parameters for inD scenario generation
     :param obstacle_start_at_zero: boolean indicating if the initial state of an obstacle has to start
     at time step zero
-    :param:  routability_planning_problem: type Routability, kind of routing check to perform on planning_problem
+    :param  routability_planning_problem: type Routability, kind of routing check to perform on planning_problem
     """
     recording_meta_df, tracks_meta_df, tracks_df, meta_scenario = load_data(recording_meta_fn, tracks_meta_fn,
                                                                             tracks_fn, ind_config)
@@ -257,13 +256,15 @@ def generate_scenarios_for_record_vehicle(recording_meta_fn: str, tracks_meta_fn
             try:
                 generate_single_scenario(
                     ind_config=ind_config, num_planning_problems=num_planning_problems, keep_ego=keep_ego,
-                    output_dir=output_dir, tracks_df=tracks_df, tracks_meta_df=tracks_meta_df, meta_scenario=meta_scenario,
+                    output_dir=output_dir, tracks_df=tracks_df, tracks_meta_df=tracks_meta_df,
+                    meta_scenario=meta_scenario,
                     benchmark_id=benchmark_id, frame_start=frame_start, frame_end=frame_end,
                     obstacle_start_at_zero=obstacle_start_at_zero, ego_vehicle_id=ego_vehicle_id,
                     routability_planning_problem=routability_planning_problem
                 )
             except IndexError as e:
                 print(f"Cannot find lanelet by position: {repr(e)}. Skipping this scenario.")
+
 
 def create_ind_scenarios(input_dir: str, output_dir: str, num_time_steps_scenario: int,
                          num_planning_problems: int, keep_ego: bool, obstacle_start_at_zero: bool,
@@ -330,3 +331,17 @@ def create_ind_scenarios(input_dir: str, output_dir: str, num_time_steps_scenari
                     zip(listing_recording, listing_metas, listing_tracks)
                 ]
             )
+
+
+if __name__ == "__main__":
+    create_ind_scenarios(
+        input_dir="../tests/resources/ind",
+        output_dir="../tests/outputs",
+        num_time_steps_scenario=150,
+        num_planning_problems=1,
+        keep_ego=False,
+        obstacle_start_at_zero=False,
+        num_processes=1,
+        inD_all=False,
+        routability_planning_problem=Routability.REGULAR_STRICT
+    )

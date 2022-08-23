@@ -138,7 +138,7 @@ def inD(
             help="Convert one CommonRoad scenario for each valid vehicle from inD dataset, since it has less recordings available. Note that if enabled, num_time_steps_scenario becomes the minimal number of time steps of one CommonRoad scenario"
         ),
         routability_check: RoutabilityCheck = typer.Option(
-            RoutabilityCheck.Nocheck,
+            RoutabilityCheck.Strict,
             help='Check routability of planning_problem'
         )
 ):

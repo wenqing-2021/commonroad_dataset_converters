@@ -31,7 +31,7 @@ class TestInDConversion(unittest.TestCase):
 
         if os.system(f"crconvert {self.dataset} "
                      f"{self.input_path_single} "
-                     f"{self.output_path}") != 0:
+                     f"{self.output_path}") != 0: # --num-time-steps 1000
             raise Exception
 
         # validate

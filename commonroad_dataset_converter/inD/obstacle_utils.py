@@ -83,6 +83,7 @@ def generate_obstacle(
     :param vehicle_id: vehicle id in the tracks_meta_df
     :param obstacle_id: unique obstacle id in a CommonRoad Scenario
     :param frame_start: frame start to offset the time steps of an obstacle
+    :param class_to_type: mapping from inD types to CommonRoad types
     :param detect_static_vehicles: whether to regard non-moving vehicles as StaticObstacle
     :return: A new Obstacle with unique obstacle ID, Static or Dynamic corresponding to movement in the scenario
     """
