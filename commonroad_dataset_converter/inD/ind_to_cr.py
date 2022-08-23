@@ -1,9 +1,9 @@
-__author__ = "Niels Mündler, Xiao Wang"
+__author__ = "Haokun Zheng, Niels Mündler, Xiao Wang"
 __copyright__ = "TUM Cyber-Physical System Group"
 __credits__ = [""]
 __version__ = "1.0"
 __maintainer__ = "Xiao Wang"
-__email__ = "xiao.wang@tum.de"
+__email__ = "commonroad@lists.lrz.de"
 __status__ = "Released"
 
 __desc__ = """
@@ -40,7 +40,7 @@ def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_
                              tracks_df: pd.DataFrame, tracks_meta_df: pd.DataFrame, meta_scenario: Scenario,
                              benchmark_id: str, frame_start: int, frame_end: int,
                              obstacle_start_at_zero: bool, ego_vehicle_id: int = None,
-                             routability_planning_problem: Type[Routability] = Routability.ANY):
+                             routability_planning_problem: Routability = Routability.ANY):
     """
     Generate a single CommonRoad scenario based on inD record snippet
     :param ind_config: dictionary with configuration parameters for highD scenario generation
@@ -55,7 +55,8 @@ def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_
     :param frame_end: end of frame in time steps of record
     :param obstacle_start_at_zero: boolean indicating if the initial state of an obstacle has to start
     at time step zero
-    :param ego_vehicle_id: None if random select ego vehicle from all converted cars
+    :param ego_vehicle_id: If none, randomly select ego vehicle from all converted cars
+    :param routability_planning_problem: whether to check if the selected planning problem is routable
     """
 
     def enough_time_steps(veh_id: int):
@@ -75,6 +76,26 @@ def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_
     # read tracks appear between [frame_start, frame_end]
     scenario_tracks_df = tracks_df[(tracks_df.frame >= frame_start) & (tracks_df.frame <= frame_end)]
     planning_problem_set = PlanningProblemSet()
+
+    # generate CR obstacles
+    for vehicle_id in [vehicle_id for vehicle_id in scenario_tracks_df.trackId.unique()
+                       if vehicle_id in tracks_meta_df.trackId.unique()]:
+        # if appearing time steps < min_time_steps, skip vehicle
+        if not enough_time_steps(vehicle_id):
+            continue
+        if ego_vehicle_id is not None and vehicle_id == ego_vehicle_id:
+            continue
+        print("Generating scenario {}, vehicle id {}".format(benchmark_id, vehicle_id), end="\r")
+        obstacle = generate_obstacle(
+            scenario_tracks_df,
+            tracks_meta_df,
+            vehicle_id=vehicle_id,
+            obstacle_id=scenario.generate_object_id(),
+            frame_start=frame_start,
+            class_to_type=ind_config.get("class_to_obstacleType"),
+            detect_static_vehicles=False
+        )
+        scenario.add_objects(obstacle)
 
     if ego_vehicle_id is not None:
         # create obstacle and planning problem from this track of ego car
@@ -106,55 +127,14 @@ def generate_single_scenario(ind_config: Dict, num_planning_problems: int, keep_
 
         num_planning_problems -= 1
 
-    # generate CR obstacles
-    for vehicle_id in [vehicle_id for vehicle_id in scenario_tracks_df.trackId.unique()
-                       if vehicle_id in tracks_meta_df.trackId.unique()]:
-        # if appearing time steps < min_time_steps, skip vehicle
-        if not enough_time_steps(vehicle_id):
-            continue
-        if ego_vehicle_id is not None and vehicle_id == ego_vehicle_id:
-            continue
-        print("Generating scenario {}, vehicle id {}".format(benchmark_id, vehicle_id), end="\r")
-        obstacle = generate_obstacle(
-            scenario_tracks_df,
-            tracks_meta_df,
-            vehicle_id=vehicle_id,
-            obstacle_id=scenario.generate_object_id(),
-            frame_start=frame_start,
-            class_to_type=ind_config.get("class_to_obstacleType"),
-            detect_static_vehicles=False
+    for _ in range(num_planning_problems):
+        planning_problem_set.add_planning_problem(
+            generate_planning_problem(scenario, keep_ego=keep_ego, routability=routability_planning_problem)
         )
-        scenario.add_objects(obstacle)
-
-    # generate planning problems
-    if len(scenario.dynamic_obstacles) != 0:
-
-        car_obstacles = [obstacle for obstacle in scenario.dynamic_obstacles if
-                         (obstacle.obstacle_type == ObstacleType.CAR
-                          and obstacle.initial_state.time_step == 0
-                          )]
-        if len(car_obstacles) != 0:
-            for _ in range(num_planning_problems):
-
-                # try every car_obstacle
-                for _ in range(len(car_obstacles)):
-
-                    try:
-                        planning_problem = generate_ind_planning_problem(scenario, keep_ego=keep_ego,
-                                                                         car_obstacles=car_obstacles)
-                    except:
-                        continue
-                    if routability_planning_problem:
-                        if not check_routability_planning_problem(
-                                scenario, planning_problem, max_difficulity=routability_planning_problem
-                        ):
-                            continue  # skip this planning problem, it is not routeable.
-                    planning_problem_set.add_planning_problem(planning_problem)
-                    break
 
     # check that there is at least one planning problem
     if len(planning_problem_set.planning_problem_dict.keys()) == 0:
-        print(f"no planning problem possible for {scenario.scenario_id}")
+        print(f"No valid planning problem possible for {scenario.scenario_id}")
         return
 
     # write new scenario
@@ -353,97 +333,15 @@ def create_ind_scenarios(input_dir: str, output_dir: str, num_time_steps_scenari
             )
 
 
-def generate_ind_planning_problem(scenario: Scenario, orientation_half_range: float = 0.2,
-                                  velocity_half_range: float = 10.,
-                                  time_step_half_range: int = 25, keep_ego: bool = False,
-                                  car_obstacles=[]) -> PlanningProblem:
-    """
-    Generates planning problem for scenario by taking obstacle trajectory
-    :param scenario: CommonRoad scenario
-    :param orientation_half_range: parameter for goal state orientation
-    :param velocity_half_range: parameter for goal state velocity
-    :param time_step_half_range: parameter for goal state time step
-    :param keep_ego: boolean indicating if vehicles selected for planning problem should be kept in scenario
-    :param car_obstacles: List of viable car_obstacles
-    :return: CommonRoad planning problem
-    """
-
-    # choose valid obstacle as ego vehicle randomly
-    if car_obstacles is None:
-        car_obstacles = []
-    dynamic_obstacle_selected_candidate = find_valid_ego(scenario, car_obstacles)
-
-    if len(dynamic_obstacle_selected_candidate) == 0:
-        raise NoCarException("There is no car in dynamic obstacles which can be used as planning problem.")
-
-    dynamic_obstacle_selected = dynamic_obstacle_selected_candidate[0]
-    max_time_step = max([obstacle.prediction.final_time_step for obstacle in scenario.dynamic_obstacles])
-
-    if not keep_ego:
-        planning_problem_id = dynamic_obstacle_selected.obstacle_id
-        scenario.remove_obstacle(dynamic_obstacle_selected)
-    else:
-        planning_problem_id = scenario.generate_object_id()
-
-    if len(scenario.dynamic_obstacles) > 0:
-        max_time_step = max(
-            [obs.prediction.trajectory.state_list[-1].time_step for obs in scenario.dynamic_obstacles])
-        final_time_step = min(
-            dynamic_obstacle_selected.prediction.trajectory.final_state.time_step + time_step_half_range,
-            max_time_step)
-    else:
-        final_time_step = dynamic_obstacle_selected.prediction.trajectory.final_state.time_step + time_step_half_range
-
-    planning_problem = obstacle_to_planning_problem(dynamic_obstacle_selected,
-                                                    planning_problem_id,
-                                                    final_time_step=final_time_step,
-                                                    orientation_half_range=orientation_half_range,
-                                                    velocity_half_range=velocity_half_range,
-                                                    time_step_half_range=time_step_half_range,
-                                                    lanelet_network=scenario.lanelet_network,
-                                                    highD=False)
-
-    return planning_problem
-
-
-def find_valid_ego(scenario, car_obstacles):
-    random.seed(0)
-
-    num_cars = len(car_obstacles)
-    # search for valid_ego_candidate
-    for _ in range(num_cars):
-
-        # all candidates exhausted
-        if len(car_obstacles) == 0:
-            return []
-
-        # random candidate pick
-        ego_candidate = random.choice(car_obstacles)
-
-        # check for movement
-        driven_distance = 0
-
-        if len(ego_candidate.prediction.occupancy_set) == 0:
-            car_obstacles.pop(ego_candidate)
-            continue
-
-        # accumulate driven distance of candidate every 5 time steps
-        occupancy_set_index_div_5 = (len(ego_candidate.prediction.occupancy_set) - 1) // 5
-        for i in range(occupancy_set_index_div_5):
-            driven_distance += np.abs(np.linalg.norm(ego_candidate.prediction.trajectory.state_list[i * 5].position
-                                                     - ego_candidate.prediction.trajectory.state_list[
-                                                         (i + 1) * 5].position))
-
-        if len(ego_candidate.prediction.occupancy_set) % 5 != 0:
-            driven_distance += np.abs(np.linalg.norm(ego_candidate.prediction.trajectory.
-                                                     state_list[occupancy_set_index_div_5 * 5].position -
-                                                     ego_candidate.prediction.trajectory.final_state.position))
-
-        # discard candidate if driven distance in scenario is too short
-        if driven_distance <= 20:
-            car_obstacles.pop(ego_candidate)
-            continue
-
-        return [ego_candidate]
-
-    return []
+if __name__ == "__main__":
+    create_ind_scenarios(
+        input_dir="../tests/resources/ind",
+        output_dir="../tests/outputs",
+        num_time_steps_scenario=150,
+        num_planning_problems=1,
+        keep_ego=False,
+        obstacle_start_at_zero=False,
+        num_processes=1,
+        inD_all=False,
+        routability_planning_problem=Routability.REGULAR_STRICT
+    )
