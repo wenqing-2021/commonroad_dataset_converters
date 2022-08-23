@@ -2996,6 +2996,38 @@
     <userOneWay>car</userOneWay>
     <userBidirectional>priorityVehicle</userBidirectional>
   </lanelet>
+  <intersection id="1000">
+    <incoming id="1001">
+      <incomingLanelet ref="172"/>
+      <incomingLanelet ref="165"/>
+      <outgoingRight ref="159"/>
+      <outgoingStraight ref="149"/>
+      <outgoingLeft ref="164"/>
+      <isLeftOf ref="1002"/>
+    </incoming>
+    <incoming id="1002">
+      <incomingLanelet ref="104"/>
+      <outgoingRight ref="103"/>
+      <outgoingStraight ref="173"/>
+      <outgoingLeft ref="168"/>
+      <isLeftOf ref="1003"/>
+    </incoming>
+    <incoming id="1003">
+      <incomingLanelet ref="147"/>
+      <incomingLanelet ref="148"/>
+      <outgoingRight ref="151"/>
+      <outgoingStraight ref="168"/>
+      <outgoingLeft ref="152"/>
+      <isLeftOf ref="1004"/>
+    </incoming>
+    <incoming id="1004">
+      <incomingLanelet ref="101"/>
+      <outgoingRight ref="163"/>
+      <outgoingStraight ref="158"/>
+      <outgoingLeft ref="149"/>
+      <isLeftOf ref="1001"/>
+    </incoming>
+  </intersection>
   <trafficSign id="179">
     <trafficSignElement>
       <trafficSignID>206</trafficSignID>
