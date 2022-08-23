@@ -161,7 +161,6 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
 
         if not keep_ego:
             planning_problem_id = dynamic_obstacle_selected.obstacle_id
-            scenario.remove_obstacle(dynamic_obstacle_selected)
         else:
             planning_problem_id = scenario.generate_object_id()
 
@@ -183,6 +182,8 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
 
         # check if generated planning problem is routable
         if routability == Routability.ANY or check_routability_planning_problem(scenario, planning_problem, routability):
+            if not keep_ego:
+                scenario.remove_obstacle(dynamic_obstacle_selected)
             return planning_problem
 
 
