@@ -6,8 +6,8 @@ from pathlib import Path
 # from commonroad_dataset_converter.highD.highd_to_cr import create_highd_scenarios
 from commonroad_dataset_converter.inD.ind_to_cr import create_ind_scenarios
 # from commonroad_dataset_converter.INTERACTION.interaction_to_cr import create_interaction_scenarios
-from exiD.exiD_to_cr import create_exiD_scenarios
-from rounD.round_to_cr import create_rounD_scenarios
+# from commonroad_dataset_converter.exiD.exiD_to_cr import create_exiD_scenarios
+from commonroad_dataset_converter.rounD.round_to_cr import create_rounD_scenarios
 
 
 
