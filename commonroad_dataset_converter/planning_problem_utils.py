@@ -3,7 +3,7 @@ __copyright__ = "TUM Cyber-Physical System Group"
 __credits__ = [""]
 __version__ = "1.0"
 __maintainer__ = "Xiao Wang"
-__email__ = "commonroad@lists.lrz.de"
+__email__ = "xiao.wang@tum.de"
 __status__ = "Released"
 
 __desc__ = """
@@ -13,7 +13,6 @@ __desc__ = """
 import random
 from enum import Enum
 from typing import Type
-import numpy as np
 import warnings
 import sys
 
@@ -31,7 +30,6 @@ try:
 except ModuleNotFoundError as exp:
     RoutePlanner = None
     warnings.warn("module commonroad_route_planner not installed, routability check will be skipped.")
-
 
 class NoCarException(Exception):
     pass
@@ -103,8 +101,8 @@ def obstacle_to_planning_problem(obstacle: DynamicObstacle, planning_problem_id:
 
 
 def generate_planning_problem(scenario: Scenario, orientation_half_range: float = 0.2, velocity_half_range: float = 10.,
-                              time_step_half_range: int = 25, keep_ego: bool = False, highD: bool = False,
-                              lane_change: bool = False, routability: Routability = Routability.ANY) -> PlanningProblem:
+                              time_step_half_range: int = 25, keep_ego: bool = False,
+                              highD: bool = False, lane_change: bool = False) -> PlanningProblem:
     """
     Generates planning problem for scenario by taking obstacle trajectory
     :param scenario: CommonRoad scenario
@@ -113,15 +111,15 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
     :param time_step_half_range: parameter for goal state time step
     :param keep_ego: boolean indicating if vehicles selected for planning problem should be kept in scenario
     :param highD: indicator for highD dataset; select only vehicles that drive to the end of the road
-    :param lane_change (only for highD): select only vehicles that located on different lanelets at initial and final ts
     :return: CommonRoad planning problem
     """
     # random choose obstacle as ego vehicle
     random.seed(0)
 
-    # if len(scenario.dynamic_obstacles) == 0: # TODO: duplicated?
-    #     raise NoCarException("There is no car in dynamic obstacles which can be used as planning problem.")
+    if len(scenario.dynamic_obstacles) == 0:
+        raise NoCarException("There is no car in dynamic obstacles which can be used as planning problem.")
 
+    max_time_step = max([obstacle.prediction.final_time_step for obstacle in scenario.dynamic_obstacles])
     # only choose car type as ego vehicle
     car_obstacles = [obstacle for obstacle in scenario.dynamic_obstacles if (obstacle.obstacle_type == ObstacleType.CAR
                                                                              and obstacle.initial_state.time_step == 0
@@ -147,69 +145,34 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
 
         car_obstacles = car_obstacles_highD
 
-    random.shuffle(car_obstacles)
+    if len(car_obstacles) > 0:
+        dynamic_obstacle_selected = random.choice(car_obstacles)
+    else:
+        raise NoCarException("There is no car in dynamic obstacles which can be used as planning problem.")
 
-    while True:
-        if len(car_obstacles) > 0:
-            dynamic_obstacle_selected = car_obstacles.pop()
-        else:
-            raise NoCarException("There is no car in dynamic obstacles which can be used as planning problem.")
+    if not keep_ego:
+        planning_problem_id = dynamic_obstacle_selected.obstacle_id
+        scenario.remove_obstacle(dynamic_obstacle_selected)
+    else:
+        planning_problem_id = scenario.generate_object_id()
 
-        # check validity of dynamic_obstacle_selected
-        if not obstacle_moved(dynamic_obstacle_selected):
-            continue
+    if len(scenario.dynamic_obstacles) > 0:
+        max_time_step = max([obs.prediction.trajectory.state_list[-1].time_step for obs in scenario.dynamic_obstacles])
+        final_time_step = min(
+            dynamic_obstacle_selected.prediction.trajectory.final_state.time_step + time_step_half_range, max_time_step)
+    else:
+        final_time_step = dynamic_obstacle_selected.prediction.trajectory.final_state.time_step + time_step_half_range
 
-        if not keep_ego:
-            planning_problem_id = dynamic_obstacle_selected.obstacle_id
-        else:
-            planning_problem_id = scenario.generate_object_id()
+    planning_problem = obstacle_to_planning_problem(dynamic_obstacle_selected,
+                                                    planning_problem_id,
+                                                    final_time_step=final_time_step,
+                                                    orientation_half_range=orientation_half_range,
+                                                    velocity_half_range=velocity_half_range,
+                                                    time_step_half_range=time_step_half_range,
+                                                    lanelet_network=scenario.lanelet_network,
+                                                    highD=highD)
 
-        if len(scenario.dynamic_obstacles) > 0:
-            max_time_step = max([obstacle.prediction.final_time_step for obstacle in scenario.dynamic_obstacles])
-            final_time_step = min(
-                dynamic_obstacle_selected.prediction.trajectory.final_state.time_step + time_step_half_range, max_time_step)
-        else:
-            final_time_step = dynamic_obstacle_selected.prediction.trajectory.final_state.time_step + time_step_half_range
-
-        planning_problem = obstacle_to_planning_problem(dynamic_obstacle_selected,
-                                                        planning_problem_id,
-                                                        final_time_step=final_time_step,
-                                                        orientation_half_range=orientation_half_range,
-                                                        velocity_half_range=velocity_half_range,
-                                                        time_step_half_range=time_step_half_range,
-                                                        lanelet_network=scenario.lanelet_network,
-                                                        highD=highD)
-
-        # check if generated planning problem is routable
-        if routability == Routability.ANY or check_routability_planning_problem(scenario, planning_problem, routability):
-            if not keep_ego:
-                scenario.remove_obstacle(dynamic_obstacle_selected)
-            return planning_problem
-
-
-def obstacle_moved(obstacle):
-    # positions = np.array([state.position for state in obstacle.prediction.trajectory.state_list])
-    # min_x = np.min(positions[:, 0])
-    # max_x = np.min(positions[:, 0])
-    # min_y = np.min(positions[:, 1])
-    # max_y = np.min(positions[:, 1])
-    #
-    # tmp1 = pow(max_x - min_x, 2) + pow(max_y - min_y, 2)
-
-    driven_distance = 0.
-    occupancy_set_index_div_5 = (len(obstacle.prediction.occupancy_set) - 1) // 5
-    for i in range(occupancy_set_index_div_5):
-        driven_distance += np.abs(np.linalg.norm(obstacle.prediction.trajectory.state_list[i * 5].position
-                                                 - obstacle.prediction.trajectory.state_list[
-                                                     (i + 1) * 5].position))
-
-    if len(obstacle.prediction.occupancy_set) % 5 != 0:
-        driven_distance += np.abs(np.linalg.norm(obstacle.prediction.trajectory.
-                                                 state_list[occupancy_set_index_div_5 * 5].position -
-                                                 obstacle.prediction.trajectory.final_state.position))
-
-    # discard candidate if driven distance in scenario is too short
-    return driven_distance > 5.
+    return planning_problem
 
 
 def check_routability_planning_problem(
@@ -229,7 +192,7 @@ def check_routability_planning_problem(
     if max_difficulity == Routability.ANY or RoutePlanner is None:
         return True
 
-    elif max_difficulity == Routability.REGULAR_STRICT:
+    elif max_difficulity ==  Routability.REGULAR_STRICT:
         route_planner = RoutePlanner(scenario, planning_problem, backend=RoutePlanner.Backend.NETWORKX_REVERSED)
         candidate_holder = route_planner.plan_routes()
         _, num_candiadates = candidate_holder.retrieve_all_routes()
