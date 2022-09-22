@@ -12,19 +12,21 @@ __desc__ = """
 
 import random
 from enum import Enum
-from typing import Type
+from typing import Type, Sequence
 import numpy as np
 import warnings
 import sys
 
+import numpy as np
 from commonroad.scenario.lanelet import LaneletNetwork
 from commonroad.scenario.trajectory import State
 from commonroad.common.util import Interval, AngleInterval
-from commonroad.geometry.shape import Rectangle
+from commonroad.geometry.shape import Rectangle, Polygon
 from commonroad.planning.planning_problem import PlanningProblem
 from commonroad.planning.goal import GoalRegion
 from commonroad.scenario.scenario import Scenario
 from commonroad.scenario.obstacle import ObstacleType, DynamicObstacle
+from shapely.geometry import LineString, Point
 
 try:
     from commonroad_route_planner.route_planner import RoutePlanner
@@ -47,10 +49,59 @@ class Routability(Enum):
         return [type(item) for item in cls]
 
 
-def obstacle_to_planning_problem(obstacle: DynamicObstacle, planning_problem_id: int, final_time_step=None,
+def _sub_line(start: Point, end: Point, line: LineString) -> LineString:
+    """Get a section of a line by start and end point."""
+    start_s = line.project(start)
+    end_s = line.project(end)
+    start_pt = line.interpolate(start_s)
+    end_pt = line.interpolate(end_s)
+    start_i = None
+    for i, pt in enumerate(line.coords):
+        s_pt = line.project(Point(pt))
+        if s_pt > start_s and start_i is None:
+            start_i = i
+    end_i = None
+    for i, pt in enumerate(reversed(line.coords)):
+        s_pt = line.project(Point(pt))
+        if s_pt > end_s and end_i is None:
+            end_i = i
+    pts = [start_pt] + line.coords[start_i:end_i] + [end_pt]
+    return LineString(pts)
+
+
+def _cut_lanelet_polygon(position: np.ndarray, lon_length: float, lanelet_network: LaneletNetwork) -> Polygon:
+    """
+    Get a longitudinal section of a lanelet polygon.
+
+    :param position: Projected center of the lanelet section
+    :param lon_length: Total longitudinal length of the lanelet section
+    :param lanelet_network: Lanelet network
+    :return: Section of the lanelet as a CommonRoad polygon
+    """
+    position = np.squeeze(position)
+    lanelet_ids = lanelet_network.find_lanelet_by_position([position])[0]
+    assert len(lanelet_ids) > 0
+    lanelet = lanelet_network.find_lanelet_by_id(lanelet_ids[0])
+    center_line = LineString(lanelet.center_vertices)
+    s_dist = center_line.project(Point(position))
+    start_s = max(0, s_dist - lon_length * 0.5)
+    end_s = min(center_line.length, s_dist + lon_length * 0.5)
+    start_pt = center_line.interpolate(start_s)
+    end_pt = center_line.interpolate(end_s)
+    left_line = LineString(lanelet.left_vertices)
+    left_sub = _sub_line(start_pt, end_pt, left_line)
+    right_line = LineString(lanelet.right_vertices)
+    right_sub = _sub_line(start_pt, end_pt, right_line)
+    poly = Polygon(np.array(list(left_sub.coords) + list(right_sub.coords)[::-1]))
+    return poly
+    
+
+def obstacle_to_planning_problem(obstacle: DynamicObstacle, planning_problem_id: int,
+                                 final_time_step=None,
                                  orientation_half_range: float = 0.2,
-                                 velocity_half_range: float = 10, time_step_half_range: int = 25,
-                                 lanelet_network: LaneletNetwork = None, highD: bool = False):
+                                 velocity_half_range: float = 10,
+                                 time_step_half_range: int = 25,
+                                 lanelet_network: LaneletNetwork = None):
     """
     Generates planning problem using initial and final states of a DynamicObstacle
     """
@@ -72,26 +123,14 @@ def obstacle_to_planning_problem(obstacle: DynamicObstacle, planning_problem_id:
                            width=max(dynamic_obstacle_shape.width + 1.0, 3.5),
                            center=dynamic_obstacle_final_state.position,
                            orientation=dynamic_obstacle_final_state.orientation)
-    # find goal lanelet # TODO: goal lanelet is too large for highD
+    # find goal lanelet
     goal_lanelets = lanelet_network.find_lanelet_by_position([dynamic_obstacle_final_state.position])
     if len(goal_lanelets[0]) == 0:
         raise NoCarException("Selected final state for planning problem is out of road. Skipping this scenario")
 
-    goal_lanelet_id = goal_lanelets[0][0]
-    goal_lanelet = lanelet_network.find_lanelet_by_id(goal_lanelet_id)
-    if not highD:
-        goal_lanelet_polygon = goal_lanelet.convert_to_polygon()
-        if goal_lanelet_polygon.shapely_object.area > goal_shape.shapely_object.area:
-            goal_position = goal_lanelet_polygon
-        else:
-            goal_position = goal_shape
-    else:
-        # works only for highD because of constant lane width
-        lanelet_width = abs(goal_lanelet.left_vertices[-1][1] - goal_lanelet.right_vertices[-1][1])
-        goal_position = Rectangle(length=20,
-                                  width=lanelet_width,
-                                  center=dynamic_obstacle_final_state.position,
-                                  orientation=0.)
+    goal_position = _cut_lanelet_polygon(dynamic_obstacle_final_state.position, dynamic_obstacle_shape.length + 2.0, lanelet_network)
+    if goal_position.shapely_object.area < goal_shape.shapely_object.area:
+        goal_position = goal_shape
 
     goal_region = GoalRegion([State(position=goal_position, orientation=orientation_interval,
                                     velocity=velocity_interval, time_step=time_step_interval)])
@@ -169,7 +208,8 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
             final_time_step = min(
                 dynamic_obstacle_selected.prediction.trajectory.final_state.time_step + time_step_half_range, max_time_step)
         else:
-            final_time_step = dynamic_obstacle_selected.prediction.trajectory.final_state.time_step + time_step_half_range
+            final_time_step = dynamic_obstacle_selected.prediction.trajectory\
+                                  .final_state.time_step + time_step_half_range
 
         planning_problem = obstacle_to_planning_problem(dynamic_obstacle_selected,
                                                         planning_problem_id,
@@ -177,8 +217,7 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
                                                         orientation_half_range=orientation_half_range,
                                                         velocity_half_range=velocity_half_range,
                                                         time_step_half_range=time_step_half_range,
-                                                        lanelet_network=scenario.lanelet_network,
-                                                        highD=highD)
+                                                        lanelet_network=scenario.lanelet_network)
 
         # check if generated planning problem is routable
         if routability == Routability.ANY or check_routability_planning_problem(scenario, planning_problem, routability):
