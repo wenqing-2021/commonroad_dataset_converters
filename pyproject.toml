@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "commonroad-dataset-converter"
+version = "0.1.0"
+description = "CommonRoad Dataset Converter"
+authors = ["Cyber-Physical Systems Group, Technical University of Munich <commonroad@lists.lrz.de>"]
+readme = "README.md"
+packages = [{ include = "commonroad_dataset_converter" }]
+homepage = "https://commonroad.in.tum.de"
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Operating System :: OS Independent",
+]
+exclude = ["**/*.ipynb"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+numpy = ">=1.18.2"
+scipy = ">=1.4.1"
+pandas = ">=0.24.2"
+ruamel-yaml = ">=0.16.10"
+commonroad-io = ">=2020.3,<=2022.1"
+typer = ">=0.4.0"
+
+[tool.poetry.scripts]
+crconvert = 'commonroad_dataset_converter.main:cli'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
