@@ -148,6 +148,14 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
         car_obstacles = car_obstacles_highD
 
     random.shuffle(car_obstacles)
+    print(scenario.scenario_id)
+    if scenario.scenario_id == "DEU_AAH1-7_4_T-1":
+        print("LALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
+        print("LALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
+        print("LALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
+        print("LALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
+        print("LALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
+        print("LALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
 
     while True:
         if len(car_obstacles) > 0:
@@ -199,8 +207,9 @@ def ego_vehicle_on_opposing_lane(ego_vehicle, lanelet_network):
     ego_initial_lanelet = lanelet_network._lanelets.get(ego_initial_lanelet_id)
     try:
         initial_lanelet_orientation = ego_initial_lanelet.orientation_by_position(ego_vehicle.initial_state.position)
-        angle = (ego_initial_orientation - initial_lanelet_orientation) % (3 * np.pi / 2)
-        return angle > np.pi / 2
+        angle_difference = ego_initial_orientation - initial_lanelet_orientation
+        angle = (angle_difference + 180) % 360 - 180
+        return np.pi >= angle >= -1 * np.pi
     except AssertionError:
         return True
 
