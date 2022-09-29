@@ -1,6 +1,7 @@
 image: python:3.8
 
 stages:
+- style
 - test
 - build
 
@@ -47,6 +48,31 @@ convert_interaction:
   cache:
     key: download-cache
   timeout: 3h
+
+convert_mona :
+  stage : test
+  image : python:3.8
+  script :
+    - poetry run crconvert mona download merge 20210802 0 .
+    - poetry run crconvert mona convert --num-scenarios 1 merge --no-disjunctive-scenarios merge_20210802_000_trajectories.parquet
+    - poetry run crconvert mona download east 20210802 0 .
+    - poetry run crconvert mona convert --num-scenarios 1 east --no-disjunctive-scenarios east_20210802_000_trajectories.parquet
+    - poetry run crconvert mona download west 20210802 0 .
+    - poetry run crconvert mona convert --num-scenarios 1 west --no-disjunctive-scenarios west_20210802_000_trajectories.parquet
+  artifacts :
+    paths :
+      - DEU_MONAMerge-2_4606_T-264.xml
+      - DEU_MONAEast-2_14535_T-4022.xml
+      - DEU_MONAWest-2_17552_T-2602.xml
+    expire_in : 1 week
+
+flake8 :
+  stage : style
+  before_script : [ ]
+  script :
+    - pip install flake8 flake8-todo
+    - flake8 commonroad_dataset_converter
+  allow_failure : true
 
 publish_internal:
   stage: build
