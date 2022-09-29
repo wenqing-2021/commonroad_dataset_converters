@@ -156,7 +156,8 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
             raise NoCarException("There is no car in dynamic obstacles which can be used as planning problem.")
 
         # check validity of dynamic_obstacle_selected
-        if not obstacle_moved(dynamic_obstacle_selected):
+        if not obstacle_moved(dynamic_obstacle_selected) or ego_vehicle_on_opposing_lane(dynamic_obstacle_selected,
+                                                                                         scenario.lanelet_network):
             continue
 
         if not keep_ego:
@@ -167,7 +168,8 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
         if len(scenario.dynamic_obstacles) > 0:
             max_time_step = max([obstacle.prediction.final_time_step for obstacle in scenario.dynamic_obstacles])
             final_time_step = min(
-                dynamic_obstacle_selected.prediction.trajectory.final_state.time_step + time_step_half_range, max_time_step)
+                dynamic_obstacle_selected.prediction.trajectory.final_state.time_step + time_step_half_range,
+                max_time_step)
         else:
             final_time_step = dynamic_obstacle_selected.prediction.trajectory.final_state.time_step + time_step_half_range
 
@@ -181,10 +183,26 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
                                                         highD=highD)
 
         # check if generated planning problem is routable
-        if routability == Routability.ANY or check_routability_planning_problem(scenario, planning_problem, routability):
+        if routability == Routability.ANY or check_routability_planning_problem(scenario, planning_problem,
+                                                                                routability):
             if not keep_ego:
                 scenario.remove_obstacle(dynamic_obstacle_selected)
             return planning_problem
+
+
+def ego_vehicle_on_opposing_lane(ego_vehicle, lanelet_network):
+    ego_initial_orientation = ego_vehicle.initial_state.orientation
+    ego_initial_lanelet_id = lanelet_network.find_lanelet_by_position([ego_vehicle.initial_state.position])
+    if len(ego_initial_lanelet_id[0]) == 0:
+        return True
+    ego_initial_lanelet_id = ego_initial_lanelet_id[0][0]
+    ego_initial_lanelet = lanelet_network._lanelets.get(ego_initial_lanelet_id)
+    try:
+        initial_lanelet_orientation = ego_initial_lanelet.orientation_by_position(ego_vehicle.initial_state.position)
+        angle = (ego_initial_orientation - initial_lanelet_orientation) % (3 * np.pi / 2)
+        return angle > np.pi / 2
+    except AssertionError:
+        return True
 
 
 def obstacle_moved(obstacle):
@@ -209,12 +227,12 @@ def obstacle_moved(obstacle):
                                                  obstacle.prediction.trajectory.final_state.position))
 
     # discard candidate if driven distance in scenario is too short
-    return driven_distance > 5.
+    return driven_distance > 25.
 
 
 def check_routability_planning_problem(
-    scenario: Scenario, planning_problem: PlanningProblem,
-    max_difficulity: Type[Routability]
+        scenario: Scenario, planning_problem: PlanningProblem,
+        max_difficulity: Type[Routability]
 ) -> bool:
     """
     Checks if a planning problem is routable on scenario
