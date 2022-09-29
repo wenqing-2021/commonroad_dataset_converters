@@ -3,6 +3,7 @@ name = "commonroad-dataset-converter"
 version = "0.1.0"
 description = "CommonRoad Dataset Converter"
 authors = ["Cyber-Physical Systems Group, Technical University of Munich <commonroad@lists.lrz.de>"]
+license = "BSD-3-Clause"
 readme = "README.md"
 packages = [{ include = "commonroad_dataset_converter" }]
 homepage = "https://commonroad.in.tum.de"
