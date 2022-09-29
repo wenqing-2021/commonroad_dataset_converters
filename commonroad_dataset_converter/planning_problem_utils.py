@@ -148,14 +148,6 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
         car_obstacles = car_obstacles_highD
 
     random.shuffle(car_obstacles)
-    print(scenario.scenario_id)
-    if scenario.scenario_id == "DEU_AAH1-7_4_T-1":
-        print("LALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
-        print("LALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
-        print("LALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
-        print("LALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
-        print("LALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
-        print("LALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
 
     while True:
         if len(car_obstacles) > 0:
