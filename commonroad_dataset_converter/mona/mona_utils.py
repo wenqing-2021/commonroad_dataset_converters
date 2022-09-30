@@ -1,7 +1,6 @@
 import enum
 import importlib.resources
 import math
-import os
 import re
 from dataclasses import dataclass
 from multiprocessing import Pool
@@ -11,7 +10,6 @@ from typing import Optional, Dict, Any
 import numpy as np
 import pandas as pd
 import pyproj
-import requests
 import scipy.spatial
 from commonroad.common.file_reader import CommonRoadFileReader
 from commonroad.common.file_writer import CommonRoadFileWriter, OverwriteExistingFile
