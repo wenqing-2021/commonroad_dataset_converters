@@ -98,14 +98,9 @@ def get_transform_to_scenario(map_scenario: Scenario, source_origin: np.ndarray,
 
 
 def _get_map(config, location):
-    maps_dir = Path.home() / ".cache/mona/maps"
-    os.makedirs(maps_dir, exist_ok=True)
-    map_path = maps_dir / config["maps"][location]
-    if not map_path.exists():
-        response = requests.get(config["map_url"] + config["maps"][location])
-        with map_path.open("w") as fp:
-            fp.write(response.text)
-    return CommonRoadFileReader(str(map_path)).open()[0]
+    with importlib.resources.path("commonroad_dataset_converter.mona.maps", config["maps"][location]) as map_path:
+        scenario, _ = CommonRoadFileReader(str(map_path)).open()
+    return scenario
 
 
 def _read_trajectories(trajectory_file: Path) -> pd.DataFrame:

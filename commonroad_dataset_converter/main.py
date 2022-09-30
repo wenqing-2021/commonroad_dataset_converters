@@ -1,17 +1,22 @@
 import os
+import re
 import time
+import warnings
 from enum import Enum
 from pathlib import Path
+from typing import Optional
 
+import numpy as np
 import typer
 
-import commonroad_dataset_converter.mona.mona_to_cr as mona
 from commonroad_dataset_converter.INTERACTION.interaction_to_cr import create_interaction_scenarios
 from commonroad_dataset_converter.highD.highd_to_cr import create_highd_scenarios
 from commonroad_dataset_converter.inD.ind_to_cr import create_ind_scenarios
+from commonroad_dataset_converter.mona.mona_utils import (transform_coordinates, _get_map, _read_trajectories,
+                                                          _get_mona_config, MONALocation, MONATrackIdJobGenerator,
+                                                          MONADisjunctiveJobGenerator, MONAProcessor, run_processor, )
 
 cli = typer.Typer(help="Generates CommonRoad scenarios from different datasets")
-cli.add_typer(mona.app, name="mona", help="Convert MONA dataset")
 
 
 class RoutabilityCheck(str, Enum):
@@ -33,12 +38,10 @@ def highD(input_dir: Path = typer.Argument(..., help="Path to highD-dataset's da
           num_time_steps: int = typer.Option(150,
                                              help="Maximum number of time steps the CommonRoad scenario can be long"),
           num_planning_problems: int = typer.Option(1, help="Number of planning problems per CommonRoad scenario"),
-          keep_ego: bool = typer.Option(False,
-                                        help="Indicator if vehicles used for planning problem should be kept in "
-                                             "scenario"),
-          obstacle_start_at_zero: bool = typer.Option(False,
-                                                      help="Indicator if the initial state of an obstacle has to "
-                                                           "start at time step zero"),
+          keep_ego: bool = typer.Option(False, help="Indicator if vehicles used for planning problem should be kept in "
+                                                    "scenario"), obstacle_start_at_zero: bool = typer.Option(False,
+                                                                                                             help="Indicator if the initial state of an obstacle has to "
+                                                                                                                  "start at time step zero"),
           downsample: int = typer.Option(1, help="Decrease dt by n*dt"
 
                                          ),
@@ -66,19 +69,20 @@ def inD(input_dir: Path = typer.Argument(..., help="Path to inD-dataset's data f
         num_time_steps: int = typer.Option(150,
                                            help="Maximum number of time steps the CommonRoad scenario can be long"),
         num_planning_problems: int = typer.Option(1, help="Number of planning problems per CommonRoad scenario"),
-        keep_ego: bool = typer.Option(False,
-                                      help="Indicator if vehicles used for planning problem should be kept in "
-                                           "scenario"),
-        obstacle_start_at_zero: bool = typer.Option(False,
-                                                    help="Indicator if the initial state of an obstacle has to start "
-                                                         "at time step zero"),
+        keep_ego: bool = typer.Option(False, help="Indicator if vehicles used for planning problem should be kept in "
+                                                  "scenario"), obstacle_start_at_zero: bool = typer.Option(False,
+                                                                                                           help="Indicator if the initial state of an obstacle has to start "
+                                                                                                                "at "
+                                                                                                                "time "
+                                                                                                                "step "
+                                                                                                                "zero"),
         num_processes: int = typer.Option(1, help="Number of multiple processes to convert dataset"),
-        all_vehicles: bool = typer.Option(False,
-                                          help="Convert one CommonRoad scenario for each valid vehicle from inD "
-                                               "dataset, since it has less "
-                                               "recordings available. Note that if enabled, num_time_steps_scenario "
-                                               "becomes the minimal number "
-                                               "of time steps of one CommonRoad scenario"),
+        all_vehicles: bool = typer.Option(False, help="Convert one CommonRoad scenario for each valid vehicle from inD "
+                                                      "dataset, since it has less "
+                                                      "recordings available. Note that if enabled, "
+                                                      "num_time_steps_scenario "
+                                                      "becomes the minimal number "
+                                                      "of time steps of one CommonRoad scenario"),
         routability_check: RoutabilityCheck = typer.Option(RoutabilityCheck.Strict,
                                                            help='Check routability of planning_problem')):
     os.makedirs(output_dir, exist_ok=True)
@@ -95,13 +99,14 @@ def interaction(input_dir: Path = typer.Argument(..., help="Path to INTERACTION 
                 output_dir: Path = typer.Argument(..., help="Directory to store generated CommonRoad files"),
                 num_time_steps: int = typer.Option(150,
                                                    help="Maximum number of time steps the CommonRoad scenario can be "
-                                                        "long"),
-                num_planning_problems: int = typer.Option(1,
-                                                          help="Number of planning problems per CommonRoad scenario"),
+                                                        "long"), num_planning_problems: int = typer.Option(1,
+                                                                                                           help="Number of planning problems per CommonRoad scenario"),
                 keep_ego: bool = typer.Option(False,
-                                              help="Indicator if vehicles used for planning problem should be kept in scenario"),
-                obstacle_start_at_zero: bool = typer.Option(False,
-                                                            help="Indicator if the initial state of an obstacle has to start at time step zero"),
+                                              help="Indicator if vehicles used for planning problem should be kept in "
+                                                   "scenario"), obstacle_start_at_zero: bool = typer.Option(False,
+                                                                                                            help="Indicator if the initial state of an obstacle has "
+                                                                                                                 "to "
+                                                                                                                 "start at time step zero"),
                 num_processes: int = typer.Option(1, help="Number of multiple processes to convert dataset"), ):
     os.makedirs(output_dir, exist_ok=True)
     start_time = time.time()
@@ -110,6 +115,52 @@ def interaction(input_dir: Path = typer.Argument(..., help="Path to INTERACTION 
                                  num_time_steps_scenario=num_time_steps, num_processes=num_processes)
     elapsed_time = time.time() - start_time
     print(f"Elapsed time: {elapsed_time} s", end="\r")
+
+
+@cli.command()
+def mona(location: MONALocation = typer.Argument(..., help="Recording location of the trajectory file"),
+         trajectory_file: Path = typer.Argument(..., help="Path to the trajectory file in csv or parquet format"),
+         output_dir: Path = typer.Option(".", help="Output directory for scenarios"),
+         track_id: Optional[int] = typer.Option(None, help="Track id to use for the planning problem"),
+         num_scenarios: Optional[int] = typer.Option(None, help="Number of scenarios to extract"),
+         max_duration: Optional[int] = typer.Option(None,
+                                                    help="Maximum duration of a scenario in number of time steps"),
+         keep_ego: bool = typer.Option(False, help="Keep the vehicle of the planning problem"),
+         disjunctive_scenarios: bool = typer.Option(True, help="Create only non-overlapping scenarios"),
+         num_processes: int = typer.Option(1, help="Number of processes to use for conversion"), ):
+    """
+    Convert MONA recording into CommonRoad scenario(s).
+
+    Nomenclature of created scenarios: [map name][day][segment index]-[map version]_[start frame]_T-[ego id]
+    """
+    file_name_pattern = re.compile(
+            r"(?P<location>east|west|merge)_(?P<day>2021080[2-6])_(?P<segment>[0-9]{3})_trajectories")
+    np.random.seed(0)
+    output_dir = Path(output_dir)
+    os.makedirs(output_dir, exist_ok=True)
+    config = _get_mona_config()
+
+    map_scenario = _get_map(config, location.value)
+
+    traj_df = _read_trajectories(trajectory_file)
+    transform_coordinates(config["origin"], traj_df, map_scenario)
+
+    match = file_name_pattern.match(trajectory_file.stem)
+    if match is not None:
+        if match["location"] != location.value:
+            warnings.warn(f"Using different map than trajectory location! {match['location']} != {location.value}")
+        map_suffix = f'{match["day"]}{match["segment"]}'
+    else:
+        map_suffix = ""
+
+    processor = MONAProcessor(map_scenario, config, output_dir, keep_ego, map_suffix)
+
+    if disjunctive_scenarios:
+        generator = MONADisjunctiveJobGenerator(traj_df, num_scenarios, max_duration)
+    else:
+        generator = MONATrackIdJobGenerator(traj_df, num_scenarios, track_id)
+
+    run_processor(generator, processor, num_processes)
 
 
 if __name__ == "__main__":
