@@ -155,11 +155,24 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
         else:
             raise NoCarException("There is no car in dynamic obstacles which can be used as planning problem.")
 
+        if scenario.scenario_id == "DEU_AAH1-17_164_T-1":
+            print("###########################################################")
+            print("###########################################################")
+            print("###########################################################")
+            print("###########################################################")
+            print("###########################################################")
+            print("###########################################################")
+            print("###########################################################")
+            print("###########################################################")
+            print("###########################################################")
+
         # check validity of dynamic_obstacle_selected
         if not obstacle_moved(dynamic_obstacle_selected) or ego_vehicle_on_opposing_lane(dynamic_obstacle_selected,
                                                                                          scenario.lanelet_network):
             continue
 
+        if scenario.scenario_id == "DEU_AAH1-17_164_T-1":
+            quit()
         if not keep_ego:
             planning_problem_id = dynamic_obstacle_selected.obstacle_id
         else:
@@ -195,13 +208,18 @@ def ego_vehicle_on_opposing_lane(ego_vehicle, lanelet_network):
     ego_initial_lanelet_id = lanelet_network.find_lanelet_by_position([ego_vehicle.initial_state.position])
     if len(ego_initial_lanelet_id[0]) == 0:
         return True
+    for ego_lanelet in ego_initial_lanelet_id:
+        print(ego_lanelet[0])
     ego_initial_lanelet_id = ego_initial_lanelet_id[0][0]
     ego_initial_lanelet = lanelet_network._lanelets.get(ego_initial_lanelet_id)
     try:
         initial_lanelet_orientation = ego_initial_lanelet.orientation_by_position(ego_vehicle.initial_state.position)
         angle_difference = ego_initial_orientation - initial_lanelet_orientation
         angle = (angle_difference + np.pi) % (2 * np.pi) - np.pi
-        return not np.pi >= angle >= -1 * np.pi
+        print("Ego Orientation: " + str(ego_initial_orientation))
+        print("Lanelet Orientation: " + str(initial_lanelet_orientation))
+        print("Angle: " + str(angle))
+        return not (np.pi / 2) >= angle >= -1 * (np.pi / 2)
     except AssertionError:
         return True
 
