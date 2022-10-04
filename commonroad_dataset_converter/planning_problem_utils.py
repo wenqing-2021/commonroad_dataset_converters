@@ -102,6 +102,10 @@ def obstacle_to_planning_problem(obstacle: DynamicObstacle, planning_problem_id:
     return PlanningProblem(planning_problem_id, dynamic_obstacle_initial_state, goal_region)
 
 
+def ego_vehicle_driving_backwards(ego_vehicle):
+    return ego_vehicle.initial_state.velocity < 0.0
+
+
 def generate_planning_problem(scenario: Scenario, orientation_half_range: float = 0.2, velocity_half_range: float = 10.,
                               time_step_half_range: int = 25, keep_ego: bool = False, highD: bool = False,
                               lane_change: bool = False, routability: Routability = Routability.ANY) -> PlanningProblem:
@@ -157,7 +161,8 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
 
         # check validity of dynamic_obstacle_selected
         if not obstacle_moved(dynamic_obstacle_selected) or ego_vehicle_on_opposing_lane(dynamic_obstacle_selected,
-                                                                                         scenario.lanelet_network):
+                                                                                         scenario.lanelet_network) or ego_vehicle_driving_backwards(
+            dynamic_obstacle_selected):
             continue
 
         if not keep_ego:
