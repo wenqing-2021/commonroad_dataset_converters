@@ -80,6 +80,9 @@ publish_internal:
     - poetry config repositories.gitlab ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi
     - poetry build
     - poetry publish --repository gitlab -u gitlab-ci-token -p ${CI_JOB_TOKEN}
+  environment:
+    name: staging
+    url: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi
 
 publish_pypi:
   stage: build
@@ -89,3 +92,6 @@ publish_pypi:
   script:
     - poetry build
     - poetry publish -u ${CR_PYPI_RELEASE_USERNAME} -p ${CR_PYPI_RELEASE_PASSWORD}
+  environment:
+    name: production
+    url: https://pypi.org/project/commonroad-dataset-converter
