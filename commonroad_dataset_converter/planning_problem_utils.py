@@ -206,7 +206,7 @@ def ego_vehicle_on_opposing_lane(ego_vehicle, lanelet_network):
         initial_lanelet_orientation = ego_initial_lanelet.orientation_by_position(ego_vehicle.initial_state.position)
         angle_difference = ego_initial_orientation - initial_lanelet_orientation
         angle = (angle_difference + np.pi) % (2 * np.pi) - np.pi
-        return not (np.pi / 2) >= angle >= -1 * (np.pi / 2)
+        return not 1.3 >= angle >= - 1.3
     except AssertionError:
         return True
 
