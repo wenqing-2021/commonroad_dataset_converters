@@ -160,6 +160,11 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
             raise NoCarException("There is no car in dynamic obstacles which can be used as planning problem.")
 
         # check validity of dynamic_obstacle_selected
+        # obstacle_moved asserts that the vehicle doesn't spawn in the goal area
+        # ego_vehicle_on_opposing_lane asserts that the vehicle does not spawn on the wrong side of the road or
+        # drives into the opposite direction on the correct lane
+        # ego_vehicle_driving_backwards asserts that the velocity of the vehicle is positive
+        # check issues on gitlab for further information
         if not obstacle_moved(dynamic_obstacle_selected) or ego_vehicle_on_opposing_lane(dynamic_obstacle_selected,
                                                                                          scenario.lanelet_network) or ego_vehicle_driving_backwards(
             dynamic_obstacle_selected):
