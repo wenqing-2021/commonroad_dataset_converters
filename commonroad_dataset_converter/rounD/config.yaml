@@ -4,7 +4,7 @@ source: The Roundabout Drone Dataset (rounD)
 tags: [roundabout, multi_lane, urban, oncoming_traffic, speed_limit]
 
 locations:
-    0: Neuweiler
+    0: Neuweiler_repaired
 location_benchmark_id:
     0: NWA
     
