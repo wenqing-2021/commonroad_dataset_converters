@@ -1,6 +1,6 @@
 import os
-import shutil
 import sys
+import shutil
 import unittest
 import warnings
 

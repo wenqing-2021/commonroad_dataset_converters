@@ -11,16 +11,19 @@ __status__ = "Released"
 __desc__ = """
 Validates a Commonroad scenario syntactically
 """
-import glob
 import os
+import glob
+from argparse import ArgumentParser
 from pathlib import Path
 
 from commonroad.common.file_reader import CommonRoadFileReader
 from commonroad.scenario.lanelet import LaneletNetwork
-from commonroad.scenario.obstacle import DynamicObstacle, StaticObstacle
 from commonroad.scenario.scenario import Scenario
+from commonroad.scenario.obstacle import DynamicObstacle, StaticObstacle
+
 from lxml import etree
 from shapely.validation import explain_validity
+from sys import exit
 
 
 def check_adjacency(lanelet_network: LaneletNetwork):

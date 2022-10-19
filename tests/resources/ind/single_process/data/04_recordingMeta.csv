@@ -1,3 +1,2 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:725c0c0a359627591a4c9971c9c6b651ec435924b8310aeeb8dffd8c7455054d
-size 279
+recordingId,locationId,frameRate,speedLimit,weekday,startTime,duration,numTracks,numVehicles,numVRUs,latLocation,lonLocation,xUtmOrigin,yUtmOrigin,orthoPxToMeter
+4,4,25.00000,13.88889,monday,12,647.68000,182,177,5,50.78506,6.13072,297631.31870,5629917.34465,0.0126999352667008

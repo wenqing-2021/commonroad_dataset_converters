@@ -1,0 +1,15 @@
+# Build deps
+twine
+build
+wheel
+
+# CLI deps
+typer==0.4.0
+
+# Dataset Converter deps
+numpy>=1.18.2
+commonroad-io>=2020.3
+pandas>=0.24.2
+scipy>=1.4.1
+ruamel.yaml>=0.16.10
+click==8.0.4
