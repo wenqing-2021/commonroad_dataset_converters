@@ -156,12 +156,9 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
     else:
         planning_problem_id = scenario.generate_object_id()
 
-    if len(scenario.dynamic_obstacles) > 0:
-        max_time_step = max([obs.prediction.trajectory.state_list[-1].time_step for obs in scenario.dynamic_obstacles])
-        final_time_step = min(
-            dynamic_obstacle_selected.prediction.trajectory.final_state.time_step + time_step_half_range, max_time_step)
-    else:
-        final_time_step = dynamic_obstacle_selected.prediction.trajectory.final_state.time_step + time_step_half_range
+        # check validity of dynamic_obstacle_selected
+        if not obstacle_moved(dynamic_obstacle_selected):
+            continue
 
     planning_problem = obstacle_to_planning_problem(dynamic_obstacle_selected,
                                                     planning_problem_id,
@@ -172,7 +169,45 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
                                                     lanelet_network=scenario.lanelet_network,
                                                     highD=highD)
 
-    return planning_problem
+        if len(scenario.dynamic_obstacles) > 0:
+            max_time_step = max([obstacle.prediction.final_time_step for obstacle in scenario.dynamic_obstacles])
+            final_time_step = min(
+                dynamic_obstacle_selected.prediction.trajectory.final_state.time_step + time_step_half_range, max_time_step)
+        else:
+            final_time_step = dynamic_obstacle_selected.prediction.trajectory\
+                                  .final_state.time_step + time_step_half_range
+
+
+        # check if generated planning problem is routable
+        if routability == Routability.ANY or check_routability_planning_problem(scenario, planning_problem, routability):
+            if not keep_ego:
+                scenario.remove_obstacle(dynamic_obstacle_selected)
+            return planning_problem
+
+
+def obstacle_moved(obstacle):
+    # positions = np.array([state.position for state in obstacle.prediction.trajectory.state_list])
+    # min_x = np.min(positions[:, 0])
+    # max_x = np.min(positions[:, 0])
+    # min_y = np.min(positions[:, 1])
+    # max_y = np.min(positions[:, 1])
+    #
+    # tmp1 = pow(max_x - min_x, 2) + pow(max_y - min_y, 2)
+
+    driven_distance = 0.
+    occupancy_set_index_div_5 = (len(obstacle.prediction.occupancy_set) - 1) // 5
+    for i in range(occupancy_set_index_div_5):
+        driven_distance += np.abs(np.linalg.norm(obstacle.prediction.trajectory.state_list[i * 5].position
+                                                 - obstacle.prediction.trajectory.state_list[
+                                                     (i + 1) * 5].position))
+
+    if len(obstacle.prediction.occupancy_set) % 5 != 0:
+        driven_distance += np.abs(np.linalg.norm(obstacle.prediction.trajectory.
+                                                 state_list[occupancy_set_index_div_5 * 5].position -
+                                                 obstacle.prediction.trajectory.final_state.position))
+
+    # discard candidate if driven distance in scenario is too short
+    return driven_distance > 5.
 
 
 def check_routability_planning_problem(
