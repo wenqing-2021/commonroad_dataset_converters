@@ -206,9 +206,10 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
         if len(scenario.dynamic_obstacles) > 0:
             max_time_step = max([obstacle.prediction.final_time_step for obstacle in scenario.dynamic_obstacles])
             final_time_step = min(
-                dynamic_obstacle_selected.prediction.trajectory.final_state.time_step + time_step_half_range, max_time_step)
+                dynamic_obstacle_selected.prediction.trajectory.final_state.time_step + time_step_half_range,
+                max_time_step)
         else:
-            final_time_step = dynamic_obstacle_selected.prediction.trajectory\
+            final_time_step = dynamic_obstacle_selected.prediction.trajectory \
                                   .final_state.time_step + time_step_half_range
 
         planning_problem = obstacle_to_planning_problem(dynamic_obstacle_selected,
@@ -220,7 +221,8 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
                                                         lanelet_network=scenario.lanelet_network)
 
         # check if generated planning problem is routable
-        if routability == Routability.ANY or check_routability_planning_problem(scenario, planning_problem, routability):
+        if routability == Routability.ANY or check_routability_planning_problem(scenario, planning_problem,
+                                                                                routability):
             if not keep_ego:
                 scenario.remove_obstacle(dynamic_obstacle_selected)
             return planning_problem
@@ -252,8 +254,8 @@ def obstacle_moved(obstacle):
 
 
 def check_routability_planning_problem(
-    scenario: Scenario, planning_problem: PlanningProblem,
-    max_difficulity: Type[Routability]
+        scenario: Scenario, planning_problem: PlanningProblem,
+        max_difficulity: Type[Routability]
 ) -> bool:
     """
     Checks if a planning problem is routable on scenario
