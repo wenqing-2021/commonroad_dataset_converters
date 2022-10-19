@@ -38,6 +38,17 @@ convert_ind:
     - python -m unittest commonroad_dataset_converter/tests/test_inD.py
   cache:
     key: download-cache
+  
+convert_round:
+  stage: test
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+      allow_failure: true
+      when: manual
+  script:
+    - python -m unittest commonroad_dataset_converter/tests/test_rounD.py
+  cache:
+    key: download-cache
 
 convert_interaction:
   stage: test
