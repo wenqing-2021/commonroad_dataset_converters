@@ -264,6 +264,8 @@ def generate_scenarios_for_record_vehicle(recording_meta_fn: str, tracks_meta_fn
                 )
             except IndexError as e:
                 print(f"Cannot find lanelet by position: {repr(e)}. Skipping this scenario.")
+            except NoCarException as e:
+                print(f"No car in this scenario: {repr(e)}. Skipping this scenario.")
 
 def create_rounD_scenarios(input_dir: str, output_dir: str, num_time_steps_scenario: int,
                          num_planning_problems: int, keep_ego: bool, obstacle_start_at_zero: bool,
