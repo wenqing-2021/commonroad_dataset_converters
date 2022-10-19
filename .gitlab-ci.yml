@@ -1,21 +1,19 @@
-image: continuumio/anaconda3
+image: python:3.8
 
 stages:
-- prepare
+- style
 - test
 - build
 
-before_script:
-  - apt-get update -y > /dev/null
-  - apt-get install -y --no-install-recommends apt-utils dialog build-essential > /dev/null
-  - conda create -n cr37 python=3.7
-  - source activate cr37
-  - pip install -r requirements.txt
-  - make install
-  - make build
+cache:
+  paths:
+    - .venv
 
-# Change pip's cache directory to be inside the project directory since we can
-# only cache local items.
+before_script:
+  - pip install poetry
+  - poetry config virtualenvs.in-project true
+  - poetry install
+  - source .venv/bin/activate
 
 convert_highd:
   stage: test
@@ -24,7 +22,7 @@ convert_highd:
       allow_failure: true
       when: manual
   script:
-    - python -m unittest commonroad_dataset_converter/tests/test_highD.py
+    - poetry run python -m unittest tests/test_highD.py
   cache:
     key: download-cache
 
@@ -35,18 +33,7 @@ convert_ind:
       allow_failure: true
       when: manual
   script:
-    - python -m unittest commonroad_dataset_converter/tests/test_inD.py
-  cache:
-    key: download-cache
-  
-convert_round:
-  stage: test
-  rules:
-    - if: '$CI_COMMIT_BRANCH'
-      allow_failure: true
-      when: manual
-  script:
-    - python -m unittest commonroad_dataset_converter/tests/test_rounD.py
+    - poetry run python -m unittest tests/test_inD.py
   cache:
     key: download-cache
 
@@ -57,7 +44,54 @@ convert_interaction:
       allow_failure: true
       when: manual
   script:
-    - python -m unittest commonroad_dataset_converter/tests/test_INTERACTION.py
+    - poetry run python -m unittest tests/test_INTERACTION.py
   cache:
     key: download-cache
   timeout: 3h
+
+convert_mona :
+  stage : test
+  image : python:3.8
+  script :
+    - poetry run crconvert mona --num-scenarios 1 merge --no-disjunctive-scenarios tests/resources/mona/merge_20210802_000_trajectories.parquet
+    - poetry run crconvert mona --num-scenarios 1 east --no-disjunctive-scenarios tests/resources/mona/east_20210802_000_trajectories.parquet
+    - poetry run crconvert mona --num-scenarios 1 west --no-disjunctive-scenarios tests/resources/mona/west_20210802_000_trajectories.parquet
+  artifacts :
+    paths :
+      - DEU_MONAMerge20210802000-2_40851_T-2036.xml
+      - DEU_MONAEast20210802000-2_14506_T-4007.xml
+      - DEU_MONAWest20210802000-2_10176_T-1399.xml
+    expire_in : 1 week
+
+flake8 :
+  stage : style
+  before_script : [ ]
+  script :
+    - pip install flake8 flake8-todo
+    - flake8 commonroad_dataset_converter
+  allow_failure : true
+
+publish_internal:
+  stage: build
+  when: manual
+  only:
+    - master
+  script:
+    - poetry config repositories.gitlab ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi
+    - poetry build
+    - poetry publish --repository gitlab -u gitlab-ci-token -p ${CI_JOB_TOKEN}
+  environment:
+    name: staging
+    url: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi
+
+publish_pypi:
+  stage: build
+  when: manual
+  only:
+    - master
+  script:
+    - poetry build
+    - poetry publish -u ${CR_PYPI_RELEASE_USERNAME} -p ${CR_PYPI_RELEASE_PASSWORD}
+  environment:
+    name: production
+    url: https://pypi.org/project/commonroad-dataset-converter
