@@ -10,10 +10,7 @@ from commonroad.scenario.trajectory import State, Trajectory
 from commonroad.prediction.prediction import TrajectoryPrediction
 from commonroad.scenario.scenario import Scenario
 
-obstacle_class_dict = {
-    'Truck': ObstacleType.TRUCK,
-    'Car': ObstacleType.CAR
-}
+obstacle_class_dict = {'Truck': ObstacleType.TRUCK, 'Car': ObstacleType.CAR}
 
 
 def get_velocity(track_df: DataFrame) -> np.array:
@@ -43,13 +40,11 @@ def get_acceleration(track_df: DataFrame, orientation: np.array) -> np.array:
     :param track_df: track data frame of a vehicle
     :return: array of accelerations for vehicle
     """
-    return np.cos(orientation) * track_df.xAcceleration + np.sin(orientation) * (
-        -track_df.yAcceleration
-    )
+    return np.cos(orientation) * track_df.xAcceleration + np.sin(orientation) * (-track_df.yAcceleration)
 
 
-def generate_dynamic_obstacle(scenario: Scenario, vehicle_id: int, tracks_meta_df: DataFrame,
-                              tracks_df: DataFrame, time_step_correction: int, downsample: int) -> DynamicObstacle:
+def generate_dynamic_obstacle(scenario: Scenario, vehicle_id: int, tracks_meta_df: DataFrame, tracks_df: DataFrame,
+                              time_step_correction: int, downsample: int) -> DynamicObstacle:
     """
 
     :param scenario: CommonRoad scenario

@@ -101,12 +101,10 @@ def rounD(input_dir: Path = typer.Argument(..., help="Path to round-dataset's da
           num_time_steps: int = typer.Option(150,
                                              help="Maximum number of time steps the CommonRoad scenario can be long"),
           num_planning_problems: int = typer.Option(1, help="Number of planning problems per CommonRoad scenario"),
-          keep_ego: bool = typer.Option(False,
-                                        help="Indicator if vehicles used for planning problem should be kept in "
-                                             "scenario"),
-          obstacle_start_at_zero: bool = typer.Option(False,
-                                                      help="Indicator if the initial state of an obstacle has to "
-                                                           "start at time step zero"),
+          keep_ego: bool = typer.Option(False, help="Indicator if vehicles used for planning problem should be kept in "
+                                                    "scenario"), obstacle_start_at_zero: bool = typer.Option(False,
+                                                                                                             help="Indicator if the initial state of an obstacle has to "
+                                                                                                                  "start at time step zero"),
           num_processes: int = typer.Option(1, help="Number of multiple processes to convert dataset"),
           all_vehicles: bool = typer.Option(False,
                                             help="Convert one CommonRoad scenario for each valid vehicle from inD "
