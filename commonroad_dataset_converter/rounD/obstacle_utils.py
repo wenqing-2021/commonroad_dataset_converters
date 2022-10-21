@@ -18,12 +18,7 @@ import pandas as pd
 from typing import Dict, Union, List
 from commonroad_dataset_converter.rounD import trajectory_classification
 
-from commonroad.scenario.obstacle import (
-    ObstacleType,
-    DynamicObstacle,
-    StaticObstacle,
-    SignalState
-)
+from commonroad.scenario.obstacle import (ObstacleType, DynamicObstacle, StaticObstacle, SignalState)
 from commonroad.geometry.shape import Rectangle, Circle
 from commonroad.scenario.trajectory import Trajectory, State
 from commonroad.prediction.prediction import TrajectoryPrediction
@@ -33,16 +28,8 @@ from commonroad_dataset_converter.helper import make_valid_orientation_pruned
 LOGGER = logging.getLogger(__name__)
 
 
-def state_from_track_tuple(
-        time_step: int,
-        xcenter: float,
-        ycenter: float,
-        heading: float,
-        lat_velocity: float,
-        lon_velocity: float,
-        lat_acceleration: float,
-        lon_acceleration: float,
-):
+def state_from_track_tuple(time_step: int, xcenter: float, ycenter: float, heading: float, lat_velocity: float,
+        lon_velocity: float, lat_acceleration: float, lon_acceleration: float, ):
     """
     Convert a tuple of informations (mostly raw from the rounD dataset) to a State object
     Description of parameters mostly copied from https://www.round-dataset.com/
@@ -56,24 +43,14 @@ def state_from_track_tuple(
     :param lon_acceleration: The longitudinal acceleration. 	[m/s²]
     :return:
     """
-    return State(
-        time_step=int(time_step),
-        position=np.array([xcenter, ycenter]),
-        orientation=make_valid_orientation_pruned(math.radians(heading)),
-        velocity=lon_velocity,
-        acceleration=lon_acceleration,
-    )
+    return State(time_step=int(time_step), position=np.array([xcenter, ycenter]),
+            orientation=make_valid_orientation_pruned(math.radians(heading)), velocity=lon_velocity,
+            acceleration=lon_acceleration, )
 
 
-def generate_obstacle(
-        tracks_df: pd.DataFrame,
-        tracks_meta_df: pd.DataFrame,
-        vehicle_id: int,
-        obstacle_id: int,
-        frame_start: int,
-        class_to_type: Dict[str, ObstacleType],
-        detect_static_vehicles=False,
-) -> Union[StaticObstacle, DynamicObstacle]:
+def generate_obstacle(tracks_df: pd.DataFrame, tracks_meta_df: pd.DataFrame, vehicle_id: int, obstacle_id: int,
+        frame_start: int, class_to_type: Dict[str, ObstacleType], detect_static_vehicles=False, ) -> Union[
+    StaticObstacle, DynamicObstacle]:
     """
     Converts a single track from a rounD dataset recording to a CommonRoad obstacle
     Assumes that the cutting will leave at least 2 frames remaining
@@ -111,62 +88,44 @@ def generate_obstacle(
     # arbitrary 1 meter threshold: if moved at least one meter, is not a parked vehicle
     # also note that if it disappears before the recording ends or appears after it begins, it is not parked
     if (
-            detect_static_vehicles
-            and obstacle_type != ObstacleType.PEDESTRIAN
-            # vehicle moved less than one meter total during recording
-            and pow(max_x - min_x, 2) + pow(max_y - min_y, 2) < 1
-    ):
+            detect_static_vehicles and obstacle_type != ObstacleType.PEDESTRIAN # vehicle moved less than one meter
+            # total during recording
+            and pow(max_x - min_x, 2) + pow(max_y - min_y, 2) < 1):
         obstacle_type = ObstacleType.PARKED_VEHICLE
-        obstacle_initial_state = state_from_track_tuple(
-            time_step=0,
-            xcenter=np.average(vehicle_track["xCenter"]),
-            ycenter=np.average(vehicle_track["yCenter"]),
-            heading=np.average(vehicle_track["heading"]),
-            lat_velocity=0.,
-            lon_velocity=0.,
-            lat_acceleration=0.,
-            lon_acceleration=0.,
-        )
+        obstacle_initial_state = state_from_track_tuple(time_step=0, xcenter=np.average(vehicle_track["xCenter"]),
+                ycenter=np.average(vehicle_track["yCenter"]), heading=np.average(vehicle_track["heading"]),
+                lat_velocity=0., lon_velocity=0., lat_acceleration=0., lon_acceleration=0., )
 
         return StaticObstacle(obstacle_id, obstacle_type, obstacle_shape, obstacle_initial_state)
 
-    track_tuples = zip(
-        np.array(vehicle_track["frame"]) - frame_start,
-        vehicle_track["xCenter"],
-        vehicle_track["yCenter"],
-        vehicle_track["heading"],
-        vehicle_track["latVelocity"],
-        vehicle_track["lonVelocity"],
-        vehicle_track["latAcceleration"],
-        vehicle_track["lonAcceleration"],
-    )
+    track_tuples = zip(np.array(vehicle_track["frame"]) - frame_start, vehicle_track["xCenter"],
+            vehicle_track["yCenter"], vehicle_track["heading"], vehicle_track["latVelocity"],
+            vehicle_track["lonVelocity"], vehicle_track["latAcceleration"], vehicle_track["lonAcceleration"], )
 
     obstacle_initial_state = state_from_track_tuple(*next(track_tuples))
     obstacle_state_list = [state_from_track_tuple(*track_tuple) for track_tuple in track_tuples]
     if len(obstacle_state_list) == 0:
-            print("f")
+        print("f")
 
     obstacle_trajectory = Trajectory(obstacle_state_list[0].time_step, obstacle_state_list[0:])
     obstacle_trajectory_prediction = TrajectoryPrediction(obstacle_trajectory, obstacle_shape)
 
     if obstacle_type in [ObstacleType.TAXI, ObstacleType.CAR, ObstacleType.PRIORITY_VEHICLE, ObstacleType.TRUCK,
                          ObstacleType.BUS, ObstacleType.MOTORCYCLE]:
-        signal_states = _add_indicator_lights_based_on_trajectory(
-            obstacle_trajectory, [40, 30], obstacle_initial_state.time_step, obstacle_state_list[-1].time_step)
+        signal_states = _add_indicator_lights_based_on_trajectory(obstacle_trajectory, [40, 30],
+                obstacle_initial_state.time_step, obstacle_state_list[-1].time_step)
     else:
         signal_states = _generate_empty_signal_series(obstacle_initial_state.time_step,
                                                       obstacle_state_list[-1].time_step)
     if signal_states[0].time_step == 0:
         signal_states = signal_states[1:]
-    return DynamicObstacle(
-        obstacle_id, obstacle_type, obstacle_shape, obstacle_initial_state, obstacle_trajectory_prediction,
-        signal_series=signal_states
-    )
+    return DynamicObstacle(obstacle_id, obstacle_type, obstacle_shape, obstacle_initial_state,
+            obstacle_trajectory_prediction, signal_series=signal_states)
 
 
 def _add_indicator_lights_based_on_trajectory(obstacle_trajectory: Trajectory, blink_padding: List[int],
-                                              initial_time_step: int, final_time_step: int,
-                                              turn_threshold=0.02) -> List[SignalState]:
+                                              initial_time_step: int, final_time_step: int, turn_threshold=0.02) -> \
+List[SignalState]:
     """
     Finds the point with the maximum curvature, adds indicator lights to a SignalState object
     according to the curvature of the trajectory.
@@ -179,10 +138,11 @@ def _add_indicator_lights_based_on_trajectory(obstacle_trajectory: Trajectory, b
     """
     obs_traj, curvature = trajectory_classification.classify_trajectory(obstacle_trajectory,
                                                                         turn_threshold=turn_threshold)
-    turn_index = [np.amin(np.where(curvature == np.amax(curvature))), np.amin(np.where(curvature == np.amin(curvature)))]
+    turn_index = [np.amin(np.where(curvature == np.amax(curvature))),
+                  np.amin(np.where(curvature == np.amin(curvature)))]
     signal_states = []
-    if obs_traj == trajectory_classification.TrajectoryType.LEFT or \
-            obs_traj == trajectory_classification.TrajectoryType.RIGHT:
+    if obs_traj == trajectory_classification.TrajectoryType.LEFT or obs_traj == \
+            trajectory_classification.TrajectoryType.RIGHT:
         traj_index = 1 if obs_traj == trajectory_classification.TrajectoryType.LEFT else 2
         start = max(initial_time_step, turn_index[traj_index - 1] - blink_padding[0])
         end = min(turn_index[traj_index - 1] + blink_padding[1], final_time_step)
@@ -199,8 +159,8 @@ def _add_indicator_lights_based_on_trajectory(obstacle_trajectory: Trajectory, b
             turn_left = start_left <= i <= end_left
             turn_right = start_right <= i <= end_right
             if turn_right and turn_left:
-                turn_left = (end_left > start_right and end_left - i > i - start_right) or \
-			(i - start_left >= end_right - i)
+                turn_left = (end_left > start_right and end_left - i > i - start_right) or (
+                            i - start_left >= end_right - i)
                 turn_right = not turn_left
             signal_states.append(SignalState(time_step=i, indicator_left=turn_left, indicator_right=turn_right))
     else:
