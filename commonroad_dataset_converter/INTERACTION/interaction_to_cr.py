@@ -48,9 +48,8 @@ def generate_single_scenario(output_dir, id_segment, tags, interaction_config, d
     scenario.add_objects(lanelet_network)
 
     # add all obstacles to scenario
-    scenario = generate_all_obstacles(
-        scenario, track_df, obstacle_start_at_zero, time_start_scenario, time_end_scenario
-    )
+    scenario = generate_all_obstacles(scenario, track_df, obstacle_start_at_zero, time_start_scenario,
+            time_end_scenario)
 
     # skip if there is only a few obstacles in the scenario
     if len(scenario.dynamic_obstacles) < num_planning_problems:
@@ -70,8 +69,8 @@ def generate_single_scenario(output_dir, id_segment, tags, interaction_config, d
         check_validity = True
     else:
         check_validity = False
-    fw.write_to_file(filename, OverwriteExistingFile.ALWAYS, check_validity=check_validity)
-    # print("Scenario file stored in {}".format(filename))
+    fw.write_to_file(filename, OverwriteExistingFile.ALWAYS,
+                     check_validity=check_validity)  # print("Scenario file stored in {}".format(filename))
 
 
 def generate_scenarios_for_map(location: str, map_dir: str, input_dir: str, output_dir: str, interaction_config,
@@ -142,12 +141,10 @@ def generate_scenarios_for_map(location: str, map_dir: str, input_dir: str, outp
         for id_segment in range(num_segments):
             benchmark_id = "{0}_{1}_T-1".format(location, id_config_scenario)
             try:
-                generate_single_scenario(
-                    directory_output, id_segment, tags, interaction_config, dt,
-                    scenario_time_steps, track_df, lanelet_network, benchmark_id,
-                    obstacle_start_at_zero=obstacle_start_at_zero, keep_ego=keep_ego,
-                    num_planning_problems=num_planning_problems
-                )
+                generate_single_scenario(directory_output, id_segment, tags, interaction_config, dt,
+                        scenario_time_steps, track_df, lanelet_network, benchmark_id,
+                        obstacle_start_at_zero=obstacle_start_at_zero, keep_ego=keep_ego,
+                        num_planning_problems=num_planning_problems)
                 id_config_scenario += 1
                 print("Generating scenario {}, vehicle id {}".format(benchmark_id, id_segment), end="\r")
             except NoCarException as e:
@@ -190,35 +187,15 @@ def create_interaction_scenarios(input_dir: str, output_dir: str = "scenarios_co
         for idx, location in enumerate(interaction_config['locations'].values()):
             print(f"\nProcessing {idx + 1} / {len(interaction_config['locations'])}:")
 
-            num_scenarios = generate_scenarios_for_map(
-                location,
-                map_dir,
-                input_dir,
-                output_dir,
-                interaction_config,
-                scenario_time_steps=num_time_steps_scenario,
-                obstacle_start_at_zero=obstacle_start_at_zero,
-                num_planning_problems=num_planning_problems,
-                keep_ego=keep_ego
-            )
+            num_scenarios = generate_scenarios_for_map(location, map_dir, input_dir, output_dir, interaction_config,
+                    scenario_time_steps=num_time_steps_scenario, obstacle_start_at_zero=obstacle_start_at_zero,
+                    num_planning_problems=num_planning_problems, keep_ego=keep_ego)
         sum_scenarios += num_scenarios
 
         print(f"""\nGenerated scenarios: {sum_scenarios}""")
     else:
         with multiprocessing.Pool(processes=num_processes) as pool:
-            pool.starmap(
-                generate_scenarios_for_map,
-                [
-                    (
-                        location,
-                        map_dir,
-                        input_dir,
-                        output_dir,
-                        interaction_config,
-                        num_time_steps_scenario,
-                        obstacle_start_at_zero,
-                        num_planning_problems,
-                        keep_ego
-                    ) for idx, location in enumerate(interaction_config['locations'].values())
-                ]
-            )
+            pool.starmap(generate_scenarios_for_map, [(
+                location, map_dir, input_dir, output_dir, interaction_config, num_time_steps_scenario,
+                obstacle_start_at_zero, num_planning_problems, keep_ego) for idx, location in
+                enumerate(interaction_config['locations'].values())])

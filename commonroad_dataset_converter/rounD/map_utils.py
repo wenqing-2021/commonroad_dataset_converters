@@ -18,14 +18,14 @@ LOGGER = logging.getLogger(__name__)
 locationId_to_lanelet_network = {}
 
 
-def load_lanelet_networks(map_dir: str, ind_config: Dict) -> Dict[int, LaneletNetwork]:
+def load_lanelet_networks(map_dir: str, round_config: Dict) -> Dict[int, LaneletNetwork]:
     """
     Load all lanelet networks from the given path into the static variable of the file
     :param map_dir: Path to lanelet network
     :return:
     """
     # load all lanelet networks in cache
-    for i, location_name in ind_config.get("locations").items():
+    for i, location_name in round_config.get("locations").items():
         LOGGER.info(f"Loading lanelet network {location_name} from {map_dir}")
         map_file = os.path.join(map_dir, f"{location_name}.xml")
         locationId_to_lanelet_network[i] = CommonRoadFileReader(map_file).open_lanelet_network()
@@ -33,11 +33,11 @@ def load_lanelet_networks(map_dir: str, ind_config: Dict) -> Dict[int, LaneletNe
     return locationId_to_lanelet_network
 
 
-def meta_scenario_from_recording(ind_config: Dict, location_id: int, recording_id: int, frame_rate=30) -> Scenario:
+def meta_scenario_from_recording(round_config: Dict, location_id: int, recording_id: int, frame_rate=30) -> Scenario:
     """
     Generate a meta scenario from the recording meta information
-    :param location_id: ID of the location in inD dataset
-    :param recording_id: ID of the recording in inD dataset
+    :param location_id: ID of the location in rounD dataset
+    :param recording_id: ID of the recording in rounD dataset
     :param frame_rate: of the recording
     :return: Meta scenario, containing lanelet_network only
     """
@@ -45,7 +45,7 @@ def meta_scenario_from_recording(ind_config: Dict, location_id: int, recording_i
     scenario_dt = 1 / frame_rate
 
     # id should not be 0 indexed, increase by one to prevent recording id = 0
-    benchmark_id = f"DEU_{ind_config.get('location_benchmark_id')[location_id]}-{location_id}_{recording_id + 1}_T-1"
+    benchmark_id = f"DEU_{round_config.get('location_benchmark_id')[location_id]}-{location_id}_{recording_id + 1}_T-1"
     scenario = Scenario(dt=scenario_dt,
             scenario_id=ScenarioID.from_benchmark_id(benchmark_id, scenario_version="2020a"))
 

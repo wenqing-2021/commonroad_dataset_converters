@@ -1,0 +1,22 @@
+author: Pinxue Shao
+affiliation: Technical University of Munich, Germany
+source: The Roundabout Drone Dataset (rounD)
+tags: [roundabout, multi_lane, urban, oncoming_traffic, speed_limit]
+
+locations:
+    0: Neuweiler_repaired
+location_benchmark_id:
+    0: NWA
+    
+class_to_obstacleType:
+    car: car
+    truck: truck
+    bus: bus 
+    pedestrian: pedestrian
+    bicycle: bicycle
+    motorcycle: motorcycle
+    trailer: truck
+    van: truck
+
+offsets:
+    0: [301221.365,5641501.341]

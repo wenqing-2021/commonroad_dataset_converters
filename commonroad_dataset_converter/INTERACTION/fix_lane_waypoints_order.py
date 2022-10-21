@@ -36,26 +36,17 @@ def is_waypoints_order_correct(lanelet: Lanelet, lanelet_network: LaneletNetwork
 
 
 def fix_waypoints_order(lanelet: Lanelet):
-    return Lanelet(
-        left_vertices=np.flip(lanelet.left_vertices),
-        center_vertices=np.flip(lanelet.center_vertices),
-        right_vertices=np.flip(lanelet.right_vertices),
-        lanelet_id=lanelet.lanelet_id,
-        predecessor=lanelet.predecessor,
-        successor=lanelet.successor,
-        adjacent_left=lanelet.adj_left,
-        adjacent_left_same_direction=lanelet.adj_left_same_direction,
-        adjacent_right=lanelet.adj_right,
-        adjacent_right_same_direction=lanelet.adj_right_same_direction,
-        line_marking_left_vertices=lanelet.line_marking_left_vertices,
-        line_marking_right_vertices=lanelet.line_marking_right_vertices,
-        stop_line=lanelet.stop_line,
-        lanelet_type=lanelet.lanelet_type,
-        user_one_way=lanelet.user_one_way,
-        user_bidirectional=lanelet.user_bidirectional,
-        traffic_signs=lanelet.traffic_signs,
-        traffic_lights=lanelet.traffic_lights
-    )
+    return Lanelet(left_vertices=np.flip(lanelet.left_vertices), center_vertices=np.flip(lanelet.center_vertices),
+            right_vertices=np.flip(lanelet.right_vertices), lanelet_id=lanelet.lanelet_id,
+            predecessor=lanelet.predecessor, successor=lanelet.successor, adjacent_left=lanelet.adj_left,
+            adjacent_left_same_direction=lanelet.adj_left_same_direction, adjacent_right=lanelet.adj_right,
+            adjacent_right_same_direction=lanelet.adj_right_same_direction,
+            line_marking_left_vertices=lanelet.line_marking_left_vertices,
+            line_marking_right_vertices=lanelet.line_marking_right_vertices, stop_line=lanelet.stop_line,
+            lanelet_type=lanelet.lanelet_type, user_one_way=lanelet.user_one_way,
+            user_bidirectional=lanelet.user_bidirectional, traffic_signs=lanelet.traffic_signs,
+            traffic_lights=lanelet.traffic_lights)
+
 
 if __name__ == "__main__":
     args = get_parser()

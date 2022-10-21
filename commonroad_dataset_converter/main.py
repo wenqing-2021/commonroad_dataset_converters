@@ -12,6 +12,7 @@ import typer
 from commonroad_dataset_converter.INTERACTION.interaction_to_cr import create_interaction_scenarios
 from commonroad_dataset_converter.highD.highd_to_cr import create_highd_scenarios
 from commonroad_dataset_converter.inD.ind_to_cr import create_ind_scenarios
+from commonroad_dataset_converter.rounD.round_to_cr import create_rounD_scenarios
 from commonroad_dataset_converter.mona.mona_utils import (transform_coordinates, _get_map, _read_trajectories,
                                                           _get_mona_config, MONALocation, MONATrackIdJobGenerator,
                                                           MONADisjunctiveJobGenerator, MONAProcessor, run_processor, )
@@ -90,6 +91,34 @@ def inD(input_dir: Path = typer.Argument(..., help="Path to inD-dataset's data f
     create_ind_scenarios(input_dir, output_dir, num_time_steps, num_planning_problems, keep_ego, obstacle_start_at_zero,
                          num_processes=num_processes, inD_all=all_vehicles,
                          routability_planning_problem=routability_check.as_int())
+    elapsed_time = time.time() - start_time
+    print(f"Elapsed time: {elapsed_time} s", end="\r")
+
+
+@cli.command()
+def rounD(input_dir: Path = typer.Argument(..., help="Path to round-dataset's data folder"),
+          output_dir: Path = typer.Argument(..., help="Directory to store generated CommonRoad files"),
+          num_time_steps: int = typer.Option(150,
+                                             help="Maximum number of time steps the CommonRoad scenario can be long"),
+          num_planning_problems: int = typer.Option(1, help="Number of planning problems per CommonRoad scenario"),
+          keep_ego: bool = typer.Option(False, help="Indicator if vehicles used for planning problem should be kept in "
+                                                    "scenario"), obstacle_start_at_zero: bool = typer.Option(False,
+                                                                                                             help="Indicator if the initial state of an obstacle has to "
+                                                                                                                  "start at time step zero"),
+          num_processes: int = typer.Option(1, help="Number of multiple processes to convert dataset"),
+          all_vehicles: bool = typer.Option(False,
+                                            help="Convert one CommonRoad scenario for each valid vehicle from inD "
+                                                 "dataset, since it has less "
+                                                 "recordings available. Note that if enabled, num_time_steps_scenario "
+                                                 "becomes the minimal number "
+                                                 "of time steps of one CommonRoad scenario"),
+          routability_check: RoutabilityCheck = typer.Option(RoutabilityCheck.Nocheck,
+                                                             help='Check routability of planning_problem')):
+    os.makedirs(output_dir, exist_ok=True)
+    start_time = time.time()
+    create_rounD_scenarios(input_dir, output_dir, num_time_steps, num_planning_problems, keep_ego,
+                           obstacle_start_at_zero, num_processes=num_processes, rounD_all=all_vehicles,
+                           routability_planning_problem=routability_check.as_int())
     elapsed_time = time.time() - start_time
     print(f"Elapsed time: {elapsed_time} s", end="\r")
 

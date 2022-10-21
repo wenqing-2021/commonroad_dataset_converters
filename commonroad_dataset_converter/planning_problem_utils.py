@@ -94,14 +94,11 @@ def _cut_lanelet_polygon(position: np.ndarray, lon_length: float, lanelet_networ
     right_sub = _sub_line(start_pt, end_pt, right_line)
     poly = Polygon(np.array(list(left_sub.coords) + list(right_sub.coords)[::-1]))
     return poly
-    
 
-def obstacle_to_planning_problem(obstacle: DynamicObstacle, planning_problem_id: int,
-                                 final_time_step=None,
-                                 orientation_half_range: float = 0.2,
-                                 velocity_half_range: float = 10,
-                                 time_step_half_range: int = 25,
-                                 lanelet_network: LaneletNetwork = None):
+
+def obstacle_to_planning_problem(obstacle: DynamicObstacle, planning_problem_id: int, final_time_step=None,
+                                 orientation_half_range: float = 0.2, velocity_half_range: float = 10,
+                                 time_step_half_range: int = 25, lanelet_network: LaneletNetwork = None):
     """
     Generates planning problem using initial and final states of a DynamicObstacle
     """
@@ -128,7 +125,8 @@ def obstacle_to_planning_problem(obstacle: DynamicObstacle, planning_problem_id:
     if len(goal_lanelets[0]) == 0:
         raise NoCarException("Selected final state for planning problem is out of road. Skipping this scenario")
 
-    goal_position = _cut_lanelet_polygon(dynamic_obstacle_final_state.position, dynamic_obstacle_shape.length + 2.0, lanelet_network)
+    goal_position = _cut_lanelet_polygon(dynamic_obstacle_final_state.position, dynamic_obstacle_shape.length + 2.0,
+                                         lanelet_network)
     if goal_position.shapely_object.area < goal_shape.shapely_object.area:
         goal_position = goal_shape
 
@@ -162,21 +160,20 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
     #     raise NoCarException("There is no car in dynamic obstacles which can be used as planning problem.")
 
     # only choose car type as ego vehicle
-    car_obstacles = [obstacle for obstacle in scenario.dynamic_obstacles if (obstacle.obstacle_type == ObstacleType.CAR
-                                                                             and obstacle.initial_state.time_step == 0
-                                                                             )]
+    car_obstacles = [obstacle for obstacle in scenario.dynamic_obstacles if
+                     (obstacle.obstacle_type == ObstacleType.CAR and obstacle.initial_state.time_step == 0)]
     # select only vehicles that drive to the end of the road
     if highD:
-        car_obstacles_highD = [obs for obs in car_obstacles
-                               if abs(obs.initial_state.position[0] -
-                                      obs.state_at_time(obs.prediction.final_time_step).position[0]) > 100.]
+        car_obstacles_highD = [obs for obs in car_obstacles if abs(
+            obs.initial_state.position[0] - obs.state_at_time(obs.prediction.final_time_step).position[0]) > 100.]
         if lane_change:
             car_lane_changing = []
             lanelet_network = scenario.lanelet_network
             for obs in car_obstacles_highD:
                 initial_lanelet = lanelet_network.find_lanelet_by_position([obs.initial_state.position])[0][0]
-                final_lanelet = lanelet_network.find_lanelet_by_position([
-                    obs.state_at_time(obs.prediction.final_time_step).position])[0][0]
+                final_lanelet = \
+                lanelet_network.find_lanelet_by_position([obs.state_at_time(obs.prediction.final_time_step).position])[
+                    0][0]
                 if initial_lanelet != final_lanelet:
                     car_lane_changing.append(obs)
             if len(car_lane_changing) == 0:
@@ -206,14 +203,13 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
         if len(scenario.dynamic_obstacles) > 0:
             max_time_step = max([obstacle.prediction.final_time_step for obstacle in scenario.dynamic_obstacles])
             final_time_step = min(
-                dynamic_obstacle_selected.prediction.trajectory.final_state.time_step + time_step_half_range,
-                max_time_step)
+                    dynamic_obstacle_selected.prediction.trajectory.final_state.time_step + time_step_half_range,
+                    max_time_step)
         else:
-            final_time_step = dynamic_obstacle_selected.prediction.trajectory \
-                                  .final_state.time_step + time_step_half_range
+            final_time_step = dynamic_obstacle_selected.prediction.trajectory.final_state.time_step + \
+                              time_step_half_range
 
-        planning_problem = obstacle_to_planning_problem(dynamic_obstacle_selected,
-                                                        planning_problem_id,
+        planning_problem = obstacle_to_planning_problem(dynamic_obstacle_selected, planning_problem_id,
                                                         final_time_step=final_time_step,
                                                         orientation_half_range=orientation_half_range,
                                                         velocity_half_range=velocity_half_range,
@@ -240,23 +236,21 @@ def obstacle_moved(obstacle):
     driven_distance = 0.
     occupancy_set_index_div_5 = (len(obstacle.prediction.occupancy_set) - 1) // 5
     for i in range(occupancy_set_index_div_5):
-        driven_distance += np.abs(np.linalg.norm(obstacle.prediction.trajectory.state_list[i * 5].position
-                                                 - obstacle.prediction.trajectory.state_list[
-                                                     (i + 1) * 5].position))
+        driven_distance += np.abs(np.linalg.norm(
+            obstacle.prediction.trajectory.state_list[i * 5].position - obstacle.prediction.trajectory.state_list[
+                (i + 1) * 5].position))
 
     if len(obstacle.prediction.occupancy_set) % 5 != 0:
-        driven_distance += np.abs(np.linalg.norm(obstacle.prediction.trajectory.
-                                                 state_list[occupancy_set_index_div_5 * 5].position -
+        driven_distance += np.abs(np.linalg.norm(obstacle.prediction.trajectory.state_list[
+                                                     occupancy_set_index_div_5 * 5].position -
                                                  obstacle.prediction.trajectory.final_state.position))
 
     # discard candidate if driven distance in scenario is too short
     return driven_distance > 5.
 
 
-def check_routability_planning_problem(
-        scenario: Scenario, planning_problem: PlanningProblem,
-        max_difficulity: Type[Routability]
-) -> bool:
+def check_routability_planning_problem(scenario: Scenario, planning_problem: PlanningProblem,
+        max_difficulity: Type[Routability]) -> bool:
     """
     Checks if a planning problem is routable on scenario
     :param scenario: CommonRoad scenario
