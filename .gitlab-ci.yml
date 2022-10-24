@@ -48,6 +48,17 @@ convert_round:
   cache:
     key: download-cache
 
+convert_exid:
+  stage: test
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+      allow_failure: true
+      when: manual
+  script:
+    - poetry run python -m unittest tests/test_exiD.py
+  cache:
+    key: download-cache
+
 convert_interaction:
   stage: test
   rules:
