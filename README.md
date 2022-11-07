@@ -1,7 +1,14 @@
 # Dataset Converters
 
 This repository contains converters from different datasets to CommonRoad scenarios using a common commandline interface.
-Currently, we support the [highD dataset](https://www.highd-dataset.com/)), [inD dataset](https://www.ind-dataset.com/) and the [INTERACTION dataset](http://interaction-dataset.com/). We will release converter for the [Waymo open dataset](https://waymo.com/open/) soon.
+Currently, we support:
+- [highD dataset](https://www.highd-dataset.com/),
+- [inD dataset](https://www.ind-dataset.com/),
+- [INTERACTION dataset](http://interaction-dataset.com/),
+- [exiD](https://www.exid-dataset.com/),
+- [rounD](https://www.round-dataset.com/),
+- [MONA](https://commonroad.in.tum.de/datasets),
+- [SinD](https://github.com/SOTIF-AVLab/SinD).
 
 ### Prerequisites
 For the converter you need at least Python 3.6 and the following packages:
@@ -15,13 +22,14 @@ For the converter you need at least Python 3.6 and the following packages:
 
 ### Install
 
-The usage of the Anaconda Python distribution is recommended. 
 ```bash
-pip install -r requirements.txt
-pip install -e .
-make install
-make build
+pip install commonroad-dataset-converter
 ```
+
+
+## Development setup
+This project uses [poetry](https://python-poetry.org/). Please follow the instructions to create the virtual development environment.
+
 
 ### Usage
 Type following command for help
