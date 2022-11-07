@@ -17,7 +17,7 @@ exclude = ["**/*.ipynb"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-numpy = ">=1.18.2"
+numpy = "~1.21"
 scipy = ">=1.4.1"
 pandas = ">=0.24.2"
 ruamel-yaml = ">=0.16.10"
