@@ -30,6 +30,9 @@ pyarrow = "^9.0.0"
 [tool.poetry.scripts]
 crconvert = 'commonroad_dataset_converter.main:cli'
 
+[tool.poetry.group.dev.dependencies]
+jupyter = "^1.0.0"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

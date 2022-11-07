@@ -1,7 +1,9 @@
-import os
-import re
 import time
-import warnings
+from enum import Enum
+
+import itertools
+import os
+import time
 from enum import Enum
 from pathlib import Path
 from typing import Optional
@@ -10,13 +12,16 @@ import numpy as np
 import typer
 
 from commonroad_dataset_converter.INTERACTION.interaction_to_cr import create_interaction_scenarios
+from commonroad_dataset_converter.helper import run_processor
 from commonroad_dataset_converter.highD.highd_to_cr import create_highd_scenarios
 from commonroad_dataset_converter.inD.ind_to_cr import create_ind_scenarios
 from commonroad_dataset_converter.rounD.round_to_cr import create_rounD_scenarios
 from commonroad_dataset_converter.exiD.exiD_to_cr import create_exid_scenarios
-from commonroad_dataset_converter.mona.mona_utils import (transform_coordinates, _get_map, _read_trajectories,
-                                                          _get_mona_config, MONALocation, MONATrackIdJobGenerator,
-                                                          MONADisjunctiveJobGenerator, MONAProcessor, run_processor, )
+from commonroad_dataset_converter.mona.mona_utils import (_get_mona_config, MONALocation,
+                                                          MONATrackIdJobGenerator, MONADisjunctiveJobGenerator,
+                                                          MONAProcessor, _get_mona_map, )
+from commonroad_dataset_converter.sind.sind_utils import (_get_map, _get_sind_config, SinDProcessor,
+                                                          SindDisjunctiveJobGenerator, SindTrackIdJobGenerator, )
 
 cli = typer.Typer(help="Generates CommonRoad scenarios from different datasets")
 
@@ -189,32 +194,57 @@ def mona(location: MONALocation = typer.Argument(..., help="Recording location o
 
     Nomenclature of created scenarios: [map name][day][segment index]-[map version]_[start frame]_T-[ego id]
     """
-    file_name_pattern = re.compile(
-            r"(?P<location>east|west|merge)_(?P<day>2021080[2-6])_(?P<segment>[0-9]{3})_trajectories")
+
     np.random.seed(0)
     output_dir = Path(output_dir)
     os.makedirs(output_dir, exist_ok=True)
     config = _get_mona_config()
 
-    map_scenario = _get_map(config, location.value)
+    map_scenario = _get_mona_map(config, location.value)
 
-    traj_df = _read_trajectories(trajectory_file)
-    transform_coordinates(config["origin"], traj_df, map_scenario)
-
-    match = file_name_pattern.match(trajectory_file.stem)
-    if match is not None:
-        if match["location"] != location.value:
-            warnings.warn(f"Using different map than trajectory location! {match['location']} != {location.value}")
-        map_suffix = f'{match["day"]}{match["segment"]}'
-    else:
-        map_suffix = ""
-
-    processor = MONAProcessor(map_scenario, config, output_dir, keep_ego, map_suffix)
+    processor = MONAProcessor(map_scenario, config, output_dir, keep_ego, disjunctive_scenarios, 0.04)
 
     if disjunctive_scenarios:
-        generator = MONADisjunctiveJobGenerator(traj_df, num_scenarios, max_duration)
+        generator = MONADisjunctiveJobGenerator(trajectory_file, location, map_scenario, config, num_scenarios, max_duration)
     else:
-        generator = MONATrackIdJobGenerator(traj_df, num_scenarios, track_id)
+        generator = MONATrackIdJobGenerator(trajectory_file, location, map_scenario, config, num_scenarios, track_id)
+
+    run_processor(generator, processor, num_processes)
+
+
+@cli.command()
+def sind(dataset_dir: Path = typer.Argument(..., help="Path to the dataset directory"),
+        output_dir: Path = typer.Option(".", help="Output directory for scenarios"),
+        track_id: Optional[int] = typer.Option(None, help="Track id to use for the planning problem"),
+        num_scenarios: Optional[int] = typer.Option(None, help="Number of scenarios to extract"),
+        max_duration: Optional[int] = typer.Option(None, help="Maximum duration of a scenario in number of time steps"),
+        keep_ego: bool = typer.Option(False, help="Keep the vehicle of the planning problem"),
+        disjunctive_scenarios: bool = typer.Option(True, help="Create only non-overlapping scenarios"),
+        num_processes: int = typer.Option(1, help="Number of processes to use for conversion"), ):
+    """Convert SIND recording into CommonRoad scenario(s)."""
+    output_dir = Path(output_dir)
+    os.makedirs(output_dir, exist_ok=True)
+
+    config = _get_sind_config()
+    map_scenario = _get_map()
+
+    assert dataset_dir.exists(), f"{dataset_dir.resolve().absolute()} does not exist!"
+    assert dataset_dir.is_dir(), f"{dataset_dir.resolve().absolute()} is not a directory!"
+
+    if all([p.is_file() for p in dataset_dir.iterdir()]):
+        recordings = [dataset_dir]
+    else:
+        recordings = [p for p in dataset_dir.iterdir() if p.is_dir()]
+
+    processor = SinDProcessor(map_scenario, config, output_dir, keep_ego, disjunctive_scenarios, 0.0)
+
+    if disjunctive_scenarios:
+        generator = [SindDisjunctiveJobGenerator(p, num_scenarios, max_duration, p.name.replace("_", "")) for p in
+                     recordings]
+    else:
+        generator = [SindTrackIdJobGenerator(p, num_scenarios, track_id, p.name.replace("_", "")) for p in recordings]
+
+    generator = itertools.chain(*generator)
 
     run_processor(generator, processor, num_processes)
 
