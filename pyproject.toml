@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "commonroad-dataset-converter"
-version = "0.1.0"
+version = "2022.1"
 description = "CommonRoad Dataset Converter"
 authors = ["Cyber-Physical Systems Group, Technical University of Munich <commonroad@lists.lrz.de>"]
 license = "BSD-3-Clause"
