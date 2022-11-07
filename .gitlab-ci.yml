@@ -75,15 +75,7 @@ convert_mona :
   stage : test
   image : python:3.8
   script :
-    - poetry run crconvert mona --num-scenarios 1 merge --no-disjunctive-scenarios tests/resources/mona/merge_20210802_000_trajectories.parquet
-    - poetry run crconvert mona --num-scenarios 1 east --no-disjunctive-scenarios tests/resources/mona/east_20210802_000_trajectories.parquet
-    - poetry run crconvert mona --num-scenarios 1 west --no-disjunctive-scenarios tests/resources/mona/west_20210802_000_trajectories.parquet
-  artifacts :
-    paths :
-      - DEU_MONAMerge20210802000-2_40851_T-2036.xml
-      - DEU_MONAEast20210802000-2_14506_T-4007.xml
-      - DEU_MONAWest20210802000-2_10176_T-1399.xml
-    expire_in : 1 week
+    - poetry run python -m unittest tests/test_mona.py
 
 flake8 :
   stage : style
