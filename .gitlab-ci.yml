@@ -5,10 +5,6 @@ stages:
 - test
 - build
 
-cache:
-  paths:
-    - .venv
-
 before_script:
   - pip install poetry
   - poetry config virtualenvs.in-project true
@@ -23,8 +19,6 @@ convert_highd:
       when: manual
   script:
     - poetry run python -m unittest tests/test_highD.py
-  cache:
-    key: download-cache
 
 convert_ind:
   stage: test
@@ -34,8 +28,6 @@ convert_ind:
       when: manual
   script:
     - poetry run python -m unittest tests/test_inD.py
-  cache:
-    key: download-cache
 
 convert_round:
   stage: test
@@ -45,8 +37,6 @@ convert_round:
       when: manual
   script:
     - poetry run python -m unittest tests/test_rounD.py
-  cache:
-    key: download-cache
 
 convert_exid:
   stage: test
@@ -56,8 +46,6 @@ convert_exid:
       when: manual
   script:
     - poetry run python -m unittest tests/test_exiD.py
-  cache:
-    key: download-cache
 
 convert_interaction:
   stage: test
@@ -67,8 +55,6 @@ convert_interaction:
       when: manual
   script:
     - poetry run python -m unittest tests/test_INTERACTION.py
-  cache:
-    key: download-cache
   timeout: 3h
 
 convert_mona :
