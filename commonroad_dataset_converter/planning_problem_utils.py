@@ -11,26 +11,24 @@ __desc__ = """
 """
 
 import random
-from enum import Enum
-from typing import Type, Sequence
-import numpy as np
 import warnings
-import sys
+from enum import Enum
+from typing import Type
 
 import numpy as np
-from commonroad.scenario.lanelet import LaneletNetwork
-from commonroad.scenario.trajectory import State
 from commonroad.common.util import Interval, AngleInterval
 from commonroad.geometry.shape import Rectangle, Polygon
-from commonroad.planning.planning_problem import PlanningProblem
 from commonroad.planning.goal import GoalRegion
-from commonroad.scenario.scenario import Scenario
+from commonroad.planning.planning_problem import PlanningProblem
+from commonroad.scenario.lanelet import LaneletNetwork
 from commonroad.scenario.obstacle import ObstacleType, DynamicObstacle
+from commonroad.scenario.scenario import Scenario
+from commonroad.scenario.trajectory import State
 from shapely.geometry import LineString, Point
 
 try:
     from commonroad_route_planner.route_planner import RoutePlanner
-except ModuleNotFoundError as exp:
+except ModuleNotFoundError:
     RoutePlanner = None
     warnings.warn("module commonroad_route_planner not installed, routability check will be skipped.")
 
@@ -165,15 +163,14 @@ def generate_planning_problem(scenario: Scenario, orientation_half_range: float 
     # select only vehicles that drive to the end of the road
     if highD:
         car_obstacles_highD = [obs for obs in car_obstacles if abs(
-            obs.initial_state.position[0] - obs.state_at_time(obs.prediction.final_time_step).position[0]) > 100.]
+                obs.initial_state.position[0] - obs.state_at_time(obs.prediction.final_time_step).position[0]) > 100.]
         if lane_change:
             car_lane_changing = []
             lanelet_network = scenario.lanelet_network
             for obs in car_obstacles_highD:
                 initial_lanelet = lanelet_network.find_lanelet_by_position([obs.initial_state.position])[0][0]
-                final_lanelet = \
-                lanelet_network.find_lanelet_by_position([obs.state_at_time(obs.prediction.final_time_step).position])[
-                    0][0]
+                final_lanelet = lanelet_network.find_lanelet_by_position(
+                        [obs.state_at_time(obs.prediction.final_time_step).position])[0][0]
                 if initial_lanelet != final_lanelet:
                     car_lane_changing.append(obs)
             if len(car_lane_changing) == 0:

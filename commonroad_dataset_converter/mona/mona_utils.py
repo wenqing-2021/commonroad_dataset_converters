@@ -95,7 +95,8 @@ file_name_pattern = re.compile(
 
 class MONATrackIdJobGenerator(IJobGenerator):
 
-    def __init__(self, trajectory_file: Path, location: MONALocation, map_scenario: Scenario, config, num_scenarios: int, track_id: int):
+    def __init__(self, trajectory_file: Path, location: MONALocation, map_scenario: Scenario, config,
+                 num_scenarios: int, track_id: int):
         self.trajectory_file = trajectory_file
         self.map_scenario = map_scenario
         self.num_scenarios = num_scenarios
@@ -119,7 +120,8 @@ class MONATrackIdJobGenerator(IJobGenerator):
 
 
 class MONADisjunctiveJobGenerator(IJobGenerator):
-    def __init__(self, trajectory_file: Path, location: MONALocation, map_scenario: Scenario, config, num_scenarios: int, max_duration: int):
+    def __init__(self, trajectory_file: Path, location: MONALocation, map_scenario: Scenario, config,
+                 num_scenarios: int, max_duration: int):
         self.trajectory_file = trajectory_file
         self.map_scenario = map_scenario
         self.num_scenarios = num_scenarios

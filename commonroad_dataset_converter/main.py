@@ -1,6 +1,3 @@
-import time
-from enum import Enum
-
 import itertools
 import os
 import time
@@ -12,14 +9,13 @@ import numpy as np
 import typer
 
 from commonroad_dataset_converter.INTERACTION.interaction_to_cr import create_interaction_scenarios
+from commonroad_dataset_converter.exiD.exiD_to_cr import create_exid_scenarios
 from commonroad_dataset_converter.helper import run_processor
 from commonroad_dataset_converter.highD.highd_to_cr import create_highd_scenarios
 from commonroad_dataset_converter.inD.ind_to_cr import create_ind_scenarios
+from commonroad_dataset_converter.mona.mona_utils import (_get_mona_config, MONALocation, MONATrackIdJobGenerator,
+                                                          MONADisjunctiveJobGenerator, MONAProcessor, _get_mona_map, )
 from commonroad_dataset_converter.rounD.round_to_cr import create_rounD_scenarios
-from commonroad_dataset_converter.exiD.exiD_to_cr import create_exid_scenarios
-from commonroad_dataset_converter.mona.mona_utils import (_get_mona_config, MONALocation,
-                                                          MONATrackIdJobGenerator, MONADisjunctiveJobGenerator,
-                                                          MONAProcessor, _get_mona_map, )
 from commonroad_dataset_converter.sind.sind_utils import (_get_map, _get_sind_config, SinDProcessor,
                                                           SindDisjunctiveJobGenerator, SindTrackIdJobGenerator, )
 
@@ -205,7 +201,8 @@ def mona(location: MONALocation = typer.Argument(..., help="Recording location o
     processor = MONAProcessor(map_scenario, config, output_dir, keep_ego, disjunctive_scenarios, 0.04)
 
     if disjunctive_scenarios:
-        generator = MONADisjunctiveJobGenerator(trajectory_file, location, map_scenario, config, num_scenarios, max_duration)
+        generator = MONADisjunctiveJobGenerator(trajectory_file, location, map_scenario, config, num_scenarios,
+                                                max_duration)
     else:
         generator = MONATrackIdJobGenerator(trajectory_file, location, map_scenario, config, num_scenarios, track_id)
 
@@ -214,13 +211,14 @@ def mona(location: MONALocation = typer.Argument(..., help="Recording location o
 
 @cli.command()
 def sind(dataset_dir: Path = typer.Argument(..., help="Path to the dataset directory"),
-        output_dir: Path = typer.Option(".", help="Output directory for scenarios"),
-        track_id: Optional[int] = typer.Option(None, help="Track id to use for the planning problem"),
-        num_scenarios: Optional[int] = typer.Option(None, help="Number of scenarios to extract"),
-        max_duration: Optional[int] = typer.Option(None, help="Maximum duration of a scenario in number of time steps"),
-        keep_ego: bool = typer.Option(False, help="Keep the vehicle of the planning problem"),
-        disjunctive_scenarios: bool = typer.Option(True, help="Create only non-overlapping scenarios"),
-        num_processes: int = typer.Option(1, help="Number of processes to use for conversion"), ):
+         output_dir: Path = typer.Option(".", help="Output directory for scenarios"),
+         track_id: Optional[int] = typer.Option(None, help="Track id to use for the planning problem"),
+         num_scenarios: Optional[int] = typer.Option(None, help="Number of scenarios to extract"),
+         max_duration: Optional[int] = typer.Option(None,
+                                                    help="Maximum duration of a scenario in number of time steps"),
+         keep_ego: bool = typer.Option(False, help="Keep the vehicle of the planning problem"),
+         disjunctive_scenarios: bool = typer.Option(True, help="Create only non-overlapping scenarios"),
+         num_processes: int = typer.Option(1, help="Number of processes to use for conversion"), ):
     """Convert SIND recording into CommonRoad scenario(s)."""
     output_dir = Path(output_dir)
     os.makedirs(output_dir, exist_ok=True)

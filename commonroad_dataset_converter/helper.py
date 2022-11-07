@@ -22,7 +22,6 @@ from tqdm import tqdm
 from commonroad_dataset_converter.planning_problem_utils import obstacle_to_planning_problem, NoCarException
 
 
-
 def load_yaml(file_name: str) -> Union[Dict, None]:
     """
     Loads configuration setup from a yaml file
@@ -116,7 +115,8 @@ class JobProcessor(IJobProcessor[T]):
 
         try:
             final_time_step = max((s.time_step for s in ego_obstacle.prediction.trajectory.state_list if
-                                  len(scenario.lanelet_network.find_lanelet_by_position([s.position])[0]) > 0), default=-1)
+                                   len(scenario.lanelet_network.find_lanelet_by_position([s.position])[0]) > 0),
+                                  default=-1)
             if final_time_step - ego_obstacle.initial_state.time_step <= 25:
                 raise NoCarException
             final_time_step += 25
@@ -231,7 +231,8 @@ class DisjunctiveJobGenerator(IJobGenerator):
 
     def __iter__(self) -> pd.DataFrame:
         for i in range(self.num_scenarios):
-            yield self.traj_df[(self.traj_df.frame_id >= i * self.max_duration) & (self.traj_df.frame_id < (i + 1) * self.max_duration)]
+            yield self.traj_df[(self.traj_df.frame_id >= i * self.max_duration) & (
+                        self.traj_df.frame_id < (i + 1) * self.max_duration)]
 
     def __len__(self):
         return self.num_scenarios
