@@ -10,16 +10,6 @@ Currently, we support:
 - [MONA](https://commonroad.in.tum.de/datasets),
 - [SinD](https://github.com/SOTIF-AVLab/SinD).
 
-### Prerequisites
-For the converter you need at least Python 3.6 and the following packages:
-* numpy>=1.18.2
-* commonroad-io>=2020.3
-* pandas>=0.24.2
-* scipy>=1.4.1
-* ruamel.yaml>=0.16.10
-* commonroad-route-planner [optional](https://gitlab.lrz.de/tum-cps/commonroad-route-planner/)
-
-
 ### Install
 
 ```bash
@@ -66,8 +56,3 @@ This is an optional parameter. The default is *1*
 * **keep_direction**: (highD) Prevents rotating the upper driving direction (right to left) by PI. (bool). This is an optional parameter. The default is *False* so that scenario direction corresponds for all scenarios.
 * **routability_check**: (inD) Validity check 'Routability' (int) of the scenario+planning problem from start to goal. 2: strict enforcement of at least one route 0: no checks, default is **2**, strict. requires **commonroad-route-planner** to be installed.
 
-
-If you want to exit/logout from command line, but still want to continue the process execute   
-`nohup command-with-options &`.
-
-Note that the specific converters in each subdirectory may host seperate additional scripts and options for conversion.
