@@ -57,11 +57,17 @@ convert_interaction:
     - poetry run python -m unittest tests/test_INTERACTION.py
   timeout: 3h
 
-convert_mona :
+test_mona :
   stage : test
   image : python:3.8
   script :
     - poetry run python -m unittest tests/test_mona.py
+
+test_sind :
+  stage : test
+  image : python:3.8
+  script :
+    - poetry run python -m unittest tests/test_sind.py
 
 flake8 :
   stage : style
