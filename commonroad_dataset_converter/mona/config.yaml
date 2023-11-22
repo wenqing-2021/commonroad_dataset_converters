@@ -1,8 +1,0 @@
-author: TUM
-affiliation: CPS
-source: MONA Dataset
-origin: [692000.0, 5340000.0]
-maps :
-  east : DEU_MONAEast-2.xml
-  west : DEU_MONAWest-2.xml
-  merge : DEU_MONAMerge-2.xml

@@ -1,0 +1,12 @@
+locations:
+  0: DEU_Neuweiler-1
+
+class_to_obstacleType:
+  car: car
+  truck: truck
+  bus: bus
+  pedestrian: pedestrian
+  bicycle: bicycle
+  motorcycle: motorcycle
+  trailer: truck
+  van: truck

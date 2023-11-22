@@ -1,9 +1,10 @@
-image: python:3.8
+image: python:3.10
 
 stages:
-- style
-- test
-- build
+  - style
+  - test
+  - build
+  - deploy
 
 before_script:
   - pip install poetry
@@ -11,71 +12,58 @@ before_script:
   - poetry install
   - source .venv/bin/activate
 
-convert_highd:
+unittest:
+  image : python:$PYTHON_VERSIONS
   stage: test
-  rules:
-    - if: '$CI_COMMIT_BRANCH'
-      allow_failure: true
-      when: manual
+  parallel :
+    matrix :
+      - PYTHON_VERSIONS : [ "3.8", "3.9", "3.10"]
   script:
-    - poetry run python -m unittest tests/test_highD.py
+    - poetry run python -m unittest discover tests/unittests
 
-convert_ind:
+dataset_test:
+  image : python:$PYTHON_VERSIONS
   stage: test
-  rules:
-    - if: '$CI_COMMIT_BRANCH'
-      allow_failure: true
-      when: manual
+  before_script: []
+  parallel :
+    matrix :
+      - PYTHON_VERSIONS : [ "3.8", "3.9", "3.10"]
   script:
-    - poetry run python -m unittest tests/test_inD.py
+    - pip install .
+    - python -m unittest discover tests/datasets
 
-convert_round:
-  stage: test
-  rules:
-    - if: '$CI_COMMIT_BRANCH'
-      allow_failure: true
-      when: manual
+#test_nuplan :
+#  stage : test
+#  image : python:3.9
+#  allow_failure : true
+#  script :
+#    - poetry install -E nuplan
+#    - poetry run python -m unittest tests/test_nuplan.py
+
+flake8:
+  stage: style
+  before_script: []
   script:
-    - poetry run python -m unittest tests/test_rounD.py
-
-convert_exid:
-  stage: test
-  rules:
-    - if: '$CI_COMMIT_BRANCH'
-      allow_failure: true
-      when: manual
-  script:
-    - poetry run python -m unittest tests/test_exiD.py
-
-convert_interaction:
-  stage: test
-  rules:
-    - if: '$CI_COMMIT_BRANCH'
-      allow_failure: true
-      when: manual
-  script:
-    - poetry run python -m unittest tests/test_INTERACTION.py
-  timeout: 3h
-
-test_mona :
-  stage : test
-  image : python:3.8
-  script :
-    - poetry run python -m unittest tests/test_mona.py
-
-test_sind :
-  stage : test
-  image : python:3.8
-  script :
-    - poetry run python -m unittest tests/test_sind.py
-
-flake8 :
-  stage : style
-  before_script : [ ]
-  script :
     - pip install flake8 flake8-todo
     - flake8 commonroad_dataset_converter
-  allow_failure : true
+  allow_failure: true
+
+black:
+  stage: style
+  needs: []
+  image: pyfound/black:22.6.0
+  before_script: []
+  cache: []
+  script:
+    - black --check --verbose --diff --color commonroad_dataset_converter
+
+sphinx:
+  stage: test
+  needs: []
+  script:
+    - poetry install --with doc
+    - apt update && apt install -y graphviz
+    - cd doc && poetry run make html && poetry run make html SPHINXOPTS="-W"
 
 publish_internal:
   stage: build
@@ -90,14 +78,36 @@ publish_internal:
     name: staging
     url: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi
 
-publish_pypi:
-  stage: build
+pages:
+  stage: deploy
+  needs:
+    - sphinx
+  script:
+    - poetry install --with doc
+    - apt update && apt install -y graphviz
+    - cd doc && poetry run sphinx-build -b html . ../public && poetry run sphinx-build -b html . ../public
+  artifacts:
+    paths:
+      - public
+  only:
+    - development
+
+push_to_external_pipy_test_registry:
+  stage: deploy
+  when: manual
+  only:
+    - master
+  script:
+    - poetry config repositories.test https://test.pypi.org/legacy/
+    - poetry build
+    - poetry publish --repository test -u __token__ -p ${CR_PYPI_TEST_API_TOKEN}
+
+push_to_external_pipy_release_registry:
+  stage: deploy
   when: manual
   only:
     - master
   script:
     - poetry build
-    - poetry publish -u ${CR_PYPI_RELEASE_USERNAME} -p ${CR_PYPI_RELEASE_PASSWORD}
-  environment:
-    name: production
-    url: https://pypi.org/project/commonroad-dataset-converter
+    - poetry publish -u __token__ -p ${CR_PYPI_RELEASE_API_TOKEN}
+

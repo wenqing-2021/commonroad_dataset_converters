@@ -1,0 +1,18 @@
+@startuml
+interface IScenarioJobProducer <JobT> {
+ {abstract} +Iterator<JobT> __iter__()
+}
+interface IScenarioJobConsumer <JobT> {
+ {abstract} +void __call__(job: JobT)
+}
+
+
+class WorkerRunner {
+ {field} num_processes: int
+ {method} +void run()
+}
+
+WorkerRunner *-- IScenarioJobProducer
+WorkerRunner *-- IScenarioJobConsumer
+
+@enduml
