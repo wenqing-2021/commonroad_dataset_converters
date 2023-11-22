@@ -1,0 +1,14 @@
+author: CPS Group
+affiliation: Technical University of Munich, Germany
+source: SIND Dataset
+traffic_light_positions:
+  1: [4.04486691, 35.10856903]
+  3: [-2.70771737, 5.47879654]
+  5: [24.29145461, -0.05534137]
+  7: [29.86289154, 27.27222434]
+
+traffic_light_incomings:
+  1: [15, 16]
+  3: [7, 6, 8]
+  5: [19, 18]
+  7: [11, 12, 13]

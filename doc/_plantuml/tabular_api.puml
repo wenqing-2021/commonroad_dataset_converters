@@ -1,0 +1,51 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package tabular {
+
+package factory {
+interface AbstractConverterFactory
+
+abstract TabularConverterFactory <WindowMeta> {
+  {abstract} +Iterable<Tuple<Window,WindowMeta> build_recording_generator()
+  {abstract} +IMetaScenarioCreator build_meta_scenario_creator()
+  {method} +TabularJobProducer build_job_generator()
+  {method} +ScenarioPrototypeCreator build_scenario_prototype_creator()
+  {method} +ScenarioIDCreator build_scenario_id_creator()
+  {method} +IWindowGenerator build_window_generator()
+  {method} +PlanningProblemCreator build_planning_problem_set_creator()
+  {method} +TabularJobConsumer build_job_processor()
+  {method} +IJobFilter build_job_filter()
+}
+AbstractConverterFactory <|- TabularConverterFactory
+}
+
+
+package interface {
+interface IWindowGenerator {
+ {abstract} +Iterable<Tuple<Window, WindowMetaT>> __call__(window: Window, window_meta: WindowMetaT)
+}
+
+interface IMetaScenarioCreator {
+ {abstract} +Scenario __call__(window: Window, window_meta: WindowMetaT)
+}
+
+interface IRecordingGenerator {
+ {abstract} +Iterable<Tuple<Window, WindowMetaT>> __iter__()
+}
+
+}
+
+package windowing {
+ class ObstacleWindowGenerator
+ class RollingWindowGenerator
+ class DownsamplingWindowWrapper
+
+IWindowGenerator <|- ObstacleWindowGenerator
+IWindowGenerator <|- RollingWindowGenerator
+IWindowGenerator <|- DownsamplingWindowWrapper
+
+}
+
+}
+@enduml

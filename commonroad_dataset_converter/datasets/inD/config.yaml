@@ -1,0 +1,11 @@
+locations:
+  1: DEU_AachenBendplatz-1
+  2: DEU_AachenFrankenburg-1
+  3: DEU_AachenHeckstrasse-1
+  4: DEU_AachenAseag-1
+
+class_to_obstacleType:
+  car: car
+  truck_bus: bus
+  pedestrian: pedestrian
+  bicycle: bicycle

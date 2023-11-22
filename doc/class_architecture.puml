@@ -1,0 +1,64 @@
+@startuml
+'https://plantuml.com/class-diagram
+package commonroad_dataset_converters {
+    package interface {
+        interface Generator <T>{
+        {abstract} +Generator[T] __iter__()
+        }
+        interface Processor <T>{
+        {abstract} + void __call__(job: T)
+        }
+
+    }
+    note right of interface: Basic interface to split work between main process and multiple worker processes.\nGenerator runs in main thread, processor in worker threads.
+
+
+    package tabular {
+        interface RecordingGenerator
+        note left: Create a data frame of consecutive trajectories.
+        interface WindowGenerator
+        note right: Create windows of data frame\nfor each scenario.
+        interface LaneletNetworkCreator
+        class ScenarioIdCreator
+        class PlanningProblemSetCreator
+        class MetaScenarioCreator
+
+        class SimpleJobGenerator
+        class SimpleJobProcessor
+
+        class RollingWindowGenerator
+        class EgoWindowGenerator
+
+        class RandomPlanningProblemSetCreator
+        class EgoPlanningProblemSetCreator
+
+        PlanningProblemSetCreator <|-- RandomPlanningProblemSetCreator
+        PlanningProblemSetCreator <|-- EgoPlanningProblemSetCreator
+
+        WindowGenerator <|-- RollingWindowGenerator
+        WindowGenerator <|-- EgoWindowGenerator
+
+        Generator <|-- SimpleJobGenerator
+        Processor <|-- SimpleJobProcessor
+
+        MetaScenarioCreator *-- LaneletNetworkCreator
+        MetaScenarioCreator *-- ScenarioIdCreator
+
+        SimpleJobGenerator *-- MetaScenarioCreator
+        SimpleJobGenerator *-- PlanningProblemSetCreator
+        SimpleJobGenerator *-- RecordingGenerator
+        SimpleJobGenerator *-- WindowGenerator
+
+    }
+    note right of tabular: Support classes to cover\nmost use cases.
+
+    package highD {
+        class HighdRecordingGenerator
+        class HighdLaneletNetworkCreator
+        RecordingGenerator <|-- HighdRecordingGenerator
+        LaneletNetworkCreator <|-- HighdLaneletNetworkCreator
+    }
+
+}
+
+@enduml

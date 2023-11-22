@@ -13,3 +13,4 @@ dist/
 
 commonroad_dataset_converter/tests/outputs/
 tests/outputs/
+/doc/_build/
