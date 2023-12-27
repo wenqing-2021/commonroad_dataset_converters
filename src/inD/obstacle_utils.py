@@ -17,30 +17,26 @@ import numpy as np
 import pandas as pd
 from typing import Dict, Union
 
-from commonroad.scenario.obstacle import (
-    ObstacleType,
-    DynamicObstacle,
-    StaticObstacle
-)
+from commonroad.scenario.obstacle import ObstacleType, DynamicObstacle, StaticObstacle
 from commonroad.geometry.shape import Rectangle, Circle
 from commonroad.scenario.trajectory import Trajectory, State
 from commonroad.prediction.prediction import TrajectoryPrediction
 
-from src.helper import make_valid_orientation_pruned
+from data_converters.src.helper import make_valid_orientation_pruned
 
 
 LOGGER = logging.getLogger(__name__)
 
 
 def state_from_track_tuple(
-        time_step: int,
-        xcenter: float,
-        ycenter: float,
-        heading: float,
-        lat_velocity: float,
-        lon_velocity: float,
-        lat_acceleration: float,
-        lon_acceleration: float,
+    time_step: int,
+    xcenter: float,
+    ycenter: float,
+    heading: float,
+    lat_velocity: float,
+    lon_velocity: float,
+    lat_acceleration: float,
+    lon_acceleration: float,
 ):
     """
     Convert a tuple of informations (mostly raw from the inD dataset) to a State object
@@ -65,13 +61,13 @@ def state_from_track_tuple(
 
 
 def generate_obstacle(
-        tracks_df: pd.DataFrame,
-        tracks_meta_df: pd.DataFrame,
-        vehicle_id: int,
-        obstacle_id: int,
-        frame_start: int,
-        class_to_type: Dict[str, ObstacleType],
-        detect_static_vehicles=False,
+    tracks_df: pd.DataFrame,
+    tracks_meta_df: pd.DataFrame,
+    vehicle_id: int,
+    obstacle_id: int,
+    frame_start: int,
+    class_to_type: Dict[str, ObstacleType],
+    detect_static_vehicles=False,
 ) -> Union[StaticObstacle, DynamicObstacle]:
     """
     Converts a single track from a inD dataset recording to a CommonRoad obstacle
@@ -110,10 +106,10 @@ def generate_obstacle(
     # arbitrary 1 meter threshold: if moved at least one meter, is not a parked vehicle
     # also note that if it disappears before the recording ends or appears after it begins, it is not parked
     if (
-            detect_static_vehicles
-            and obstacle_type != ObstacleType.PEDESTRIAN
-            # vehicle moved less than one meter total during recording
-            and pow(max_x - min_x, 2) + pow(max_y - min_y, 2) < 1
+        detect_static_vehicles
+        and obstacle_type != ObstacleType.PEDESTRIAN
+        # vehicle moved less than one meter total during recording
+        and pow(max_x - min_x, 2) + pow(max_y - min_y, 2) < 1
     ):
         obstacle_type = ObstacleType.PARKED_VEHICLE
         obstacle_initial_state = state_from_track_tuple(
@@ -121,10 +117,10 @@ def generate_obstacle(
             xcenter=np.average(vehicle_track["xCenter"]),
             ycenter=np.average(vehicle_track["yCenter"]),
             heading=np.average(vehicle_track["heading"]),
-            lat_velocity=0.,
-            lon_velocity=0.,
-            lat_acceleration=0.,
-            lon_acceleration=0.,
+            lat_velocity=0.0,
+            lon_velocity=0.0,
+            lat_acceleration=0.0,
+            lon_acceleration=0.0,
         )
 
         return StaticObstacle(obstacle_id, obstacle_type, obstacle_shape, obstacle_initial_state)
@@ -147,6 +143,9 @@ def generate_obstacle(
     obstacle_trajectory_prediction = TrajectoryPrediction(obstacle_trajectory, obstacle_shape)
 
     return DynamicObstacle(
-        obstacle_id, obstacle_type, obstacle_shape, obstacle_initial_state, obstacle_trajectory_prediction
+        obstacle_id,
+        obstacle_type,
+        obstacle_shape,
+        obstacle_initial_state,
+        obstacle_trajectory_prediction,
     )
-

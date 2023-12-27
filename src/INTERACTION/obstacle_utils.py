@@ -7,7 +7,8 @@ import pandas as pd
 
 from commonroad.geometry.shape import Rectangle
 from commonroad.scenario.scenario import Scenario
-from commonroad.scenario.trajectory import State, Trajectory
+from commonroad.scenario.state import State, InitialState, PMState
+from commonroad.scenario.trajectory import Trajectory
 from commonroad.scenario.obstacle import DynamicObstacle, ObstacleType
 from commonroad.prediction.prediction import TrajectoryPrediction
 
@@ -19,15 +20,17 @@ def get_velocity(track_df: pd.DataFrame) -> np.array:
     :param track_df: track data frame of a vehicle
     :return: array of velocities for vehicle
     """
-    return np.sqrt(track_df.vx ** 2 + track_df.vy ** 2)
+    return np.sqrt(track_df.vx**2 + track_df.vy**2)
 
 
 def get_type_obstacle_commonroad(type_agent):
-    dict_conversion = {'car': ObstacleType.CAR,
-                       'truck': ObstacleType.TRUCK,
-                       'bus': ObstacleType.BUS,
-                       'bicycle': ObstacleType.BICYCLE,
-                       'motorcycle': ObstacleType.MOTORCYCLE}
+    dict_conversion = {
+        "car": ObstacleType.CAR,
+        "truck": ObstacleType.TRUCK,
+        "bus": ObstacleType.BUS,
+        "bicycle": ObstacleType.BICYCLE,
+        "motorcycle": ObstacleType.MOTORCYCLE,
+    }
 
     type_obstacle_CR = dict_conversion.get(type_agent, ObstacleType.UNKNOWN)
 
@@ -51,20 +54,31 @@ def generate_dynamic_obstacle(scenario: Scenario, track_df: pd.DataFrame, time_s
 
     state_list = []
     for i, (x, y, v, theta) in enumerate(zip(xs, ys, velocities, orientations)):
-        state_list.append(State(position=np.array([x, y]), velocity=v, orientation=theta,
-                                time_step=time_start_track + i))
+        state_list.append(
+            InitialState(position=np.array([x, y]), velocity=v, orientation=theta, time_step=time_start_track + i)
+        )
 
     dynamic_obstacle_initial_state = state_list[0]
 
     dynamic_obstacle_trajectory = Trajectory(time_start_track + 1, state_list[1:])
     dynamic_obstacle_prediction = TrajectoryPrediction(dynamic_obstacle_trajectory, dynamic_obstacle_shape)
 
-    return DynamicObstacle(dynamic_obstacle_id, dynamic_obstacle_type, dynamic_obstacle_shape,
-                           dynamic_obstacle_initial_state, dynamic_obstacle_prediction)
+    return DynamicObstacle(
+        dynamic_obstacle_id,
+        dynamic_obstacle_type,
+        dynamic_obstacle_shape,
+        dynamic_obstacle_initial_state,
+        dynamic_obstacle_prediction,
+    )
 
 
-def generate_all_obstacles(scenario: Scenario, track_df: pd.DataFrame, obstacle_start_at_zero: bool,
-                           time_start_scenario: int, time_end_scenario: int):
+def generate_all_obstacles(
+    scenario: Scenario,
+    track_df: pd.DataFrame,
+    obstacle_start_at_zero: bool,
+    time_start_scenario: int,
+    time_end_scenario: int,
+):
     # generate obstacles
     vehicle_ids = track_df.track_id.unique()
 
@@ -81,11 +95,17 @@ def generate_all_obstacles(scenario: Scenario, track_df: pd.DataFrame, obstacle_
             continue
 
         def enough_time_steps():
-            if not obstacle_start_at_zero and time_end_scenario - time_start_track < 2 \
-                    or time_end_track - time_start_scenario < 2:
+            if (
+                not obstacle_start_at_zero
+                and time_end_scenario - time_start_track < 2
+                or time_end_track - time_start_scenario < 2
+            ):
                 return False
-            elif obstacle_start_at_zero and time_start_track > time_start_scenario \
-                    or time_end_scenario - time_start_scenario < 2:
+            elif (
+                obstacle_start_at_zero
+                and time_start_track > time_start_scenario
+                or time_end_scenario - time_start_scenario < 2
+            ):
                 return False
             return True
 

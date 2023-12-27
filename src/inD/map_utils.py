@@ -1,4 +1,3 @@
-
 __desc__ = """
 Extracts planning problems from a big recording by removing a dynamic vehicle and replacing its first and last state
 with ego vehicle start and goal position
@@ -48,8 +47,7 @@ def meta_scenario_from_recording(ind_config: Dict, location_id: int, recording_i
     # id should not be 0 indexed, increase by one to prevent recording id = 0
     benchmark_id = f"DEU_{ind_config.get('location_benchmark_id')[location_id]}-{location_id}_{recording_id + 1}_T-1"
     scenario = Scenario(
-        dt=scenario_dt,
-        scenario_id=ScenarioID.from_benchmark_id(benchmark_id, scenario_version="2020a")
+        dt=scenario_dt, scenario_id=ScenarioID.from_benchmark_id(benchmark_id, scenario_version="2020a")
     )
 
     lanelet_network = locationId_to_lanelet_network[location_id]

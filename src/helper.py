@@ -3,19 +3,21 @@ from typing import Dict, Union
 
 from commonroad.common.util import make_valid_orientation, make_valid_orientation_interval
 
+
 def load_yaml(file_name: str) -> Union[Dict, None]:
     """
     Loads configuration setup from a yaml file
 
     :param file_name: name of the yaml file
     """
-    with open(file_name, 'r') as stream:
+    with open(file_name, "r") as stream:
         try:
             config = ruamel.yaml.round_trip_load(stream, preserve_quotes=True)
             return config
         except ruamel.yaml.YAMLError as exc:
             print(exc)
             return None
+
 
 def make_valid_orientation_pruned(orientation: float):
     """
