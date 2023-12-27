@@ -16,7 +16,7 @@ locations:
     9: USA_Roundabout-1
     10: USA_Roundabout-2
     11: USA_Roundabout-3
-    12: BGR_Interaction-1
+    # 12: BGR_Interaction-1
     
 maps:
     CHN_Merging-1: CHN_Merging_ZS_repaired
@@ -30,7 +30,7 @@ maps:
     USA_Roundabout-1: USA_Roundabout_EP_repaired
     USA_Roundabout-2: USA_Roundabout_FT_repaired
     USA_Roundabout-3: USA_Roundabout_SR_repaired
-    BGR_Interaction-1: BGR_Intersection_VA_repaired
+    # BGR_Interaction-1: BGR_Intersection_VA_repaired
     
 offsets:
     CHN_Merging-1:
@@ -88,11 +88,11 @@ offsets:
         y_offset_lanelets: 1005
         x_offset_tracks: 945.5
         y_offset_tracks: 993.5
-    BGR_Interaction-1:
-        x_offset_lanelets: -504690
-        y_offset_lanelets: 965
-        x_offset_tracks: 945
-        y_offset_tracks: 954
+    # BGR_Interaction-1:
+    #     x_offset_lanelets: -504690
+    #     y_offset_lanelets: 965
+    #     x_offset_tracks: 945
+    #     y_offset_tracks: 954
 
 tags:
     CHN_Merging-1: highway multi_lane parallel_lanes merging_lanes
@@ -106,7 +106,7 @@ tags:
     USA_Roundabout-1: urban roundabout multi_lane comfort
     USA_Roundabout-2: urban roundabout multi_lane comfort
     USA_Roundabout-3: urban roundabout multi_lane comfort
-    BGR_Interaction-1: urban multi_lane intersection comfort
+    # BGR_Interaction-1: urban multi_lane intersection comfort
 
 directory_data:
     CHN_Merging-1: INTERACTION-Dataset-DR-v1_0/recorded_trackfiles/DR_CHN_Merging_ZS/
@@ -120,7 +120,7 @@ directory_data:
     USA_Roundabout-1: INTERACTION-Dataset-DR-v1_0/recorded_trackfiles/DR_USA_Roundabout_EP/
     USA_Roundabout-2: INTERACTION-Dataset-DR-v1_0/recorded_trackfiles/DR_USA_Roundabout_FT/
     USA_Roundabout-3: INTERACTION-Dataset-DR-v1_0/recorded_trackfiles/DR_USA_Roundabout_SR/
-    BGR_Interaction-1: INTERACTION-Dataset-TC-v1_0/recorded_trackfiles/TC_BGR_Intersection_VA/
+    # BGR_Interaction-1: INTERACTION-Dataset-TC-v1_0/recorded_trackfiles/TC_BGR_Intersection_VA/
 
 flag_same_direction_problems:
     CHN_Merging-1: True
@@ -134,4 +134,4 @@ flag_same_direction_problems:
     USA_Roundabout-1: True
     USA_Roundabout-2: True
     USA_Roundabout-3: True
-    BGR_Interaction-1: True
+    # BGR_Interaction-1: True

@@ -7,6 +7,7 @@ from commonroad.scenario.scenario import Scenario, ScenarioID
 from commonroad.scenario.lanelet import Lanelet, LaneletType, RoadUser, LineMarking
 from commonroad.scenario.traffic_sign import TrafficSignIDGermany, TrafficSignElement, TrafficSign
 
+
 def resample_polyline(polyline, step=2.0):
     new_polyline = [polyline[0]]
     current_position = 0 + step
@@ -18,14 +19,10 @@ def resample_polyline(polyline, step=2.0):
             current_idx += 1
             if current_idx > len(polyline) - 2:
                 break
-            current_length = np.linalg.norm(
-                polyline[current_idx + 1] - polyline[current_idx]
-            )
+            current_length = np.linalg.norm(polyline[current_idx + 1] - polyline[current_idx])
         else:
             rel = current_position / current_length
-            new_polyline.append(
-                (1 - rel) * polyline[current_idx] + rel * polyline[current_idx + 1]
-            )
+            new_polyline.append((1 - rel) * polyline[current_idx] + rel * polyline[current_idx + 1])
             current_position += step
     return np.array(new_polyline)
 
@@ -34,11 +31,12 @@ class Direction(Enum):
     """
     Enum for representing upper or lower interstate road
     """
+
     UPPER = 1
     LOWER = 2
 
 
-def get_lane_markings(recording_df: DataFrame, extend_width=2.):
+def get_lane_markings(recording_df: DataFrame, extend_width=2.0):
     """
     Extracts upper and lower lane markings from data frame;
     extend width of the outter lanes because otherwise some vehicles are off-road at the first time step.
@@ -68,7 +66,7 @@ def get_dt(recording_df: DataFrame) -> float:
     :param recording_df: data frame of the recording meta information
     :return: time step size
     """
-    return 1./recording_df.frameRate.values[0]
+    return 1.0 / recording_df.frameRate.values[0]
 
 
 def get_speed_limit(recording_df: DataFrame) -> Union[float, None]:
@@ -85,8 +83,16 @@ def get_speed_limit(recording_df: DataFrame) -> Union[float, None]:
         return speed_limit
 
 
-def get_meta_scenario(dt: float, benchmark_id: str, lane_markings: List[float], speed_limit: float,
-                      road_length: int, direction: Direction, road_offset: int, num_vertices: int = 10):
+def get_meta_scenario(
+    dt: float,
+    benchmark_id: str,
+    lane_markings: List[float],
+    speed_limit: float,
+    road_length: int,
+    direction: Direction,
+    road_offset: int,
+    num_vertices: int = 10,
+):
     """
     Generates meta CommonRoad scenario containing only lanelet network
 
@@ -108,14 +114,14 @@ def get_meta_scenario(dt: float, benchmark_id: str, lane_markings: List[float], 
             next_lane_y = lane_markings[i + 1]
 
             right_vertices = resample_polyline(
-                np.array([[road_length + road_offset, lane_y], [-road_offset, lane_y]]), step= resample_step
+                np.array([[road_length + road_offset, lane_y], [-road_offset, lane_y]]), step=resample_step
             )
             left_vertices = resample_polyline(
                 np.array([[road_length + road_offset, next_lane_y], [-road_offset, next_lane_y]]), step=resample_step
             )
             center_vertices = (left_vertices + right_vertices) / 2.0
 
-             # assign lanelet ID and adjacent IDs and lanelet types
+            # assign lanelet ID and adjacent IDs and lanelet types
             lanelet_id = i + 1
             lanelet_type = {LaneletType.INTERSTATE, LaneletType.MAIN_CARRIAGE_WAY}
             adjacent_left = lanelet_id + 1
@@ -136,15 +142,23 @@ def get_meta_scenario(dt: float, benchmark_id: str, lane_markings: List[float], 
 
             # add lanelet to scenario
             scenario.add_objects(
-                Lanelet(lanelet_id=lanelet_id, left_vertices=left_vertices,  right_vertices=right_vertices,
-                        center_vertices=center_vertices, adjacent_left=adjacent_left,
-                        adjacent_left_same_direction=adjacent_left_same_direction, adjacent_right=adjacent_right,
-                        adjacent_right_same_direction=adjacent_right_same_direction, user_one_way={RoadUser.VEHICLE},
-                        line_marking_left_vertices=line_marking_left_vertices,
-                        line_marking_right_vertices=line_marking_right_vertices, lanelet_type=lanelet_type))
+                Lanelet(
+                    lanelet_id=lanelet_id,
+                    left_vertices=left_vertices,
+                    right_vertices=right_vertices,
+                    center_vertices=center_vertices,
+                    adjacent_left=adjacent_left,
+                    adjacent_left_same_direction=adjacent_left_same_direction,
+                    adjacent_right=adjacent_right,
+                    adjacent_right_same_direction=adjacent_right_same_direction,
+                    user_one_way={RoadUser.VEHICLE},
+                    line_marking_left_vertices=line_marking_left_vertices,
+                    line_marking_right_vertices=line_marking_right_vertices,
+                    lanelet_type=lanelet_type,
+                )
+            )
     else:
         for i in range(len(lane_markings) - 1):
-
             # get two lines of current lane
             next_lane_y = lane_markings[i + 1]
             lane_y = lane_markings[i]
@@ -180,12 +194,21 @@ def get_meta_scenario(dt: float, benchmark_id: str, lane_markings: List[float], 
 
             # add lanelet to scenario
             scenario.add_objects(
-                Lanelet(lanelet_id=lanelet_id, left_vertices=left_vertices,  right_vertices=right_vertices,
-                        center_vertices=center_vertices, adjacent_left=adjacent_left,
-                        adjacent_left_same_direction=adjacent_left_same_direction, adjacent_right=adjacent_right,
-                        adjacent_right_same_direction=adjacent_right_same_direction, user_one_way={RoadUser.VEHICLE},
-                        line_marking_left_vertices=line_marking_left_vertices,
-                        line_marking_right_vertices=line_marking_right_vertices, lanelet_type=lanelet_type))
+                Lanelet(
+                    lanelet_id=lanelet_id,
+                    left_vertices=left_vertices,
+                    right_vertices=right_vertices,
+                    center_vertices=center_vertices,
+                    adjacent_left=adjacent_left,
+                    adjacent_left_same_direction=adjacent_left_same_direction,
+                    adjacent_right=adjacent_right,
+                    adjacent_right_same_direction=adjacent_right_same_direction,
+                    user_one_way={RoadUser.VEHICLE},
+                    line_marking_left_vertices=line_marking_left_vertices,
+                    line_marking_right_vertices=line_marking_right_vertices,
+                    lanelet_type=lanelet_type,
+                )
+            )
 
     # store speed limit for traffic sign generation
     if speed_limit is not None:

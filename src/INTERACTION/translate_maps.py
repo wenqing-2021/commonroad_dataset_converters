@@ -11,8 +11,12 @@ from src.helper import load_yaml
 
 def get_parser():
     parser = ArgumentParser()
-    parser.add_argument("-i", default="./repaired_maps", dest="input",
-                        help="Path to directory containing commonroad formatted lanelets (converts all files)")
+    parser.add_argument(
+        "-i",
+        default="./repaired_maps",
+        dest="input",
+        help="Path to directory containing commonroad formatted lanelets (converts all files)",
+    )
     parser.add_argument("-o", default="./repaired_maps/translated", help="Path to output directory", dest="output")
 
     return parser.parse_args()
@@ -35,7 +39,7 @@ if __name__ == "__main__":
             scenario, planning_problem_set = CommonRoadFileReader(file_path).open()
             x_offset_lanelets = interaction_config["offsets"][location]["x_offset_lanelets"]
             y_offset_lanelets = interaction_config["offsets"][location]["y_offset_lanelets"]
-            tags = [Tag(tag) for tag in interaction_config['tags'][location].split(' ')]
+            tags = [Tag(tag) for tag in interaction_config["tags"][location].split(" ")]
 
             scenario.translate_rotate(np.array([-x_offset_lanelets, -y_offset_lanelets]), 0)
 
@@ -44,4 +48,3 @@ if __name__ == "__main__":
             file_writer.write_to_file(output_file, OverwriteExistingFile.ALWAYS)
         except:
             continue
-
